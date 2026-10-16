@@ -1,0 +1,53 @@
+# Local secrets, account data and private source material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+cookies*.json
+*.sqlite
+*.sqlite3
+*.sqlite-wal
+*.sqlite-shm
+*.db
+*.db-wal
+*.db-shm
+/raw/
+/web/tarot/source/
+/data/
+/settings/
+**/browser-profile/
+**/chrome-profile/
+**/user-data-dir/
+
+# Dependencies, generated builds and local caches
+node_modules/
+.next/
+out/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.tsbuildinfo
+*.log
+.DS_Store
+.obsidian/
+
+# Deliveries, reference footage and renders stay local
+*.zip
+*.mov
+*.MOV
+*.mp4
+*.MP4
+*.webm
+*.mkv
+**/renders/
+
+# System font files are not redistributed
+*.ttf
+*.otf
+*.woff
+*.woff2

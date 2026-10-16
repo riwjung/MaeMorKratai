@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "checks": [
+    "renewed blob URL matched to same card; save pending without new generation; reveal path; no image bytes in stored state",
+    "batch resumes old generated empress then sends ONLY next emperor",
+    "explicit user image picker recovers ambiguous history without generation"
+  ],
+  "browser_errors": [],
+  "live_gemini_tested": false,
+  "api_calls": 0,
+  "images_generated": 0
+}

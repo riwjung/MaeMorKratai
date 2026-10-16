@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+source/
+artifacts/
+*.tsbuildinfo
+
+# Local credentials
+.env*
+!.env.example

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "the-fool",
+    "name": "The Fool",
+    "keyword": "การเริ่มต้น",
+    "meanings": {
+      "คนโสด": "รักใหม่กำลังมา",
+      "แอบชอบ": "อยากลองเข้าหา",
+      "คุยกัน": "คุยสนุกแต่ยังไม่คิดไกล",
+      "ซับซ้อน": "ความสัมพันธ์ไร้ทิศทาง",
+      "มีแฟน": "เติมความสดใหม่",
+      "เลิกกัน": "เริ่มต้นชีวิตใหม่ ไม่ยึดติดอดีต"
+    },
+    "source_message": 16,
+    "source_line": 24,
+    "source_url": "https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3",
+    "review_status": "owner-provided-chat-unreviewed",
+    "art_status": "pilot"
+  },
+  {
+    "id": "three-of-wands",
+    "name": "Three of Wands",
+    "keyword": "การรอคอย",
+    "meanings": {
+      "คนโสด": "มีโอกาสพบรักผ่านสังคมหรือระยะทาง",
+      "แอบชอบ": "รออีกฝ่ายเข้าหา",
+      "คุยกัน": "รอความสัมพันธ์ก้าวหน้า",
+      "ซับซ้อน": "รอคนที่ยังไม่ชัดเจน",
+      "มีแฟน": "วางแผนอนาคตร่วมกัน",
+      "เลิกกัน": "รอจังหวะเริ่มต้นบทใหม่"
+    },
+    "source_message": 16,
+    "source_line": 242,
+    "source_url": "https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3",
+    "review_status": "owner-provided-chat-unreviewed",
+    "art_status": "pilot"
+  },
+  {
+    "id": "the-lovers",
+    "name": "The Lovers",
+    "keyword": "ความรักและการเลือก",
+    "meanings": {
+      "คนโสด": "มีโอกาสพบคนถูกใจ",
+      "แอบชอบ": "แรงดึงดูดสูง",
+      "คุยกัน": "ความรู้สึกอาจตรงกัน",
+      "ซับซ้อน": "ต้องเลือกหรือมีรักหลายทาง",
+      "มีแฟน": "รักกันและเลือกกัน",
+      "เลิกกัน": "ยังมีแรงดึงดูด แต่ต้องเลือกว่าจะกลับมาหรือไปต่อ"
+    },
+    "source_message": 16,
+    "source_line": 78,
+    "source_url": "https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3",
+    "review_status": "owner-provided-chat-unreviewed",
+    "art_status": "pilot"
+  },
+  {
+    "id": "the-hanged-man",
+    "name": "The Hanged Man",
+    "keyword": "การรอและการหยุดนิ่ง",
+    "meanings": {
+      "คนโสด": "ยังไม่รีบมีรัก",
+      "แอบชอบ": "รอโดยไม่กล้าขยับ",
+      "คุยกัน": "ความสัมพันธ์ค้างคา",
+      "ซับซ้อน": "ยอมเสียสละโดยไม่ได้สิ่งที่ต้องการ",
+      "มีแฟน": "ต้องปรับมุมมองหรืออดทน",
+      "เลิกกัน": "ยังปล่อยวางไม่ได้ หรือต้องใช้เวลาฟื้นใจ"
+    },
+    "source_message": 16,
+    "source_line": 132,
+    "source_url": "https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3",
+    "review_status": "owner-provided-chat-unreviewed",
+    "art_status": "pilot"
+  },
+  {
+    "id": "queen-of-swords",
+    "name": "Queen of Swords",
+    "keyword": "ขอบเขตและความเด็ดขาด",
+    "meanings": {
+      "คนโสด": "เลือกคู่ด้วยเหตุผลและมาตรฐาน",
+      "แอบชอบ": "ชอบแต่ไม่ยอมเสียศักดิ์ศรี",
+      "คุยกัน": "ต้องการคำตอบที่ชัดเจน",
+      "ซับซ้อน": "ตัดสินใจเด็ดขาดต่อความสัมพันธ์ที่ไม่เหมาะสม",
+      "มีแฟน": "พูดกันตรง ๆ และกำหนดขอบเขต",
+      "เลิกกัน": "ตั้งกำแพง ไม่ยอมกลับไปหากไม่มีการเปลี่ยนแปลง"
+    },
+    "source_message": 16,
+    "source_line": 420,
+    "source_url": "https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3",
+    "review_status": "owner-provided-chat-unreviewed",
+    "art_status": "pilot"
+  }
+]

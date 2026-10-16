@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": [
+    "empty-contenteditable editor + lazy file input via plus/upload menu + icon-only send",
+    "open shadow-root editor + paste reference image without file input",
+    "manual picker + explicit unsent reset + prepare-only preserve unrelated draft",
+    "UNSENT with missing editor shows actionable error; no unhandled rejection"
+  ],
+  "browser_errors": [],
+  "live_gemini_tested": false,
+  "api_calls": 0,
+  "images_generated": 0
+}

@@ -1,0 +1,111 @@
+from pathlib import Path
+import json
+P=Path(__file__).parent
+
+def back_card(w=130,h=190):
+    return f'''<rect x="{-w/2}" y="{-h/2+9}" width="{w}" height="{h}" rx="14" fill="#b69bbd"/><rect x="{-w/2}" y="{-h/2}" width="{w}" height="{h}" rx="14" fill="#523764" stroke="#dcb5c9" stroke-width="5"/><rect x="{-w/2+12}" y="{-h/2+12}" width="{w-24}" height="{h-24}" rx="8" fill="none" stroke="#b18dba" stroke-width="2.5"/><path d="M0 -34 L9 -9 L34 0 L9 9 L0 34 L-9 9 L-34 0 L-9 -9Z" fill="#eacb98"/><circle cy="-59" r="4" fill="#eacb98"/><circle cy="59" r="4" fill="#eacb98"/>'''
+
+head='M508 482 C431 410 402 325 431 236 C459 159 529 119 602 133 L649 140 C709 70 794 45 864 61 C964 77 1029 139 1029 222 C1027 283 1011 344 980 391 C1127 413 1205 495 1233 660 C1260 787 1237 873 1196 914 C1109 896 996 860 884 854 L739 849 L463 874 C408 865 384 852 391 820 C397 789 418 763 430 735 C440 622 447 557 508 482Z'
+left='M389 956 C446 921 536 941 601 972 C671 1007 703 1064 668 1117 C637 1166 550 1184 471 1163 C404 1146 371 1111 361 1053 C355 1011 362 976 389 956Z'
+right='M795 988 C850 948 937 948 1008 975 C1086 1003 1116 1052 1111 1111 C1105 1160 1060 1195 1000 1190 C930 1190 875 1170 813 1136 C761 1107 739 1071 751 1034 C761 1014 776 999 795 988Z'
+legs='M407 1152 C323 1180 280 1226 284 1320 C290 1417 324 1476 389 1484 C447 1489 497 1472 548 1476 C577 1536 650 1569 717 1549 L815 1522 C904 1553 1024 1544 1092 1498 C1170 1448 1206 1369 1193 1263 L1163 1134 C1050 1105 951 1144 825 1142 C650 1123 507 1128 407 1152Z'
+fan='\n'.join(f'<g transform="translate(800 1135)"><g id="fan-{i}" class="fan-card"><g transform="translate(0 -75)">{back_card(106,158)}</g></g></g>' for i in range(7))
+stars='\n'.join(f'<g class="spark spark-{i}" transform="translate({x} {y})"><path d="M0 -{r} L{r*.25} -{r*.25} L{r} 0 L{r*.25} {r*.25} L0 {r} L-{r*.25} {r*.25} L-{r} 0 L-{r*.25} -{r*.25}Z" fill="#f8e6bc"/></g>' for i,(x,y,r) in enumerate([(250,465,11),(830,413,8),(760,235,9),(341,330,7),(890,900,8),(205,930,7),(198,1504,11),(883,1480,10)]))
+html='''<!doctype html><html lang="th"><head><meta charset="utf-8"><title>MaeMorKratai — end credit</title>
+<script src="assets/gsap.min.js"></script><style>
+@font-face{font-family:MaeMorRound;src:url('assets/rounded.ttf') format('truetype');font-weight:700;font-display:block}
+*{box-sizing:border-box}html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#211332}
+#endcard{position:relative;width:1080px;height:1920px;overflow:hidden;background:#211332}
+#world{position:absolute;inset:0;transform-origin:540px 990px}#room{position:absolute;inset:0;background:url('assets/room.svg') center/100% 100% no-repeat}
+#scene{position:absolute;inset:0;width:1080px;height:1920px}.wordmark-layout{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 65px 304px;pointer-events:none}
+#wordmark{color:#f8e6bc;font:700 84px/1.2 MaeMorRound,sans-serif;letter-spacing:.2px;white-space:nowrap;max-width:950px;text-align:center}
+#title-rule{height:3px;width:164px;background:#ba8ba9;margin-top:24px;border-radius:3px}
+</style></head><body><div id="endcard" data-composition-id="maemorkratai-endcard" data-start="0" data-duration="10" data-width="1080" data-height="1920" data-fps="30">
+<div id="world"><div id="room"></div><svg id="scene" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<filter id="source-key" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 8 0 0 -0.8"/></filter>
+<mask id="raster-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="1600"><image href="assets/character.jpg" width="1600" height="1600" filter="url(#source-key)"/></mask>
+<filter id="paw-key" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  30 0 0 0 -28"/></filter><mask id="paw-alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1600" height="1600"><image href="assets/character.jpg" width="1600" height="1600" filter="url(#paw-key)"/></mask><clipPath id="head-clip"><path d="HEADPATH"/></clipPath>
+<clipPath id="left-clip"><path d="LEFTPATH"/></clipPath><clipPath id="right-clip"><path d="RIGHTPATH"/></clipPath>
+<clipPath id="legs-clip"><path d="LEGSPATH"/></clipPath>
+</defs>
+<g id="ambient-ring" opacity=".35"><ellipse cx="540" cy="1245" rx="410" ry="132" fill="#43234f"/></g>
+<g id="stars">STARSMARKUP</g>
+<g id="cushion"><ellipse cx="540" cy="1316" rx="304" ry="75" fill="#321c40"/><ellipse cx="540" cy="1295" rx="283" ry="69" fill="#87558e"/><path d="M286 1308 Q540 1401 792 1308" fill="none" stroke="#b278ad" stroke-width="7" stroke-linecap="round"/></g>
+<g transform="translate(84 417) scale(.57)"><g id="rabbit">
+<!-- The face, ears, feet and moving paws reuse the untouched supplied JPG. -->
+<path d="M447 989 C344 1107 308 1259 373 1408 C432 1535 637 1510 786 1509 C1038 1590 1242 1440 1164 1191 C1127 1083 1062 1016 1040 975Z" fill="#fdf7f7"/>
+<g clip-path="url(#legs-clip)" mask="url(#raster-alpha)" opacity="0"><image href="assets/character.jpg" width="1600" height="1600"/></g>
+<!-- Scarf shapes follow the source silhouette and palette, underneath articulated paws. -->
+<path d="M394 838 Q590 859 744 847 Q960 842 1138 885 Q1171 1018 1300 1085 Q1185 1126 1090 1097 Q995 1019 869 973 L588 991 L398 971 Q346 919 394 838Z" fill="#eba07d"/>
+<path d="M394 838 L467 864 Q496 929 548 981 L398 971 Q346 919 394 838Z M864 855 Q921 846 982 860 Q1020 931 1061 975 Q1125 1038 1167 1100 L1090 1109 Q1048 1041 985 1010 Q919 973 864 882Z" fill="#7ead8a"/>
+<g id="head"><g clip-path="url(#head-clip)" mask="url(#raster-alpha)"><image href="assets/character.jpg" width="1600" height="1600"/></g>
+<path d="M591 845 L823 845 L823 853 L591 853Z" fill="#fdf7f7"/><g id="blink" opacity="0"><ellipse cx="572" cy="744" rx="30" ry="34" fill="#fdf7f7"/><ellipse cx="780" cy="711" rx="32" ry="38" fill="#fdf7f7"/><path d="M552 745 Q572 759 591 744 M758 713 Q779 729 801 710" fill="none" stroke="#505043" stroke-width="8" stroke-linecap="round"/></g></g>
+<g id="shuffle-decks"><g transform="translate(690 982)"><g id="pack-left">LEFTDECK</g></g><g transform="translate(808 995)"><g id="pack-right">RIGHTDECK</g></g></g>
+<g id="fan" opacity="0">FANMARKUP</g>
+<g id="chosen-path"><g id="chosen" transform="translate(800 1060)" opacity="0"><g id="chosen-flip"><g id="chosen-back">CHOSENBACK</g>
+<g id="chosen-front" opacity="0"><rect x="-64" y="-94" width="128" height="188" rx="13" fill="#c6ac9a"/><rect x="-64" y="-100" width="128" height="188" rx="13" fill="#f7e9cf" stroke="#d6b68b" stroke-width="4"/><rect x="-52" y="-88" width="104" height="164" rx="8" fill="none" stroke="#b89777" stroke-width="2.5"/><circle cy="-8" r="39" fill="#eac46f"/><path d="M0 -42 L10 -17 L37 -15 L16 4 L23 31 L0 16 L-24 31 L-16 4 L-38 -15 L-11 -17Z" fill="none" stroke="#84633e" stroke-width="3" stroke-linejoin="round"/><path d="M-20 53 Q0 44 20 53" stroke="#87a78a" stroke-width="6" fill="none" stroke-linecap="round"/><circle cy="-66" r="4" fill="#b89777"/></g></g></g></g>
+<g id="left-paw"><g clip-path="url(#left-clip)" mask="url(#paw-alpha)"><image href="assets/character.jpg" width="1600" height="1600"/></g></g>
+<g id="right-paw"><g clip-path="url(#right-clip)" mask="url(#paw-alpha)"><image href="assets/character.jpg" width="1600" height="1600"/></g></g>
+</g></g>
+<!-- Low table: front edge leaves the head, both hands and raised card unobstructed. -->
+<g id="table"><path d="M270 1246 L300 1488 Q310 1508 325 1492 L363 1251 M714 1255 L755 1491 Q771 1510 782 1490 L814 1241" fill="#543249"/><ellipse cx="540" cy="1220" rx="376" ry="106" fill="#51304e"/><path d="M166 1217 Q166 1353 540 1357 Q913 1353 914 1217 Q865 1300 540 1308 Q214 1300 166 1217Z" fill="#734568"/><ellipse cx="540" cy="1199" rx="374" ry="104" fill="#93618a"/><ellipse cx="540" cy="1196" rx="329" ry="80" fill="#563366"/><path d="M227 1200 Q540 1314 853 1200" fill="none" stroke="#d2aac0" stroke-width="3" opacity=".6"/><path d="M518 1266 L540 1234 L562 1266 L540 1292Z" fill="none" stroke="#dfbd9e" stroke-width="3"/></g>
+<g id="card-magic" opacity="0" fill="#f8e6bc"><path d="M760 807 l5 16 16 5 -16 5 -5 16 -5 -16 -16 -5 16 -5Z"/><path d="M638 801 l3 10 10 3 -10 3 -3 10 -3 -10 -10 -3 10 -3Z"/><circle cx="783" cy="909" r="4"/><circle cx="658" cy="927" r="3"/></g>
+</svg></div>
+<div class="wordmark-layout"><div id="wordmark">MaeMorKratai</div><div id="title-rule"></div></div>
+</div>
+<script>
+(() => {
+ const tl=gsap.timeline({paused:true});
+ // A visible ambient tween fills the entire finite composition.
+ tl.fromTo('#ambient-ring',{opacity:.25},{opacity:.4,duration:10,ease:'sine.inOut'},0);
+ tl.from('#world',{scale:1.025,duration:2,ease:'power2.out'},.1);
+ tl.from('#rabbit',{y:20,duration:.9,ease:'sine.out'},.1);
+ tl.to('#head',{rotation:-1.15,svgOrigin:'780 860',duration:1.1,ease:'sine.inOut'},.5);
+ tl.to('#head',{rotation:.65,duration:1.8,ease:'sine.inOut'},1.6);
+ tl.to('#head',{rotation:-1.6,duration:1.1,ease:'sine.inOut'},4.1);
+ tl.to('#head',{rotation:.3,duration:1.4,ease:'sine.inOut'},6.2);
+ for(const at of [1.0,4.8,8.3]){
+   tl.set('#blink',{opacity:1},at);
+   tl.set('#blink',{opacity:0},at+.17);
+ }
+ for(let k=0;k<3;k++){
+   const t=1.2+k*.87;
+   tl.to('#pack-left',{x:-42,y:-34,rotation:-12,transformOrigin:'50% 50%',duration:.27,ease:'sine.inOut'},t);
+   tl.to('#pack-right',{x:35,y:18,rotation:9,transformOrigin:'50% 50%',duration:.27,ease:'sine.inOut'},t);
+   tl.to('#left-paw',{x:-24,y:-22,rotation:-3,svgOrigin:'520 1080',duration:.27,ease:'sine.inOut'},t);
+   tl.to('#right-paw',{x:20,y:12,rotation:2,svgOrigin:'930 1090',duration:.27,ease:'sine.inOut'},t);
+   tl.to('#pack-left',{x:44,y:4,rotation:2,duration:.3,ease:'sine.inOut'},t+.27);
+   tl.to('#pack-right',{x:-43,y:-12,rotation:-2,duration:.3,ease:'sine.inOut'},t+.27);
+   tl.to('#left-paw',{x:38,y:0,rotation:3,duration:.3,ease:'sine.inOut'},t+.27);
+   tl.to('#right-paw',{x:-33,y:-10,rotation:-3,duration:.3,ease:'sine.inOut'},t+.27);
+   tl.to('#pack-left',{x:0,y:0,rotation:0,duration:.3,ease:'sine.inOut'},t+.57);
+   tl.to('#pack-right',{x:0,y:0,rotation:0,duration:.3,ease:'sine.inOut'},t+.57);
+   tl.to('#left-paw',{x:0,y:0,rotation:0,duration:.3,ease:'sine.inOut'},t+.57);
+   tl.to('#right-paw',{x:0,y:0,rotation:0,duration:.3,ease:'sine.inOut'},t+.57);
+ }
+ tl.to('#shuffle-decks',{opacity:0,y:85,duration:.4,ease:'power2.inOut'},3.95);
+ tl.to('#fan',{opacity:1,duration:.35,ease:'sine.out'},4.0);
+ for(let i=0;i<7;i++)tl.to('#fan-'+i,{rotation:(i-3)*12,x:(i-3)*34,transformOrigin:'50% 100%',duration:.65,ease:'power2.out'},4.04+i*.035);
+ tl.to('#left-paw',{x:-95,y:77,rotation:-12,duration:.65,ease:'sine.inOut'},4.05);
+ tl.to('#right-paw',{x:80,y:60,rotation:11,duration:.65,ease:'sine.inOut'},4.05);
+ tl.to('#chosen',{opacity:1,duration:.1,ease:'none'},5.12);
+ tl.to('#fan-3',{opacity:0,duration:.1,ease:'none'},5.12);
+ tl.to('#right-paw',{x:-10,y:15,rotation:0,duration:.35,ease:'power2.inOut'},4.9);
+ tl.to('#chosen-path',{x:275,y:-340,rotation:6,svgOrigin:'800 1060',duration:1.15,ease:'power2.inOut'},5.25);
+ tl.to('#right-paw',{x:152,y:-200,rotation:-11,duration:1.15,ease:'power2.inOut'},5.25);
+ tl.to('#chosen-flip',{scaleX:0,transformOrigin:'50% 50%',duration:.3,ease:'sine.in'},6.05);
+ tl.set('#chosen-back',{opacity:0},6.35);tl.set('#chosen-front',{opacity:1},6.35);
+ tl.to('#chosen-flip',{scaleX:1,duration:.35,ease:'sine.out'},6.35);
+ tl.to('#card-magic',{opacity:1,duration:.65,ease:'sine.out'},6.65);
+ tl.from('#wordmark',{y:26,opacity:0,duration:.8,ease:'power2.out'},6.8);
+ tl.from('#title-rule',{scaleX:0,opacity:0,duration:.9,ease:'sine.out'},7.0);
+ for(let i=0;i<8;i++)tl.fromTo('.spark-'+i,{opacity:.3},{opacity:.95,duration:1.2+(i%3)*.2,repeat:4,yoyo:true,ease:'sine.inOut'},.2+(i%4)*.3);
+ window.__timelines=window.__timelines||{};window.__timelines['maemorkratai-endcard']=tl;
+})();
+</script></body></html>'''
+for key,val in {'HEADPATH':head,'LEFTPATH':left,'RIGHTPATH':right,'LEGSPATH':legs,'FANMARKUP':fan,'STARSMARKUP':stars,'LEFTDECK':back_card(),'RIGHTDECK':back_card(),'CHOSENBACK':back_card(128,188)}.items():html=html.replace(key,val)
+(P/'index.html').write_text(html)
+(P/'meta.json').write_text(json.dumps(dict(id='maemorkratai-endcard',name='MaeMorKratai — purple astrology home',width=1080,height=1920,fps=30,duration=10),indent=2))
+(P/'hyperframes.json').write_text(json.dumps({'$schema':'https://hyperframes.heygen.com/schema.json','entry':'index.html'},indent=2))
+print('Built scene source')

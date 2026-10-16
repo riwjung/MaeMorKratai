@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "two sequential cards; reference attached on EVERY send; skip existing; wait for download completion",
+    "quota stops queue without retry",
+    "download error preserves submitted job; no resend",
+    "preserve owner draft",
+    "reload with submitted job never resends",
+    "only owner-confirmed RETRY allows one new send",
+    "old generated image never completes a new text-only reply",
+    "prepare-only attaches and fills without sending",
+    "stale preparing job preserves original cause; explicit UNSENT recovers to prepare-only without duplicate send"
+  ],
+  "browser_errors": [],
+  "live_gemini_tested": false,
+  "api_calls": 0,
+  "images_generated": 0
+}

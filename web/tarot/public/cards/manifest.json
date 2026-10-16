@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "created": "2026-10-15",
+  "source_directory": "wiki/Images/Cards",
+  "transformation": "none; byte-identical copies of owner-provided original images",
+  "cards": [
+    {
+      "id": "the-fool",
+      "src": "/cards/the-fool.jpeg",
+      "original_filename": "THE_FOOL.jpeg",
+      "dimensions": {
+        "width": 1632,
+        "height": 2624
+      },
+      "sha256": "950bc3d68c4017b10ba599f3f5373392462803d7460fd1edc3a5934f4adc65d3"
+    },
+    {
+      "id": "three-of-wands",
+      "src": "/cards/three-of-wands.jpeg",
+      "original_filename": "Three_of_Wands.jpeg",
+      "dimensions": {
+        "width": 1632,
+        "height": 2624
+      },
+      "sha256": "86c0ccd8174113f0c7efe67c7497ae4c59ebe10bd4e6d197b205bd173417181d"
+    },
+    {
+      "id": "the-lovers",
+      "src": "/cards/the-lovers.jpeg",
+      "original_filename": "THE_LOVERS.jpeg",
+      "dimensions": {
+        "width": 1632,
+        "height": 2624
+      },
+      "sha256": "19ebbe6fe8bd156ea89b4b109ca2576b1a223749478e686ca701368eb20e48ba"
+    },
+    {
+      "id": "the-hanged-man",
+      "src": "/cards/the-hanged-man.jpeg",
+      "original_filename": "THE_HANGED_MAN.jpeg",
+      "dimensions": {
+        "width": 1632,
+        "height": 2624
+      },
+      "sha256": "67a2a5f85ba9ae552351a0175f81e8a9bb04432ff9362e7ee179752c61ab1323"
+    },
+    {
+      "id": "queen-of-swords",
+      "src": "/cards/queen-of-swords.jpeg",
+      "original_filename": "QUEEN_OF_SWORDS.jpeg",
+      "dimensions": {
+        "width": 1632,
+        "height": 2624
+      },
+      "sha256": "e3ee5e8deffef72325e016b37a09604f32302dc96de50fb691f0cf1e82ce0afc"
+    }
+  ]
+}

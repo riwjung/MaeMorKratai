@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "target chat only",
+    "cross-tab lock serialization",
+    "image URL allowlist",
+    "download ownership",
+    "completion and MIME verification",
+    "data image bytes preserve JPEG extension",
+    "reject HTML and mismatched image signatures",
+    "reveal actual downloaded file"
+  ],
+  "network_calls": 0
+}

@@ -1,0 +1,194 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 1
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 2,
+    "infoCount": 1,
+    "findings": [
+      {
+        "code": "container_overflow",
+        "severity": "warning",
+        "time": 6.7,
+        "selector": "#scene > g:nth-of-type(4)",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -91.66,
+          "top": 241.54,
+          "right": 1131.09,
+          "bottom": 1428.04,
+          "width": 1222.76,
+          "height": 1186.5
+        },
+        "containerSelector": "#scene",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "overflow": {
+          "left": 91.66,
+          "right": 51.09
+        },
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -91.66,
+          "y": 241.54,
+          "width": 1222.76,
+          "height": 1186.5
+        },
+        "firstSeen": 6.7,
+        "lastSeen": 9.9,
+        "occurrences": 3,
+        "heldMs": 0
+      },
+      {
+        "code": "rotation_pivot_drift",
+        "severity": "warning",
+        "time": 9.9,
+        "selector": "#right-paw",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 61.825000000000045,
+          "y": 241.54499999999996,
+          "width": 1069.27,
+          "height": 1069.27
+        },
+        "rect": {
+          "left": 61.825000000000045,
+          "top": 241.54499999999996,
+          "right": 1131.095,
+          "bottom": 1310.815,
+          "width": 1069.27,
+          "height": 1069.27
+        },
+        "message": "Rotating element's bounding-box center drifts 120px across rotation — it is not spinning about its own center (check transformOrigin/svgOrigin).",
+        "fixHint": "The bounding-box center should stay fixed while the element spins; check its transformOrigin/svgOrigin so rotation pivots about the element's own center rather than a point in a coordinate space it was resized out of.",
+        "firstSeen": 9.9,
+        "lastSeen": 9.9,
+        "occurrences": 1,
+        "heldMs": 0
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 4.6,
+        "selector": "#scene > g:nth-of-type(4)",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -82.05,
+          "top": 349.58,
+          "right": 1144.59,
+          "bottom": 1425.24,
+          "width": 1226.63,
+          "height": 1075.65
+        },
+        "containerSelector": "#scene",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1080,
+          "bottom": 1920,
+          "width": 1080,
+          "height": 1920
+        },
+        "overflow": {
+          "left": 82.05,
+          "right": 64.59
+        },
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": -82.05,
+          "y": 349.58,
+          "width": 1226.63,
+          "height": 1075.65
+        },
+        "firstSeen": 4.6,
+        "lastSeen": 4.6,
+        "occurrences": 1,
+        "heldMs": 0
+      }
+    ],
+    "duration": 10,
+    "samples": [
+      0.5,
+      1.6,
+      2.5,
+      4.6,
+      6.7,
+      8.5,
+      9.9
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 3,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      0.5,
+      1.6,
+      4.6,
+      6.7,
+      9.9
+    ],
+    "checked": 1,
+    "passed": 1
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  },
+  "_meta": {
+    "version": "0.8.140",
+    "latestVersion": "0.8.157",
+    "updateAvailable": true
+  }
+}

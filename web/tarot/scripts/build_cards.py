@@ -1,0 +1,42 @@
+from pathlib import Path
+import ast,base64,json,html,os
+P=Path(__file__).resolve().parents[1]
+B=Path(os.environ.get('MAEMOR_SCENE_DIR',P.parent/'halloween-2026'))
+if not B.exists():B=P.parents[1]/'animations/halloween-2026'
+tree=ast.parse((B/'build_scene.py').read_text())
+outline=next(ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='outline' for t in n.targets))
+jpg=base64.b64encode((B/'assets/character.jpg').read_bytes()).decode()
+cards=json.loads((P/'lib/cards.json').read_text())
+def bunny(x,y,scale,rotation=0):
+ return f'<g transform="translate({x} {y}) scale({scale})"><g class="bunny-motion"><g transform="rotate({rotation} 627 627)"><image href="data:image/jpeg;base64,{jpg}" width="1254" height="1254" clip-path="url(#bunny)"/></g></g></g>'
+star='<path d="M0 -14Q3 -3 12 0Q3 3 0 14Q-3 3 -12 0Q-3 -3 0 -14" fill="#f6d7a3"/>'
+defs=f'''<defs><clipPath id="bunny"><path d="{outline}"/></clipPath><clipPath id="window"><rect x="32" y="78" width="536" height="704" rx="245"/></clipPath>
+<linearGradient id="sky" x2="0" y2="1"><stop stop-color="#281633"/><stop offset=".65" stop-color="#694270"/><stop offset="1" stop-color="#bc7f8e"/></linearGradient>
+<radialGradient id="halo"><stop stop-color="#ffdba9" stop-opacity=".45"/><stop offset="1" stop-color="#d8ad94" stop-opacity="0"/></radialGradient>
+<linearGradient id="stone" x2=".8" y2="1"><stop stop-color="#8e6a8e"/><stop offset="1" stop-color="#412b52"/></linearGradient>
+<filter id="grain"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="3" seed="13"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope=".11"/></feComponentTransfer><feBlend in="SourceGraphic" mode="soft-light"/></filter>
+<filter id="soft"><feGaussianBlur stdDeviation="10"/></filter></defs>'''
+def staff(x,y,h):
+ return f'<g transform="translate({x} {y})"><path d="M0 0Q-8 {-h*.4} 0 {-h}" fill="none" stroke="#bd8c73" stroke-width="12" stroke-linecap="round"/><path d="M-1 {-h+70}Q-37 {-h+57} -23 {-h+33}Q-1 {-h+39} -1 {-h+70} M3 {-h+44}Q38 {-h+30} 24 {-h+9}Q3 {-h+14} 3 {-h+44}" fill="#a995ac" stroke="#dac1ac" stroke-width="2"/></g>'
+scenes={}
+scenes['the-fool']=('<circle class="orb" cx="410" cy="215" r="90" fill="url(#halo)"/><circle cx="410" cy="215" r="41" fill="#f1cc8f"/><path d="M0 590L95 470 180 585 270 440 390 598 490 495 600 600V800H0" fill="#72527f"/><path d="M0 630L105 560 218 648 390 540 600 635V800H0" fill="#98708e"/><path d="M30 672Q225 640 400 674L367 710 383 746 300 790H30Z" fill="url(#stone)" stroke="#d0a0a1" stroke-width="3"/><path d="M370 530L455 358" stroke="#b88870" stroke-width="9" stroke-linecap="round"/><path d="M426 388Q483 350 485 397Q467 425 433 414Z" fill="#e9a16b" stroke="#f5cc98" stroke-width="3"/>'+bunny(68,270,.37)+'<g class="spirit" transform="translate(115 628)"><path d="M-23 0Q-27 -39 0 -40Q28 -39 24 0L34 14 16 10 3 17 -11 11 -31 14Z" fill="#f6e9e7"/><circle cx="-8" cy="-13" r="3" fill="#5d3d58"/><circle cx="8" cy="-13" r="3" fill="#5d3d58"/></g>')
+scenes['three-of-wands']=('<circle cx="300" cy="315" r="120" fill="url(#halo)"/><path d="M0 500Q150 460 300 500T600 500V800H0Z" fill="#9e778f"/><path d="M0 540Q150 500 300 540T600 540M0 580Q150 540 300 580T600 580" fill="none" stroke="#e1b6ab" stroke-width="3" opacity=".6"/><g class="sail"><path d="M365 467H465L447 488H385Z" fill="#59374c"/><path d="M415 394V465H375Z" fill="#edd1b5"/><path d="M422 400V460H455Z" fill="#bfa3c4"/></g><path d="M0 680Q300 640 600 690V800H0" fill="#52354e"/>'+staff(95,738,380)+staff(466,738,400)+bunny(23,256,.4)+staff(522,745,340))
+scenes['the-lovers']=('<circle class="orb" cx="300" cy="310" r="145" fill="url(#halo)"/><path d="M300 354C225 308 229 254 265 254Q291 254 300 278Q312 251 336 254C375 258 371 313 300 354Z" fill="#e2a6b1" stroke="#f6d5bd" stroke-width="3"/><path d="M38 670Q145 615 300 660Q440 611 562 667V800H38" fill="#896180"/><path d="M300 780Q259 703 173 660 M300 780Q351 701 429 660" fill="none" stroke="#dfb1a0" stroke-width="13"/>'+bunny(-4,325,.27)+bunny(260,325,.27)+'<path d="M70 640Q27 420 96 296 M530 640Q573 420 504 296" fill="none" stroke="#a07c8e" stroke-width="8"/><path d="M85 345Q30 323 40 286Q79 291 85 345M510 361Q568 341 551 302Q520 306 510 361" fill="#ad8eac"/>')
+scenes['the-hanged-man']=('<path d="M98 670V242Q104 201 155 200H494" fill="none" stroke="#9e7893" stroke-width="22" stroke-linecap="round"/><path d="M100 285Q48 268 56 234Q94 238 100 285M430 200Q450 151 481 167Q477 199 430 200" fill="#a38cac"/><path d="M320 202Q298 235 320 263" fill="none" stroke="#f4c188" stroke-width="9"/><circle class="orb" cx="305" cy="554" r="132" fill="url(#halo)"/>'+bunny(60,173,.38,180)+'<path d="M40 714Q130 651 240 703Q330 653 430 708Q500 662 570 709V790H40" fill="#9c7a9c" opacity=".8"/><path d="M60 742Q162 702 260 743T550 741" fill="none" stroke="#dcc0ce" stroke-width="3"/>')
+scenes['queen-of-swords']=('<path d="M131 706V340Q131 242 280 225Q423 243 423 340V706Z" fill="url(#stone)" stroke="#b994a9" stroke-width="5"/><path d="M154 655V350Q154 281 280 259Q401 281 401 350V655" fill="none" stroke="#d2adba" stroke-width="3"/>'+bunny(24,258,.39)+'<g class="sword"><path d="M463 303L483 354 471 601H455L444 354Z" fill="#e8e2e9" stroke="#b3a4c7" stroke-width="3"/><path d="M463 321V587" stroke="#a99abb" stroke-width="2"/><path d="M425 608Q463 593 500 608" fill="none" stroke="#eec38c" stroke-width="10" stroke-linecap="round"/><path d="M463 608V675" stroke="#a6746c" stroke-width="13"/><circle cx="463" cy="684" r="12" fill="#e6bb86"/></g><path d="M223 355L224 326 245 342 265 317 286 342 309 326 307 356Z" fill="#efc17c" stroke="#fff0cf" stroke-width="2"/>')
+numerals={'the-fool':'0','three-of-wands':'III','the-lovers':'VI','the-hanged-man':'XII','queen-of-swords':'QUEEN'}
+for card in cards:
+ id=card['id']
+ stars=''.join(f'<g transform="translate({62+i*97%480} {120+i*71%490}) scale({.2+i%3*.1})"><g class="twinkle">{star}</g></g>' for i in range(18))
+ art=f'''<svg xmlns="http://www.w3.org/2000/svg" width="600" height="960" viewBox="0 0 600 960" role="img" aria-label="{html.escape(card['name'])} — MaeMorKratai">
+{defs}<rect x="3" y="3" width="594" height="954" rx="28" fill="#21142d" stroke="#ceaa83" stroke-width="5"/><rect x="16" y="16" width="568" height="928" rx="20" fill="none" stroke="#8b6689" stroke-width="2"/>
+<g clip-path="url(#window)" filter="url(#grain)"><rect x="32" y="78" width="536" height="704" fill="url(#sky)"/>{stars}{scenes[id]}</g><rect x="32" y="78" width="536" height="704" rx="245" fill="none" stroke="#c5a080" stroke-width="2"/>
+<text x="300" y="54" text-anchor="middle" fill="#e6c69e" font-family="Georgia,serif" font-size="23" letter-spacing="6">{numerals[id]}</text>
+<path d="M100 811H257M343 811H500 M300 795Q303 808 316 811Q303 814 300 827Q297 814 284 811Q297 808 300 795" stroke="#c9a081" fill="#c9a081"/>
+<text x="300" y="866" text-anchor="middle" fill="#fff0cf" font-family="Georgia,serif" font-size="{31 if len(card['name'])>15 else 37}">{html.escape(card['name'])}</text><text x="300" y="914" text-anchor="middle" fill="#b99abc" font-family="Georgia,serif" font-size="18" letter-spacing="4">MAEMORKRATAI</text></svg>'''
+ (P/f'public/cards/{id}.svg').write_text(art)
+ composition=f'''<!doctype html><html><head><meta charset="utf-8"><title>{card['name']} — MaeMorKratai</title><style>html,body{{margin:0;width:600px;height:960px;overflow:hidden;background:#21142d}}svg{{display:block}}</style></head><body><div id="card" data-composition-id="{id}" data-start="0" data-duration="6" data-width="600" data-height="960">{art}</div><script src="../scene/assets/gsap.min.js"></script><script>const tl=gsap.timeline({{paused:true}});tl.to('.bunny-motion',{{y:-8,duration:1.5,repeat:3,yoyo:true,ease:'sine.inOut'}},0);tl.to('.twinkle',{{opacity:.2,duration:1,repeat:5,yoyo:true,ease:'sine.inOut'}},0);tl.to('.orb',{{opacity:.5,duration:1.5,repeat:3,yoyo:true,ease:'sine.inOut'}},0);window.__timelines=window.__timelines||{{}};window.__timelines['{id}']=tl;</script></body></html>'''
+ # Some cards have no orb. Only emit that tween for cards containing one.
+ if 'class="orb"' not in art:composition=composition.replace("tl.to('.orb',{opacity:.5,duration:1.5,repeat:3,yoyo:true,ease:'sine.inOut'},0);",'')
+ (P/f'public/card-scenes/{id}.html').write_text(composition)
+print('Created five SVG artworks and five finite HyperFrames/GSAP compositions')

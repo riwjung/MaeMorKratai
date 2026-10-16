@@ -1,0 +1,75 @@
+{
+  "status": 200,
+  "playback": {
+    "beforeTime": 0,
+    "duringTime": 1.09,
+    "advances": true
+  },
+  "frames": [
+    {
+      "url": "http://localhost:3005/#project/halloween-2026?v=1&t=0&tab=design&rc=0",
+      "title": "HyperFrames Studio",
+      "compositionIds": [],
+      "timelines": [],
+      "images": {
+        "count": 86,
+        "broken": []
+      },
+      "bodyText": "|\nhalloween-2026\nCapture\nInspector\nWindow\nEdit with Framey\nNew\nExport\nCompositions\nAssets\nCode\nCatalog\nPreview\nDesign\nLayers\nRenders (1)\nVariables\nTimeline\nVariables opened\n00:01/00:12\n1x\nFit\n00:00\n00:02\n00:04\n00:06\n00:08\n00:10\n00:12\n00:14\n◇\nCamera\n∿\nOther\n‹\n◇\n›\nScale\n‹\n◇\n›\nCamera\nfx\nother\n2 keyfram"
+    },
+    {
+      "url": "http://localhost:3005/api/projects/halloween-2026/preview?__hf_shader_capture_scale=1&__hf_shader_loading=player",
+      "title": "MaeMorKratai Halloween 2026",
+      "compositionIds": [
+        {
+          "id": "maemorkratai-halloween",
+          "width": "1080",
+          "height": "1920",
+          "duration": "12"
+        }
+      ],
+      "timelines": [
+        {
+          "id": "__proxied",
+          "type": "boolean",
+          "keys": []
+        },
+        {
+          "id": "maemorkratai-halloween",
+          "type": "object",
+          "keys": [
+            "vars",
+            "_delay",
+            "_repeat",
+            "_ts",
+            "_dur",
+            "_tDur",
+            "data",
+            "labels",
+            "smoothChildTiming",
+            "autoRemoveChildren",
+            "_sort",
+            "_start",
+            "_end",
+            "_next",
+            "_prev"
+          ],
+          "duration": 12,
+          "paused": true,
+          "time": 1.09
+        }
+      ],
+      "images": {
+        "count": 0,
+        "broken": []
+      },
+      "bodyText": "MaeMorKratai\n\nHalloween 2026"
+    }
+  ],
+  "errors": [],
+  "failedRequests": [],
+  "iframeCount": 1,
+  "screenshots": [
+    "/Users/sawettachatsuthum/AIVideoLocal/maemorkratai/halloween-2026/studio-preview.png"
+  ]
+}

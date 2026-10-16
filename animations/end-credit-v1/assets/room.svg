@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <title>MaeMorKratai — a quiet room under the stars</title>
+  <desc>Flat illustrated midnight-purple astrology room. Open central stage for the original rabbit character; open lower band for the closing wordmark.</desc>
+  <defs>
+    <clipPath id="night-window">
+      <path d="M277 837V447C277 288 388 188 540 187C695 186 804 288 804 447V837Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- The wall stays matte and flat, like the supplied illustration. -->
+  <path fill="#211332" d="M0 0H1080V1920H0Z"/>
+  <path fill="#332044" d="M23 0H1058V1419C840 1446 220 1445 23 1420Z"/>
+  <path fill="#3d284e" d="M24 32H1057V89C784 67 308 70 24 89Z"/>
+  <path fill="#62416f" d="M20 79C319 61 757 62 1061 80V91C759 76 321 76 20 93Z"/>
+  <path fill="#281937" d="M0 1407C273 1427 792 1427 1080 1407V1920H0Z"/>
+  <path fill="#62416f" d="M0 1405C274 1420 794 1420 1080 1405V1423C788 1443 276 1441 0 1423Z"/>
+  <path fill="#332044" d="M0 1767C268 1743 802 1744 1080 1767V1920H0Z"/>
+  <path d="M0 1812C302 1795 782 1797 1080 1813M113 1810L78 1920M968 1810L1003 1920" fill="none" stroke="#62416f" stroke-width="3" opacity=".23" stroke-linecap="round"/>
+
+  <!-- A broad arch frames the mascot instead of competing with it. -->
+  <path fill="#211332" d="M239 870V447C239 269 366 149 541 151C718 152 841 274 841 447V870Z"/>
+  <path fill="#8b6597" d="M253 859V447C253 280 373 164 541 165C706 166 826 281 826 447V859Z"/>
+  <path fill="#62416f" d="M265 850V447C265 286 382 178 540 178C701 178 815 285 815 447V850Z"/>
+  <path fill="#18132e" d="M277 837V447C277 288 388 188 540 187C695 186 804 288 804 447V837Z"/>
+  <g clip-path="url(#night-window)">
+    <path fill="#251d3f" d="M270 640C413 603 585 636 813 607V858H270Z"/>
+    <path fill="#302345" d="M260 721C413 675 612 706 828 669V855H260Z"/>
+    <path fill="#f8e6bc" d="M674 275C636 281 611 310 611 345C611 385 643 415 682 413C708 412 729 397 742 375C725 384 701 385 682 374C647 354 641 305 674 275Z"/>
+    <g fill="#f8e6bc">
+      <path d="M429 253L433 264L445 268L433 272L429 284L425 272L413 268L425 264Z"/>
+      <path d="M350 418L353 427L363 430L353 433L350 443L347 433L337 430L347 427Z"/>
+      <path d="M708 493L711 503L722 507L711 510L708 521L705 510L694 507L705 503Z"/>
+      <path d="M561 386L564 393L572 396L564 399L561 407L558 399L550 396L558 393Z"/>
+      <circle cx="372" cy="325" r="3.5"/><circle cx="475" cy="329" r="3"/><circle cx="556" cy="252" r="3.5"/>
+      <circle cx="766" cy="412" r="3"/><circle cx="431" cy="465" r="2.5"/><circle cx="622" cy="469" r="2.5"/>
+      <circle cx="321" cy="522" r="2.8"/><circle cx="492" cy="563" r="3"/><circle cx="752" cy="586" r="2.5"/>
+    </g>
+    <path d="M374 537L417 569L463 535L499 578L554 552" fill="none" stroke="#8b6597" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#c8aecb"><circle cx="374" cy="537" r="3.5"/><circle cx="417" cy="569" r="3.5"/><circle cx="463" cy="535" r="3.5"/><circle cx="499" cy="578" r="3.5"/><circle cx="554" cy="552" r="3.5"/></g>
+  </g>
+  <path d="M540 194V834M280 489H800" fill="none" stroke="#62416f" stroke-width="12" stroke-linecap="round"/>
+  <path fill="#8b6597" d="M240 838C434 831 653 833 838 839L847 858C674 871 407 867 233 858Z"/>
+
+  <!-- Soft curtains, deliberately tucked to either side of the stage. -->
+  <path fill="#62416f" d="M251 204C243 358 246 539 217 683C212 744 211 801 228 849C202 853 176 849 158 838C195 658 173 399 204 223Z"/>
+  <path fill="#62416f" d="M826 205C838 367 833 544 863 685C869 749 869 805 853 852C877 855 903 848 921 839C887 652 905 399 875 225Z"/>
+  <path d="M223 259C201 465 225 618 197 794M855 259C877 469 853 622 883 798" fill="none" stroke="#8b6597" stroke-width="7" stroke-linecap="round" opacity=".64"/>
+  <path d="M178 672C191 680 204 682 218 679M861 681C875 686 889 682 903 675" fill="none" stroke="#d2af87" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Small framed celestial study at the left. -->
+  <path fill="#211332" d="M42 286Q43 274 56 274H152Q163 277 163 289V431Q161 445 148 445H56Q43 444 42 431Z"/>
+  <path d="M55 287H150V431H55Z" fill="none" stroke="#8b6597" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="102" cy="350" r="29" fill="none" stroke="#c8aecb" stroke-width="2.5"/>
+  <path d="M102 306V316M102 384V394M58 350H68M136 350H146M72 320L79 327M125 373L132 380M71 380L78 373M125 327L132 320" stroke="#c8aecb" stroke-width="2.5" stroke-linecap="round"/>
+  <path fill="#f8e6bc" d="M102 330L106 345L121 350L106 355L102 370L98 355L83 350L98 345Z"/>
+
+  <!-- Left shelf: rounded books and a tiny candle. -->
+  <path fill="#211332" d="M18 824H188V845H18Z"/>
+  <path fill="#8b6597" d="M14 815Q96 808 189 815L197 831H13Z"/>
+  <path fill="#62416f" d="M36 746Q36 738 44 738H65Q72 739 72 747V814H36Z"/>
+  <path fill="#937785" d="M76 717Q77 710 84 710H102Q109 712 109 719V814H76Z"/>
+  <path fill="#74927d" d="M117 749Q117 744 123 743L141 741Q147 741 149 747L158 811L127 815Z"/>
+  <path d="M45 750H61M45 800H62M84 727H101M84 799H101M126 755L141 753" fill="none" stroke="#dcc6b4" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+  <path fill="#d2af87" d="M51 1057H151L158 1070Q104 1077 44 1070Z"/>
+  <path fill="#f8e6bc" d="M76 978Q102 970 127 979V1058H76Z"/>
+  <path fill="#dbc69f" d="M77 982Q86 996 92 981Q104 995 110 982Q121 998 127 982V979Q102 973 77 979Z"/>
+  <path d="M102 972V960" fill="none" stroke="#281937" stroke-width="4" stroke-linecap="round"/>
+  <path fill="#e9b779" d="M103 927C88 947 88 955 103 961C117 955 118 946 103 927Z"/>
+  <path fill="#f8e6bc" d="M103 942C97 952 98 957 103 958C109 956 109 950 103 942Z"/>
+  <path fill="#8b6597" d="M15 1070H182L191 1086H14Z"/>
+  <path fill="#211332" d="M22 1087H179V1097H22Z"/>
+  <path d="M34 1100V1137H61M157 1100V1137H131" fill="none" stroke="#62416f" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Right shelf: a little armillary sphere and just three books. -->
+  <g fill="none" stroke="#c9a678" stroke-width="4" stroke-linecap="round">
+    <circle cx="979" cy="582" r="43"/>
+    <ellipse cx="979" cy="582" rx="19" ry="43" transform="rotate(26 979 582)"/>
+    <ellipse cx="979" cy="582" rx="43" ry="15" transform="rotate(-22 979 582)"/>
+    <path d="M977 625V651M950 651H1007"/>
+  </g>
+  <circle cx="979" cy="582" r="8" fill="#f8e6bc"/>
+  <path fill="#8b6597" d="M899 655Q987 649 1068 655L1075 671H895Z"/>
+  <path fill="#211332" d="M903 672H1066V683H903Z"/>
+  <path fill="#937785" d="M921 929Q978 924 1044 929L1046 952H921Z"/>
+  <path fill="#c5ab95" d="M935 905H1041Q1048 908 1048 914V928H935Z"/>
+  <path fill="#74927d" d="M923 878Q973 875 1029 879L1027 904H923Z"/>
+  <path d="M938 887H1014M948 915H1035M936 939H1030" fill="none" stroke="#f8e6bc" stroke-width="2.5" stroke-linecap="round" opacity=".65"/>
+  <path fill="#8b6597" d="M895 953H1075V970H895Z"/>
+  <path fill="#211332" d="M903 971H1068V982H903Z"/>
+
+  <!-- A low plant softens the edge; the lower wordmark area stays clear. -->
+  <path d="M981 1290C981 1223 982 1176 994 1138M982 1245L946 1192M987 1200L1027 1164" fill="none" stroke="#74927d" stroke-width="7" stroke-linecap="round"/>
+  <path fill="#74927d" d="M991 1181C972 1169 974 1147 998 1121C1012 1146 1007 1166 991 1181Z"/>
+  <path fill="#8fa185" d="M980 1238C957 1239 935 1220 929 1183C957 1188 976 1208 980 1238Z"/>
+  <path fill="#74927d" d="M990 1210C990 1184 1009 1165 1047 1159C1037 1190 1016 1207 990 1210Z"/>
+  <path fill="#8fa185" d="M982 1281C965 1275 956 1260 955 1242C975 1246 986 1260 982 1281Z"/>
+  <path fill="#b98683" d="M946 1282Q983 1288 1019 1282L1010 1362Q983 1374 954 1362Z"/>
+  <path fill="#d3aaa0" d="M940 1278Q981 1271 1025 1278V1293Q984 1301 940 1293Z"/>
+  <path d="M969 1311L972 1348M993 1312L991 1348" fill="none" stroke="#d3aaa0" stroke-width="4" stroke-linecap="round" opacity=".6"/>
+
+  <!-- Sparse wall constellations, no labels and no crowded ornament. -->
+  <g fill="none" stroke="#8b6597" stroke-width="2" stroke-linecap="round" opacity=".55">
+    <path d="M916 303L959 269L1017 294L998 347"/>
+    <path d="M59 552L99 581L147 556"/>
+  </g>
+  <g fill="#c8aecb" opacity=".7">
+    <circle cx="916" cy="303" r="3"/><circle cx="959" cy="269" r="3"/><circle cx="1017" cy="294" r="3"/><circle cx="998" cy="347" r="3"/>
+    <circle cx="59" cy="552" r="3"/><circle cx="99" cy="581" r="3"/><circle cx="147" cy="556" r="3"/>
+  </g>
+  <g fill="#f8e6bc" opacity=".72">
+    <path d="M156 174L159 184L170 187L159 190L156 201L153 190L142 187L153 184Z"/>
+    <path d="M951 418L954 426L963 429L954 432L951 441L948 432L939 429L948 426Z"/>
+    <circle cx="80" cy="210" r="2.5"/><circle cx="1001" cy="174" r="2.5"/><circle cx="1004" cy="774" r="2.5"/><circle cx="49" cy="1210" r="2.5"/>
+  </g>
+</svg>

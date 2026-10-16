@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "live_gemini_generation": false,
+  "uses_real_chrome_extension": true,
+  "api_calls": 0,
+  "images_generated": 0,
+  "download_state": "complete",
+  "mime": "image/jpeg",
+  "filename": "/Users/sawettachatsuthum/AIVideoLocal/maemorkratai/gemini-web-runner/tests/artifacts/real-extension-downloads/07f94f70-bf14-4c2f-8303-0d4b4587c960",
+  "bytes_identical": true,
+  "sha256": "bdaa7d02c5fda8f9e062758ff011c19e5387a2c209d05aaf4b03f227519384ff",
+  "browser_errors": [],
+  "blob_to_data_to_download": true
+}

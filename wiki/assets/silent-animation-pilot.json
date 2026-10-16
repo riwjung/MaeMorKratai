@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "draft_awaiting_owner_review_and_model_cost",
+  "title": "ค่อย ๆ ไปก็ได้",
+  "brand": "แม่หมอกระต่าย",
+  "duration_seconds": 15,
+  "generation_status": "not_started",
+  "approved_credits": null,
+  "quoted_credits": null,
+  "selected_model": null,
+  "render_target": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "aspect_ratio": "9:16"
+  },
+  "identity_reference": "/Users/sawettachatsuthum/Desktop/AI_Video/MaeMorKratai/wiki/Images/IMG_5392.JPG",
+  "style_reference": "/Users/sawettachatsuthum/Desktop/AI_Video/MaeMorKratai/wiki/video/Maemorkratai.MP4",
+  "style_reference_scope": "visual softness, warm lighting and emotional pacing only; external screen recording, not channel analytics evidence",
+  "reference_audio_reviewed": false,
+  "character_lock": "The same Maemorkratai rabbit mascot shown in the supplied identity image: a plump rounded warm-white rabbit, large round head, short legs, long rounded ears with pale-pink inner ears, small black dot eyes, a round coral-red nose, soft pink cheeks and paw pads, a simple closed curved mouth, and the same peach-orange and sage-green scarf. Preserve the original head shape, body proportions, eye spacing, nose, scarf colors and identity. Translate the illustration into a soft stylized 3D plush character with subtle short fur, gentle rounded forms, warm diffuse lighting, and a restrained lavender-and-light-wood setting. Express emotions through ears, head tilt, paws and body posture. Keep the mouth closed throughout. No dialogue, no lip-sync, no vocalization.",
+  "keyframe_prompt": "Create a clean vertical 9:16 establishing keyframe using the supplied Maemorkratai mascot identity image. The same Maemorkratai rabbit mascot shown in the supplied identity image: a plump rounded warm-white rabbit, large round head, short legs, long rounded ears with pale-pink inner ears, small black dot eyes, a round coral-red nose, soft pink cheeks and paw pads, a simple closed curved mouth, and the same peach-orange and sage-green scarf. Preserve the original head shape, body proportions, eye spacing, nose, scarf colors and identity. Translate the illustration into a soft stylized 3D plush character with subtle short fur, gentle rounded forms, warm diffuse lighting, and a restrained lavender-and-light-wood setting. Express emotions through ears, head tilt, paws and body posture. Keep the mouth closed throughout. No dialogue, no lip-sync, no vocalization. The rabbit sits on a soft floor cushion beside a low light-wood table in a simple cozy lavender room, holding a single cream-colored tarot-like card with a simple gold star symbol at chest level. The rabbit's ears are relaxed and its head is slightly tilted in quiet curiosity. Both ears, both paws, the scarf, the card, and both feet are completely visible. Warm side light, soft shadows, subtle material texture, clear readable silhouette, uncluttered surroundings. Leave space around the rabbit for movement. No text, no logos, no social media interface, no border, no additional characters. The image depicts a fictional comforting moment, not a fortune-telling prediction.",
+  "negative_prompt": "talking, speaking, dialogue, voice-over, singing, humming, lip-sync, open mouth, teeth, oversized irises, human eyes, photorealistic rabbit anatomy, changing mascot identity, changing nose color, changing scarf color, extra characters, duplicated rabbit, extra limbs, missing ears, missing paws, morphing hands, card teleportation, paw clipping, frantic camera shake, multiple camera moves, heavy sparkles covering the face, rainbow flags as default costume, cosmetics or makeup story, romantic rabbit pair copied from reference, platform interface, engagement counters, watermark, generated text, subtitles, logo, frame border",
+  "audio_policy": {
+    "dialogue": false,
+    "lip_sync": false,
+    "vocalizations": false,
+    "first_review": "mute",
+    "mute_generated_audio_in_edit": true,
+    "music_or_sfx": "optional, owner-approved assets only"
+  },
+  "content_claim": "fictional uplifting gesture; no guaranteed fortune prediction",
+  "shots": [
+    {
+      "id": "shot-01",
+      "start_seconds": 0,
+      "duration_seconds": 5,
+      "title": "ลังเล",
+      "action_th": "ถือไพ่ เอียงหัว หูลู่เล็กน้อย แล้วหยุดนิ่ง",
+      "camera": "slow_push_in",
+      "start_frame": "approved_establishing_keyframe",
+      "end_state": "holding_card_paused",
+      "prompt": "The same Maemorkratai rabbit mascot shown in the supplied identity image: a plump rounded warm-white rabbit, large round head, short legs, long rounded ears with pale-pink inner ears, small black dot eyes, a round coral-red nose, soft pink cheeks and paw pads, a simple closed curved mouth, and the same peach-orange and sage-green scarf. Preserve the original head shape, body proportions, eye spacing, nose, scarf colors and identity. Translate the illustration into a soft stylized 3D plush character with subtle short fur, gentle rounded forms, warm diffuse lighting, and a restrained lavender-and-light-wood setting. Express emotions through ears, head tilt, paws and body posture. Keep the mouth closed throughout. No dialogue, no lip-sync, no vocalization. Continue from the approved clean establishing keyframe. Five-second vertical 9:16 shot. The rabbit holds the same single star card near its chest, looks down at it, gently tilts its head, and lowers its ears slightly as if unsure. A tiny pause makes the emotion readable. The card and paws remain stable and separate. One camera movement only: a slow gentle push-in while keeping the rabbit's ears and feet inside the frame. The scene, scarf, nose and small black dot eyes remain identical. End on the rabbit calmly pausing, still holding the card. Silent visual storytelling; mouth closed, no speech, no vocals, no lip-sync. If the model generates audio, only quiet room ambience is allowed and it will be muted in the edit."
+    },
+    {
+      "id": "shot-02",
+      "start_seconds": 5,
+      "duration_seconds": 5,
+      "title": "พักใจ",
+      "action_th": "วางไพ่ แตะอก หลับตาพัก แล้วผ่อนหัวไหล่",
+      "camera": "static",
+      "start_frame": "approved_shot_01_end",
+      "end_state": "card_flat_on_table_relaxed",
+      "prompt": "The same Maemorkratai rabbit mascot shown in the supplied identity image: a plump rounded warm-white rabbit, large round head, short legs, long rounded ears with pale-pink inner ears, small black dot eyes, a round coral-red nose, soft pink cheeks and paw pads, a simple closed curved mouth, and the same peach-orange and sage-green scarf. Preserve the original head shape, body proportions, eye spacing, nose, scarf colors and identity. Translate the illustration into a soft stylized 3D plush character with subtle short fur, gentle rounded forms, warm diffuse lighting, and a restrained lavender-and-light-wood setting. Express emotions through ears, head tilt, paws and body posture. Keep the mouth closed throughout. No dialogue, no lip-sync, no vocalization. Five-second vertical 9:16 shot in exactly the same cozy lavender room, with the same rabbit, scarf, cushion, low wooden table and single star card. The rabbit slowly places the card on the table, rests one paw lightly against its chest, closes its eyes for a short quiet breathing pause, then relaxes its shoulders. The gold star on the card gives a very subtle warm glow. The glow does not cover the face or change the rabbit's eyes. Static camera for the entire shot. Preserve correct paw contact with the card and table; no clipping or extra paws. End with relaxed posture and the card resting flat on the table. Mouth remains closed at all times; no dialogue, lip-sync, humming or other vocal sounds."
+    },
+    {
+      "id": "shot-03",
+      "start_seconds": 10,
+      "duration_seconds": 5,
+      "title": "กลับมาสดใส",
+      "action_th": "ยกหู พยักหน้า โบกมือ จบด้วยยิ้มปิดปากนิ่งครึ่งวินาที",
+      "camera": "slow_pull_back",
+      "start_frame": "approved_shot_02_end",
+      "end_state": "whole_body_closed_mouth_smile_hold",
+      "prompt": "The same Maemorkratai rabbit mascot shown in the supplied identity image: a plump rounded warm-white rabbit, large round head, short legs, long rounded ears with pale-pink inner ears, small black dot eyes, a round coral-red nose, soft pink cheeks and paw pads, a simple closed curved mouth, and the same peach-orange and sage-green scarf. Preserve the original head shape, body proportions, eye spacing, nose, scarf colors and identity. Translate the illustration into a soft stylized 3D plush character with subtle short fur, gentle rounded forms, warm diffuse lighting, and a restrained lavender-and-light-wood setting. Express emotions through ears, head tilt, paws and body posture. Keep the mouth closed throughout. No dialogue, no lip-sync, no vocalization. Five-second vertical 9:16 shot continuing the exact approved ending of the previous shot. The single card stays flat on the same low wooden table. Its gold star glows gently. The rabbit opens its small black dot eyes, lifts its ears, gives a little nod, and waves one paw warmly toward the viewer. Its simple curved mouth stays closed. One camera movement only: a slow gentle pull-back to show the whole rabbit, including ears and feet. Warm tender mood, controlled subtle motion and no new props. Finish with a calm closed-mouth smile and a still half-second ending suitable for an edit. No speech, no lip-sync, no vocalization. This is an uplifting fictional gesture, not a guaranteed fortune prediction."
+    }
+  ],
+  "acceptance": [
+    "mascot retains original small dot eyes and round coral nose",
+    "same orange-green scarf across all shots",
+    "closed mouth throughout",
+    "understandable with audio muted",
+    "ears, paws, feet and card visible",
+    "no copied platform UI, typography or source story",
+    "review actual capabilities and get_cost before any generation"
+  ]
+}

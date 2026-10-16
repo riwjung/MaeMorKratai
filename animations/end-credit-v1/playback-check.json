@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "http_range": 206,
+  "encoded_playback": {
+    "ended": true,
+    "duration": 10,
+    "error": null,
+    "width": 1080,
+    "height": 1920,
+    "quality": 300
+  },
+  "iframe_seek": 8.8,
+  "mobile_width": 390,
+  "browser_errors": []
+}

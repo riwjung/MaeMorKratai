@@ -1,0 +1,23 @@
+const vm=require('node:vm'),fs=require('node:fs'),assert=require('node:assert/strict'),path=require('node:path');
+let listener,storage={},requests=[],items={},shown=[],folders=[],liveTabs=new Set([1,2]);
+const chrome={runtime:{onMessage:{addListener:f=>listener=f}},storage:{local:{get:async k=>({[k]:storage[k]}),set:async o=>Object.assign(storage,o),remove:async k=>delete storage[k]}},tabs:{get:async id=>{if(!liveTabs.has(id))throw Error('no tab');return {id}},onRemoved:{addListener:()=>{}}},downloads:{download:async o=>{requests.push(o);const id=requests.length;items[id]={state:'in_progress',mime:'image/png',filename:o.filename};return id;},search:async({id})=>items[id]?[items[id]]:[],show:async id=>shown.push(id),showDefaultFolder:async()=>folders.push('default')}};
+vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../extension/background.js'),'utf8'),{chrome,URL,Number,Promise,Error,atob:globalThis.atob});
+const sender=id=>({url:'https://gemini.google.com/u/0/app/c1051ca2e5090320',tab:{id}});
+const send=(message,s=sender(1))=>new Promise(resolve=>listener(message,s,resolve));
+(async()=>{
+ assert.equal((await send({type:'mmkt:lock'},{url:'https://example.com',tab:{id:1}})).ok,false);
+ const claims=await Promise.all([send({type:'mmkt:lock'},sender(1)),send({type:'mmkt:lock'},sender(2))]);assert.equal(claims.filter(r=>r.ok).length,1);
+ await send({type:'mmkt:unlock'},sender(1));assert.equal((await send({type:'mmkt:lock'},sender(2))).ok,true);
+ assert.equal((await send({type:'mmkt:download',cardId:'the-magician',url:'https://evil.example/img'})).ok,false);assert.equal(requests.length,0);
+ const d=await send({type:'mmkt:download',cardId:'the-magician',url:'https://lh3.googleusercontent.com/example'});assert.equal(d.downloadId,1);
+ assert.equal((await send({type:'mmkt:download-status',downloadId:1},sender(2))).ok,false);
+ assert.equal((await send({type:'mmkt:download-status',downloadId:1})).state,'in_progress');
+ items[1].state='complete';assert.equal((await send({type:'mmkt:download-status',downloadId:1})).state,'complete');
+ items[1].mime='text/html';assert.equal((await send({type:'mmkt:download-status',downloadId:1})).state,'invalid');
+ assert.equal((await send({type:'mmkt:download-data',cardId:'the-empress',dataUrl:'data:text/html;base64,PGh0bWw+'})).ok,false);
+ const jpeg=fs.readFileSync(path.join(__dirname,'../extension/assets/IMG_5392.JPG')).toString('base64');
+ const local=await send({type:'mmkt:download-data',cardId:'the-empress',dataUrl:'data:image/jpeg;base64,'+jpeg});assert.equal(local.ok,true);assert.equal(requests.at(-1).filename,'MaeMorKratai/cards/the-empress.jpg');assert.equal(requests.at(-1).url,'data:image/jpeg;base64,'+jpeg);
+ const wrong=await send({type:'mmkt:download-data',cardId:'the-empress',dataUrl:'data:image/png;base64,'+jpeg});assert.equal(wrong.ok,false);
+ items[local.downloadId].state='complete';items[local.downloadId].mime='image/jpeg';const revealed=await send({type:'mmkt:show-download'});assert.equal(revealed.found,true);assert.equal(shown.at(-1),local.downloadId);
+ const report={passed:true,checks:['target chat only','cross-tab lock serialization','image URL allowlist','download ownership','completion and MIME verification','data image bytes preserve JPEG extension','reject HTML and mismatched image signatures','reveal actual downloaded file'],network_calls:0};fs.writeFileSync(path.join(__dirname,'artifacts/background-check.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));
+})().catch(e=>{console.error(e);process.exitCode=1});
