@@ -44,6 +44,8 @@ __pycache__/
 *.MP4
 *.webm
 *.mkv
+# The web's baked mobile shuffle video is a site asset, not a render.
+!web/tarot/public/scene/draw-shuffle.mp4
 **/renders/
 
 # System font files are not redistributed

@@ -52,10 +52,13 @@ with sync_playwright() as p:
   home=page.evaluate(fps);assert home>=30,f'home page {home} fps'
   # The home reveal used to stay on the mirrored back on Safari; the drawn card's face must be the visible side.
   expect(page.locator('.draw-button')).to_be_enabled(timeout=15000);page.locator('.draw-button').tap()
-  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=15000)
+  # The still scene plays the baked shuffle-and-raise video for the draw; the reveal waits for it.
+  page.wait_for_function("(()=>{const v=document.querySelector('.room-window .draw-video');return v&&v.classList.contains('is-playing')&&!v.paused&&v.currentTime>1})()",timeout=8000)
+  assert not page.locator('.reveal-layer').count(),'reveal opened before the shuffle video ended'
+  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=20000)
   faces=page.locator('.reveal-flipper').evaluate("(f)=>[getComputedStyle(f.querySelector('.reveal-front')).visibility,getComputedStyle(f.querySelector('.reveal-back')).visibility]")
   assert faces==['visible','hidden'],faces
-  page.screenshot(path=str(OUT/'iphone-home-reveal.png'));ok('home scene fitted with zoom; reveal shows the card face')
+  page.screenshot(path=str(OUT/'iphone-home-reveal.png'));ok('home scene fitted with zoom; shuffle video plays, then the reveal shows the card face')
   page.goto(URL+'/reading/');phase(page,'topic');page.get_by_role('button',name='ไปต่อ',exact=False).tap();phase(page,'question')
   page.get_by_role('button',name='พร้อมแล้ว',exact=False).tap();phase(page,'shuffling');page.wait_for_timeout(2500)
   assert page.evaluate("!!document.querySelector('canvas.ritual-deck-canvas')"),'WebGL deck not live'

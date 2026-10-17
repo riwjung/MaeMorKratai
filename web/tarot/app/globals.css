@@ -28,4 +28,5 @@
 
 .three-card-entry{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #c6a3bf55;border-radius:8px;padding:15px 17px;margin:15px 0;background:#66416a20}.three-card-entry>span{font-size:11px;color:#c6adce}.three-card-entry strong{font-size:13px;font-weight:400;color:#f3c89f}.three-card-entry strong span{margin-left:10px}.three-card-entry:hover{background:#79517a38}@media(max-width:760px){.site-header nav{gap:12px;font-size:10px}}
 @media(max-width:480px){.site-header nav a{white-space:nowrap}.site-header nav a[href^="#"]{display:none}}
+.room-window .draw-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;opacity:0;pointer-events:none;z-index:1}.room-window .draw-video.is-playing{opacity:1}
 
