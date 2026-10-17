@@ -1,0 +1,58 @@
+/* The hitbox/placement belongs to the caller. These inner layers own only decoration. */
+.ritual-card-visual{position:absolute;inset:0;perspective:1000px;pointer-events:none;--float-height:2.5px;--float-duration:4.8s}
+.ritual-card-bob,.ritual-card-turn{position:absolute;inset:0;transform-style:preserve-3d;border-radius:inherit}
+.ritual-card-visual .ritual-card-turn{transition:transform 650ms cubic-bezier(.4,0,.2,1);transform:rotateY(0deg)}
+.ritual-card-visual[data-open=true] .ritual-card-turn{transform:rotateY(180deg)}
+.ritual-card-visual .ritual-card-back{transform:translateZ(1px);background:#58306e}
+.ritual-card-visual .ritual-card-front{transform:rotateY(180deg) translateZ(1px);background:#392144}
+.ritual-card-visual .ritual-card-back,.ritual-card-visual .ritual-card-front{border-radius:7px;box-shadow:0 0 0 1px #e8d3afbb;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ritual-card-visual .ritual-card-back>img,.ritual-card-visual .ritual-card-front>img{display:block;position:static;width:100%;height:100%;object-fit:contain;transform:none;box-shadow:none;border-radius:7px}
+.ritual-card-edge{position:absolute;display:block;background:repeating-linear-gradient(#fff0cf 0 1px,#bba082 1px 2px);backface-visibility:visible}
+.edge-left,.edge-right{top:6px;bottom:6px;width:2px;transform:rotateY(90deg)}
+.edge-left{left:-1px}.edge-right{right:-1px}
+.edge-top,.edge-bottom{left:6px;right:6px;height:2px;transform:rotateX(90deg)}
+.edge-top{top:-1px}.edge-bottom{bottom:-1px}
+.ritual-card-visual[data-float=true]>.ritual-card-bob{animation:ritual-card-float var(--float-duration) ease-in-out infinite;animation-delay:var(--float-delay,0s)}
+@keyframes ritual-card-float{0%,100%{transform:translateY(0) rotateX(2deg) rotateY(-3deg)}50%{transform:translateY(calc(-1 * var(--float-height))) rotateX(-2deg) rotateY(3deg)}}
+.ritual-slot:nth-child(2){--float-delay:-1.8s}.ritual-slot:nth-child(3){--float-delay:-3.2s}
+.ritual-slot .ritual-card-bob{filter:none}
+.ritual-slot .ritual-card-turn{box-shadow:0 14px 25px #08041455}
+.ritual-slot.is-target .ritual-slot-card,.ritual-slot-card.is-filled:not(.is-open):hover{transform:none}
+.ritual-slot-card{transition:box-shadow .2s,border-color .2s}
+.ritual-deck-card .ritual-card-turn{transition:transform .25s ease}
+.ritual-deck-card.is-candidate .ritual-card-turn{transform:rotateX(-7deg) rotateY(-9deg);box-shadow:5px 15px 22px #08041470}
+.ritual-deck-card .ritual-card-visual{border-radius:7px}
+.ritual-ghost .ritual-card-turn{transform:rotateY(-5deg);box-shadow:0 22px 44px #05020fa6,0 0 20px #f3c39a33}
+.ritual-ghost .ritual-card-visual{position:absolute}
+.ritual-flight .ritual-card-turn{box-shadow:0 18px 32px #05020f77}
+.ritual-welcome-card{position:relative;width:86px;height:138px;flex:none;perspective:900px}
+.ritual-welcome-card:first-child{transform:translate(18px,8px) rotate(-17deg);z-index:-1;--float-duration:5.6s;--float-delay:-1.4s}
+.ritual-welcome-card:nth-child(2){--float-duration:4.8s;--float-delay:-2.6s}
+.ritual-welcome-card:last-child{transform:translate(-18px,8px) rotate(17deg);z-index:-1;--float-duration:5.2s;--float-delay:-.4s}
+.ritual-welcome-card .ritual-card-visual{--float-height:7px;--float-duration:inherit}
+.ritual-welcome-card .ritual-card-turn{box-shadow:0 15px 25px #08041466}
+.ritual-card-lean{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(var(--lean-x,0deg)) rotateY(var(--lean-y,0deg));transition:transform .25s ease}
+.ritual-welcome-cards .ritual-card-visual img{width:100%;height:100%;transform:none;z-index:auto;box-shadow:none}
+.ritual-rabbit{position:relative;width:100%;height:100%;isolation:isolate;overflow:hidden;border-radius:inherit;background:#291731}
+.ritual-rabbit iframe{position:absolute;left:50%;top:50%;width:1000px;height:1100px;max-width:none;max-height:none;transform-origin:center;border:0;pointer-events:none;opacity:0}
+.ritual-rabbit[data-ready=true] iframe{opacity:1}
+.ritual-rabbit .ritual-rabbit-fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 10%}
+.ritual-rabbit[data-ready=true] .ritual-rabbit-fallback{visibility:hidden}
+.ritual-rabbit-reaction{position:absolute;inset:0;pointer-events:none;border-radius:inherit;animation:ritual-rabbit-glow 750ms ease-out both}
+@keyframes ritual-rabbit-glow{0%{box-shadow:inset 0 0 6px #ffd1a900}25%{box-shadow:inset 0 0 22px #ffdbbbaa}100%{box-shadow:inset 0 0 6px #ffd1a900}}
+.ritual-motion-toggle{border:1px solid #b697a650;background:#33213b;color:#e6d2bd;border-radius:24px;padding:9px 14px;font:inherit;font-size:11px;cursor:pointer;white-space:nowrap;min-height:40px}
+.ritual-motion-toggle:focus-visible{outline:2px solid #f3ceaa;outline-offset:4px}
+.ritual-motion-toggle:disabled{cursor:default;color:#bda9bf}
+.ritual-header{flex-wrap:wrap;gap:12px}
+.ritual-edition{margin-left:auto}
+[data-motion-active=false] .ritual-card-bob,[data-motion-active=false] .ritual-rabbit-reaction{animation-play-state:paused!important}
+[data-motion-active=false]>.ritual-welcome-card .ritual-card-lean{transform:none}
+.ritual[data-reduced=true] *,.ritual-card-visual[data-still=true] *{animation:none!important;transition:none!important}
+.ritual-card-visual[data-still=true] .ritual-card-bob{transform:none}
+.ritual[data-reduced=true] .ritual-deck-card.is-candidate .ritual-card-turn{transform:none}
+@media(max-width:700px){.ritual-welcome-card{width:70px;height:112px}.ritual-motion-toggle{font-size:10px;padding:7px 10px}.ritual-edition{display:none}.ritual-header{justify-content:space-between}}
+@media(prefers-reduced-motion:reduce){.ritual-card-visual *,.ritual-rabbit-reaction{animation:none!important;transition:none!important}.ritual-card-lean{transform:none}}
+
+[data-motion-active=false] .ritual-slot-open span{animation-play-state:paused!important}
+.ritual-ghost[data-reduced=true]>div{transition:none;transform:none!important}
+.ritual-ghost[data-reduced=true] .ritual-card-turn{transform:none}

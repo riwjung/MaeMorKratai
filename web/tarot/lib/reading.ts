@@ -26,9 +26,12 @@ export const suggestions: Record<Category, readonly string[]> = {
 export const positions = ['อดีต', 'ปัจจุบัน', 'อนาคต'] as const;
 export type ReadingRequest = {category: Category; situation: string; question: string; spread: 'past-present-future'};
 export type Phase = 'topic' | 'question' | 'shuffling' | 'gathering' | 'spreading' | 'selecting' | 'revealing' | 'locked' | 'reading';
-export type DrawSession = {phase: Phase; deck: string[]; selected: string[]; revealed: number; unlocked: boolean};
-export const initialSession: DrawSession = {phase: 'topic', deck: [], selected: [], revealed: 0, unlocked: false};
-export type Action = {type: 'QUESTION' | 'TOPIC' | 'EDIT' | 'STOP' | 'GATHERED' | 'SPREAD' | 'REVEAL' | 'NEXT_REVEAL' | 'UNLOCK' | 'RESET'} | {type: 'START'; deck: string[]} | {type: 'PICK' | 'REMOVE'; id: string};
+// slots follow the spread positions (past, present, future); a card keeps the slot it was placed in.
+export type DrawSession = {phase: Phase; deck: string[]; slots: (string | null)[]; opened: boolean[]; unlocked: boolean};
+export const initialSession: DrawSession = {phase: 'topic', deck: [], slots: [null, null, null], opened: [false, false, false], unlocked: false};
+export type Action = {type: 'QUESTION' | 'TOPIC' | 'EDIT' | 'STOP' | 'GATHERED' | 'SPREAD' | 'REVEAL' | 'NEXT_REVEAL' | 'UNLOCK' | 'RESET'} | {type: 'START'; deck: string[]} | {type: 'PICK'; id: string; slot?: number} | {type: 'REMOVE'; id: string} | {type: 'OPEN'; slot: number};
+export const placedCards = (s: DrawSession) => s.slots.filter((id): id is string => id !== null);
+const openSlot = (s: DrawSession, slot: number) => s.opened.map((open, i) => open || i === slot);
 export function sessionReducer(s: DrawSession, action: Action): DrawSession {
   switch (action.type) {
     case 'QUESTION': return s.phase === 'topic' ? {...s, phase: 'question'} : s;
@@ -38,10 +41,28 @@ export function sessionReducer(s: DrawSession, action: Action): DrawSession {
     case 'STOP': return s.phase === 'shuffling' ? {...s, phase: 'gathering'} : s;
     case 'GATHERED': return s.phase === 'gathering' ? {...s, phase: 'spreading'} : s;
     case 'SPREAD': return s.phase === 'spreading' ? {...s, phase: 'selecting'} : s;
-    case 'PICK': return s.phase === 'selecting' && s.selected.length < 3 && s.deck.includes(action.id) && !s.selected.includes(action.id) ? {...s, selected: [...s.selected, action.id]} : s;
-    case 'REMOVE': return s.phase === 'selecting' ? {...s, selected: s.selected.filter(id => id !== action.id)} : s;
-    case 'REVEAL': return s.phase === 'selecting' && s.selected.length === 3 ? {...s, phase: 'revealing'} : s;
-    case 'NEXT_REVEAL': return s.phase === 'revealing' ? {...s, revealed: s.revealed + 1, phase: s.revealed === 2 ? 'locked' : 'revealing'} : s;
+    case 'PICK': {
+      // Without a slot the card takes the first empty one; a named slot must be empty.
+      const slot = action.slot ?? s.slots.indexOf(null);
+      if (s.phase !== 'selecting' || !s.deck.includes(action.id) || s.slots.includes(action.id) || slot < 0 || slot > 2 || s.slots[slot] !== null) return s;
+      return {...s, slots: s.slots.map((id, i) => i === slot ? action.id : id)};
+    }
+    case 'REMOVE': {
+      // An opened card has been seen and stays; removing leaves its slot empty instead of shifting the others.
+      const slot = s.slots.indexOf(action.id);
+      return s.phase === 'selecting' && slot >= 0 && !s.opened[slot] ? {...s, slots: s.slots.map((id, i) => i === slot ? null : id)} : s;
+    }
+    case 'OPEN': {
+      if (s.phase !== 'selecting' || !s.slots[action.slot] || s.opened[action.slot]) return s;
+      const opened = openSlot(s, action.slot);
+      return {...s, opened, phase: opened.every(Boolean) ? 'locked' : 'selecting'};
+    }
+    case 'REVEAL': return s.phase === 'selecting' && s.slots.every(id => id !== null) ? {...s, phase: 'revealing'} : s;
+    case 'NEXT_REVEAL': {
+      if (s.phase !== 'revealing') return s;
+      const opened = openSlot(s, s.opened.indexOf(false));
+      return {...s, opened, phase: opened.every(Boolean) ? 'locked' : 'revealing'};
+    }
     case 'UNLOCK': return s.phase === 'locked' ? {...s, phase: 'reading', unlocked: true} : s;
     case 'RESET': return initialSession;
   }

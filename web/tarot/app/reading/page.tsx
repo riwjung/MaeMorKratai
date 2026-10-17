@@ -1,24 +1,34 @@
 'use client';
 import Link from 'next/link';
 import {useEffect, useMemo, useReducer, useRef, useState} from 'react';
-import {categories, contexts, suggestions, situations, createReading, initialSession, sessionReducer, shuffleDeck, type Category, type ReadingRequest} from '../../lib/reading';
-import {Back, Mascot, ShuffleDeck, Table} from './Table';
+import {categories, contexts, suggestions, situations, createReading, initialSession, placedCards, sessionReducer, shuffleDeck, type Category, type ReadingRequest} from '../../lib/reading';
+import {ShuffleDeck, Table} from './Table';
+import {DeckScene, type DeckPhase} from './DeckScene';
+import {AnimatedRabbit} from './Motion';
+import {WelcomeCards} from './CardVisual';
 import './reading.css';
+import './motion.css';
 
 export default function ReadingPage() {
   const [session, dispatch] = useReducer(sessionReducer, initialSession);
   const [category, setCategory] = useState<Category>('love');
   const [situation, setSituation] = useState<string>(contexts[0]);
   const [question, setQuestion] = useState('');
-  const [reduced, setReduced] = useState(false);
+  const [systemReduced, setReduced] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const reduced = systemReduced || paused;
   const [error, setError] = useState('');
+  const [webgl, setWebgl] = useState(true);
   const title = useRef<HTMLHeadingElement>(null);
   const stage = session.phase;
   const setup = stage==='topic' || stage==='question';
   const shuffling = stage==='shuffling' || stage==='gathering';
+  // The WebGL deck owns shuffle → spread unless motion is reduced or WebGL is unavailable.
+  const deck3d = webgl && !reduced;
   const categoryLabel = categories.find(c=>c.id===category)!.label;
   const request: ReadingRequest = useMemo(()=>({category,situation,question:question.trim(),spread:'past-present-future'}),[category,situation,question]);
-  const result = useMemo(()=>session.unlocked?createReading(request,session.selected):null,[session.unlocked,request,session.selected]);
+  const result = useMemo(()=>session.unlocked?createReading(request,placedCards(session)):null,[session.unlocked,request,session]);
+  const openedCount = session.opened.filter(Boolean).length;
   useEffect(()=>{
     const media=matchMedia('(prefers-reduced-motion: reduce)');
     const update=()=>setReduced(media.matches);update();media.addEventListener('change',update);
@@ -29,10 +39,14 @@ export default function ReadingPage() {
     if (['topic','question','shuffling','reading'].includes(stage)) window.scrollTo({top:0,behavior:'instant'});
   },[stage]);
   useEffect(()=>{
+    // Warm the WebGL deck while the question is being written, so the shuffle opens in 3D right away.
+    if(stage==='question' && deck3d) import('three').catch(()=>{});
+  },[stage,deck3d]);
+  useEffect(()=>{
     if(stage!=='revealing') return;
-    const timer=setTimeout(()=>dispatch({type:'NEXT_REVEAL'}),reduced?80:850);
+    const timer=setTimeout(()=>dispatch({type:'NEXT_REVEAL'}),reduced?0:700);
     return ()=>clearTimeout(timer);
-  },[stage,session.revealed,reduced]);
+  },[stage,openedCount,reduced]);
   function changeCategory(next:Category) {
     setCategory(next);setSituation(situations[next][0]);
     // Preserve a personal question; discard a suggestion belonging to the previous category.
@@ -46,7 +60,7 @@ export default function ReadingPage() {
   const step=setup?1:shuffling?2:['spreading','selecting'].includes(stage)?3:4;
   const heading=stage==='topic'?'วันนี้มีเรื่องอะไร\nอยู่ในใจคุณ?':stage==='question'?'เล่าให้กระต่ายฟัง\nอีกสักนิด':stage==='shuffling'?'กระต่ายกำลังสับไพ่ให้คุณ':stage==='gathering'?'เก็บคำถามไว้ในใจสักครู่':stage==='spreading'?'ไพ่ของคุณกำลังเรียงตัว':stage==='selecting'?'ให้ความรู้สึกพาคุณเลือก':stage==='revealing'?'ค่อย ๆ เปิดเรื่องราวของคุณ':stage==='locked'?'ไพ่ทั้งสามใบของคุณ': 'เรื่องราวจากไพ่ของคุณ';
   return <main className="ritual" data-phase={stage} data-reduced={reduced}>
-    <header className="ritual-header"><Link className="ritual-home" href="/" aria-label="กลับหน้าแรกแม่หมอกระต่าย"><span aria-hidden="true">←</span><span>MaeMorKratai<small>ห้องไพ่ใต้แสงจันทร์</small></span></Link><span className="ritual-edition">THREE CARDS, A LITTLE CLARITY <span aria-hidden="true">✧</span></span></header>
+    <header className="ritual-header"><Link className="ritual-home" href="/" aria-label="กลับหน้าแรกแม่หมอกระต่าย"><span aria-hidden="true">←</span><span>MaeMorKratai<small>ห้องไพ่ใต้แสงจันทร์</small></span></Link><span className="ritual-edition">THREE CARDS, A LITTLE CLARITY <span aria-hidden="true">✧</span></span><button className="ritual-motion-toggle" aria-pressed={paused} onClick={()=>setPaused(!paused)} disabled={systemReduced}>{systemReduced?'ลดการเคลื่อนไหวตามอุปกรณ์':paused?'เล่นภาพเคลื่อนไหว':'หยุดภาพเคลื่อนไหว'}</button></header>
     <div className="ritual-progress" aria-label={`ขั้นตอนที่ ${step} จาก 4`}>
       {['ตั้งคำถาม','สับไพ่','เลือก 3 ใบ','เปิดเรื่องราว'].map((label,i)=><span key={label} aria-current={step===i+1?'step':undefined} className={step>=i+1?'is-active':''}><b>{String(i+1).padStart(2,'0')}</b>{label}</span>)}
     </div>
@@ -73,21 +87,21 @@ export default function ReadingPage() {
         </>}
         <p className="ritual-private">ไม่ต้องกรอกชื่อหรือวันเกิด · คำถามอยู่เฉพาะในหน้านี้</p>
       </div>
-      <aside className="ritual-welcome-art" aria-label="โลกของแม่หมอกระต่าย"><span className="ritual-art-top">THE MOONLIT ROOM</span><div className="ritual-arch"><img src="/scene/assets/character.jpg" alt="แม่หมอกระต่ายรออยู่ใต้แสงจันทร์"/></div><span className="ritual-art-star" aria-hidden="true">✧</span><div className="ritual-welcome-cards" aria-hidden="true"><Back/><Back/><Back/></div><p>ไพ่สามใบ เรื่องราวหนึ่งเรื่อง</p><small>อดีต · ปัจจุบัน · อนาคต</small></aside>
+      <aside className="ritual-welcome-art" aria-label="โลกของแม่หมอกระต่าย"><span className="ritual-art-top">THE MOONLIT ROOM</span><div className="ritual-arch"><AnimatedRabbit size="portrait" motion={!reduced}/></div><span className="ritual-art-star" aria-hidden="true">✧</span><WelcomeCards motion={!reduced}/><p>ไพ่สามใบ เรื่องราวหนึ่งเรื่อง</p><small>อดีต · ปัจจุบัน · อนาคต</small></aside>
     </section> : <section className="ritual-experience">
-      <Mascot/>
+      <div className="ritual-mascot"><AnimatedRabbit motion={!reduced} reaction={session.slots.filter(Boolean).length}/><span aria-hidden="true">✧</span></div>
       <p className="ritual-category-badge">{categoryLabel} <span>·</span> {situation}</p>
       <h1 ref={title} tabIndex={-1}>{heading}</h1>
       <p className="ritual-question">{request.question?`“${request.question}”`:'เก็บคำถามไว้ในใจ แล้วเริ่มเมื่อคุณพร้อม'}</p>
       {shuffling ? <>
-        <ShuffleDeck stopping={stage==='gathering'} reduced={reduced} onStop={()=>dispatch({type:'STOP'})} onGathered={()=>dispatch({type:'GATHERED'})}/>
+        <ShuffleDeck stopping={stage==='gathering'} reduced={reduced} external={deck3d} onStop={()=>dispatch({type:'STOP'})} onGathered={()=>dispatch({type:'GATHERED'})}/>
         <p className="ritual-shuffle-hint">{stage==='shuffling'?'แตะสำรับเมื่อคุณพร้อม':'กำลังรวมสำรับ แล้วกางไพ่ให้คุณ…'}</p>
         <button className="ritual-primary ritual-stop" disabled={stage==='gathering'} onClick={()=>dispatch({type:'STOP'})}>หยุดสับไพ่ <span aria-hidden="true">✧</span></button>
         {stage==='shuffling'&&<button className="ritual-back" onClick={()=>dispatch({type:'EDIT'})}>← กลับไปแก้คำถาม</button>}
       </> : <>
-        <Table session={session} reduced={reduced} onPick={id=>dispatch({type:'PICK',id})} onRemove={id=>dispatch({type:'REMOVE',id})} onReveal={()=>dispatch({type:'REVEAL'})} onSpread={()=>dispatch({type:'SPREAD'})}/>
+        <Table session={session} reduced={reduced} external={deck3d} onPick={(id,slot)=>dispatch({type:'PICK',id,slot})} onRemove={id=>dispatch({type:'REMOVE',id})} onOpen={slot=>dispatch({type:'OPEN',slot})} onReveal={()=>{dispatch({type:'REVEAL'});dispatch({type:'NEXT_REVEAL'});}} onSpread={()=>dispatch({type:'SPREAD'})}/>
         {stage==='selecting' && <button className="ritual-back ritual-edit" onClick={()=>dispatch({type:'EDIT'})}>← แก้คำถามและเริ่มสำรับใหม่</button>}
-        {stage==='revealing' && <p className="ritual-reveal-status" role="status">เปิดไพ่แล้ว {session.revealed} / 3 ใบ</p>}
+        {stage==='revealing' && <p className="ritual-reveal-status" role="status">เปิดไพ่แล้ว {openedCount} / 3 ใบ</p>}
         {stage==='locked' && <div className="ritual-unlock"><span className="ritual-unlock-star" aria-hidden="true">✧</span><p className="ritual-eyebrow">YOUR STORY IS READY TO UNFOLD</p><h2>สามช่วงเวลา เชื่อมเป็นเรื่องของคุณ</h2><p>มองความหมายรายใบ แล้วค่อย ๆ อ่านภาพรวมไปด้วยกัน</p><button className="ritual-primary" onClick={()=>dispatch({type:'UNLOCK'})}>ปลดล็อกคำอ่านฉบับเต็ม <span aria-hidden="true">→</span></button><small>ปลดล็อกแบบสาธิต · ไม่มีการชำระเงินจริง</small></div>}
         {result && <section className="ritual-result" aria-label="คำอ่านฉบับเต็ม">
           <p className="ritual-demo-banner">ร่างทดลอง · {category==='love'?'ความหมายรายใบจากคลังเดิมยังรอทบทวน ส่วนการเชื่อมสามช่วงเวลาเป็นตัวอย่าง':'หมวดนี้ยังไม่มีคำอ่านของเจ้าของ แสดงตัวอย่างหน้าผลลัพธ์เท่านั้น'}</p>
@@ -99,6 +113,7 @@ export default function ReadingPage() {
         {['locked','reading'].includes(stage) && <button className="ritual-back ritual-new" onClick={reset}>ตั้งคำถามใหม่ แล้วเริ่มอีกครั้ง ↗</button>}
       </>}
     </section>}
+    {deck3d && (shuffling || stage==='spreading' || stage==='selecting') && <DeckScene phase={stage as DeckPhase} onFail={()=>setWebgl(false)} onGathered={()=>dispatch({type:'GATHERED'})} onSpread={()=>dispatch({type:'SPREAD'})}/>}
     <footer className="ritual-footer"><span>MAEMORKRATAI <span aria-hidden="true">☾</span></span><span>พื้นที่เล็ก ๆ สำหรับฟังใจตัวเอง</span><span>สำรับ 78 ใบ · ประสบการณ์ทดลอง</span></footer>
   </main>;
 }

@@ -3,6 +3,7 @@ export type Motion = {
   set: (target: unknown, vars: Record<string, unknown>) => void;
   to: (target: unknown, vars: Record<string, unknown>) => Timeline;
   timeline: (options?: Record<string, unknown>) => Timeline;
+  ticker: {add: (fn: (time: number) => void) => void; remove: (fn: (time: number) => void) => void};
 };
 let loading: Promise<Motion> | undefined;
 export function loadReadingMotion(): Promise<Motion> {

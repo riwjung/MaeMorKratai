@@ -37,8 +37,8 @@
 1. เลือกความรัก/การงาน/การเงิน/ภาพรวมชีวิต และคำถามที่พิมพ์หรือเลือกจากตัวอย่าง
 2. เลือกสถานการณ์;ความรักใช้คนโสด/แอบชอบ/คุยกัน/ซับซ้อน/มีแฟน/เลิกกัน
 3. สำรับสับวนด้วยGSAPจนผู้ใช้แตะหยุด;รวมจากposeปัจจุบันแล้วกางสำรับ
-4. เลือก3ใบจาก78รหัสไม่ซ้ำ ผ่านพัดที่เลื่อนหรือกริด;แตะยกใบแล้วกดยืนยัน;คืนไพ่ได้ก่อนเปิด
-5. เปิดเรียงอดีต→ปัจจุบัน→อนาคต แล้วปลดล็อกคำอ่านแบบสาธิตฟรี
+4. เลือก3ใบจาก78รหัสไม่ซ้ำ: ลากไพ่จากพัดไปวางในช่องอดีต/ปัจจุบัน/อนาคตที่ต้องการ หรือแตะแล้วกดเลือก (ลงช่องว่างแรก); คืนไพ่ได้ก่อนเปิดและช่องว่างไว้ไม่เลื่อน
+5. แตะไพ่ในช่องเพื่อเปิดเองทีละใบ ลำดับใดก็ได้ หรือกดเปิดใบที่เหลือ; เปิดครบแล้วปลดล็อกคำอ่านแบบสาธิตฟรี
 
 ใช้ม่วง/ครีม/พีชและมาสคอต/หลังไพ่เดิม รองรับkeyboard,reducedmotion,ภาพที่ยังไม่พร้อมและGSAPโหลดไม่สำเร็จ
 
@@ -50,6 +50,7 @@
 - `lib/reading.ts` — types,state reducer,WebCrypto Fisher–Yates,ตัวสร้างคำอ่านdemo
 - `lib/reading-cards.json` — 78รหัสและ468ความหมาย พร้อมแหล่งข้อมูลและURLภาพที่มีจริง
 - `lib/reading-motion.ts` — ตัวโหลดGSAPจากlocal asset
+- `app/reading/DeckScene.tsx` — สำรับ WebGL (three.js) ช่วงสับ→รวม→กาง ส่งต่อให้พัด DOM; ไม่มี WebGL/reduced motion ใช้สำรับ DOM ใน `Table.tsx`
 
 พาธข้างต้นสัมพันธ์กับโฟลเดอร์เว็บ ไม่ใช่รากvault
 
@@ -96,7 +97,7 @@ python3 -m http.server 3010 --bind 127.0.0.1 --directory out
 
 ## สายงานอื่นที่ต้องรู้
 
-- Gemini web runnerรุ่น1.2.0อยู่ `tools/gemini-web-runner/`;runtimeแยกในโฟลเดอร์เดียวกันนอกiCloud ใช้Chrome extensionแทนpaidAPI แก้blob downloadแล้ว;ห้ามส่งpromptซ้ำให้ใบที่generatedแต่ดาวน์โหลดค้าง อ่านREADMEและwikiก่อนrecover
+- Gemini web runnerรุ่น1.3.0อยู่ `tools/gemini-web-runner/`;runtimeแยกในโฟลเดอร์เดียวกันนอกiCloud ใช้Chrome extensionแทนpaidAPI แก้blob downloadแล้ว;ห้ามส่งpromptซ้ำให้ใบที่generatedแต่ดาวน์โหลดค้าง อ่านREADMEและwikiก่อนrecover
 - ชุดพรอมต์78ใบอยู่ `animations/tarot-pilot/prompts-78/` พรอมต์ครบไม่เท่ากับภาพครบ
 - Halloween animationล่าสุดv3มีสับ/ถือไพ่/กระพริบตาอยู่ `animations/halloween-2026/` และruntime;ไม่เจนทับart styleโดยอัตโนมัติ
 - Social Center ยังไม่มีข้อมูลบัญชี/โพสต์/metricจริงที่เชื่อมแล้ว ตามHANDOFFเดิม;อย่าอ้างตัวเลขจริงหรือยิงsyncโดยเดาtoken
@@ -110,3 +111,11 @@ Repositoryเป็นpublic. `.gitignore`กัน`.env*`,rawส่วนตั
 ## ข้อความเริ่มงานสำหรับ Claude Code
 
 > อ่าน AGENTS.md, CLAUDE.md และ CLAUDE_HANDOFF.md ในโฟลเดอร์ MaeMorKratai ก่อน แล้วตรวจ HANDOFF.md กับ git status. โปรเจกต์เว็บรันจาก ~/AIVideoLocal/maemorkratai/tarot-web และสำรองใน web/tarot. คุยภาษาไทย รอคำสั่งงานถัดไป ไม่เจนภาพ ไม่ใช้เครดิต และไม่deployเอง.
+
+## อัปเดตชื่อภาพไพ่ — 2026-10-16
+
+เจ้าของยืนยันชื่ออังกฤษเดิม: runner 1.3 และพรอมต์ 78 ใบรองรับ title-v1, เพิ่มชื่อภาพเดิม และ ref ภาพตัวอักษรที่เจ้าของอนุมัติ คู่มือ runner ด้านบนเป็นจุดเริ่มต้น คิวเก่าและไฟล์ไม่มีชื่อยังคงอยู่ ไม่มีการเจนจริงหรืออนุมัติภาพแทนเจ้าของ; ภาพ/ref ที่นำเข้าอยู่ในหน่วยความจำแท็บ ต้องเลือกใหม่หลัง refresh
+
+## Gemini runner 1.4.0 — 2026-10-17
+
+ดู [[gemini-pro-card-repair-source-2026-10-17]]: Pro model picker เป็นค่าเริ่มต้น/ตรวจซ้ำก่อนส่ง; โหมดซ่อมภาพเดิมเลือกกรอบหรือคิ้ว โดยรักษาภาพและชื่อ คิว repair-v1 แยกจากเดิม; attempt history และไฟล์เก่าคงอยู่ ผล cards-repaired/v1 ต้อง owner review ไม่มี auto visual QA. Emperor เริ่มซ่อมกรอบ; Chariot เริ่มเติมคิ้ว. พรอมต์สองใบพร้อมใช้ใน tools/gemini-web-runner/repair-prompts. Google แยก Pro chat กับ Nano Banana Pro (Redo with Pro); ตัวช่วยยังไม่กด Redo เพิ่มเอง. อัปเดตคู่มือ/ZIP/สำรอง runtime แล้ว อ่านผลทดสอบ tests/artifacts; ไม่มีการเจนภาพจริงหรือเปลี่ยน JPG ใน Downloads ในงานนี้

@@ -15,20 +15,25 @@ Next.js static export; สถานะอยู่ใน React memory ของ�
 `topic → question → shuffling → gathering → spreading → selecting → revealing → locked → reading`
 
 - Fisher–Yates ใช้ Web Crypto + rejection sampling สุ่มครบหนึ่งสำรับต่อรอบ ไม่ใช้ sort(random) และไม่สุ่มใหม่ตอนแตะเลือกหรือปลดล็อก
-- `STOP` หยุด GSAP timeline โดยคง pose ล่าสุด จากนั้น tween กลับเป็นกอง ก่อนแสดงพัดไพ่ ไม่ seek กลับเฟรมแรก
+- ช่วงสับ→รวม→กางใช้สำรับ WebGL (`app/reading/DeckScene.tsx`, three.js 0.186.1 โหลดแบบ lazy เมื่อถึงขั้นคำถาม/สับ) ท่าสับตามหลักของ Moonlight (Ref2): ทั้งกองเอียงหลัง 10° และหมุนรอบแกนตั้งรอบละ 4 วินาที จึงเห็นด้านข้างของสำรับเป็นระยะ; ไพ่ 30 ใบบนสุดวนเป็นวงแนวตั้งรอบกอง (ขึ้น-ไปหลัง-ลง-กลับหน้า) รอบละ 3 วินาที เริ่มจากใบบนสุดห่างกันใบละ 0.1 วินาที จึงกระจายเท่ากันหนึ่งวงพอดี; รัศมีวงเพิ่มทีละใบให้มีระยะห่างชัด ไพ่ทุกใบหันทางเดียวกันตลอด (ต่างแค่เอียงในระนาบเล็กน้อย) จึงไม่ทะลุกัน มีความหนาขอบครีมให้เห็นเป็นเส้นตอนหันข้าง ใช้สีจากภาพหลังไพ่ตรง ๆ และเอียงตามเมาส์เล็กน้อย; ระยะวงลดเองเมื่อพื้นที่ stage เตี้ย
+- อ้างอิงที่วิเคราะห์จาก bundle สาธารณะของ app.moonlight.world (2026-10-16): เป็น Framer Motion + CSS 3D ไม่ใช่ three.js; ไพ่กว้าง 150px, กองเอียง 10°, หมุน 4 วินาที/รอบ, วงไพ่ 3 วินาที, หน่วงใบละ 0.1 วินาที, ขึ้นลง ±90px, รัศมี 25px+2px ต่อใบ, ใช้ไพ่ทั้ง 78 ใบ. ของเราเขียนใหม่ด้วย three.js ไม่ได้คัดลอกโค้ด ลดเหลือ 30 ใบและเว้นระยะวงห่างกว่าราว 2.5 เท่า; ไพ่อีก 48 ใบปรากฏจากในกองตอนกางเป็นพัด 78 ใบ
+- ปุ่ม `.ritual-shuffle` เดิมยังเป็นจุดแตะหยุดและตำแหน่งที่สำรับ 3D ยึด; เฟรมเดินด้วย `gsap.ticker` (ไม่มี GSAP ใช้ rAF) และเขียน `data-pose` ไว้ให้ชุดทดสอบ
+- `STOP` หยุดตรง pose ปัจจุบันแล้วรวมกองจากท่านั้น (gap ไม่ถึงศูนย์ ไพ่ยังแยกชั้น); `spreading` สำรับลงกลางพัดแล้วคลี่ออกไปที่ตำแหน่ง DOM fan แบบตรงพิกเซล (ชดเชย perspective) ตัดขอบตามกล่องพัด/แถบเลือกที่ sticky บนมือถือ แล้ว fade canvas ทับพัด DOM 0.2 วินาทีก่อนคืนหน่วยความจำ
+- ไม่มี WebGL, three โหลดไม่ทันใน 4 วินาที หรือ reduced motion → ใช้สำรับ DOM 24 ใบ (สูตร pose ต่อเนื่องบน GSAP) และไพ่บินลงพัดด้วย WAAPI แบบเดิม; หลังไพ่ทั้งสองแบบใช้ `card-back.webp` ที่ raster จาก SVG เดิม
+- ระหว่างเลือก เมาส์ยกไพ่รอบ pointer เป็นคลื่นนุ่ม (touch ไม่ใช้)
 - สำรับเป็น 78 ปุ่มตามลำดับเดิม มุมมองพัดเลื่อนแนวนอน/กริดใช้รหัสเดียวกัน ใบที่เลือกซ่อนจากสำรับและคืนได้ก่อนเปิด ไม่มีการอ่านชื่อไพ่ผ่าน accessible label ก่อนเปิด
-- แตะไพ่เพื่อยก แล้วกดยืนยัน; pointer movement/scroll เกิน 9px ไม่ถือเป็น tap ยืนยัน ใช้ ArrowLeft/Right และ Home/End เลื่อนไปหาไพ่ด้วยคีย์บอร์ดได้
-- เลือกได้สามใบต่างกัน ยกเลิกใบกลางแล้วไพ่ถัดไปเลื่อนช่องซ้าย บทบาทตำแหน่งผูกกับลำดับปัจจุบันที่ผู้ใช้เห็น
-- เปิดเรียงทีละใบแล้วคงสำรับ/ผลเดิมเมื่อปลดล็อก ปุ่มปลดล็อกเป็น demo ไม่มี entitlement หรือ price
+- เลือกได้สองทาง: ลากไพ่จากพัดไปวางในช่อง อดีต/ปัจจุบัน/อนาคต ที่ต้องการ (ช่องว่างขึ้น "วางที่นี่" และเรืองเมื่อไพ่อยู่เหนือช่อง ปล่อยนอกช่องไพ่กลับที่เดิม) หรือแตะไพ่แล้วกด "เลือกใบนี้" ซึ่งลงช่องว่างแรก; บนจอสัมผัส ดึงขึ้น (เฉียงได้) คือหยิบไพ่ ส่วนปัดแนวนอนยังเลื่อนพัด; pointer movement/scroll เกิน 9px ไม่ถือเป็น tap ยืนยัน ใช้ ArrowLeft/Right และ Home/End เลื่อนไปหาไพ่ด้วยคีย์บอร์ดได้; เมื่อเริ่มกางไพ่ หน้าเลื่อนให้เห็นทั้งช่องและพัดเหนือแถบเลือกบนมือถือ
+- เลือกได้สามใบต่างกัน ไพ่อยู่ในช่องที่วางเสมอ; "เลือกใหม่" คืนไพ่ใบนั้นเข้าสำรับแล้วช่องว่างไว้ ไม่เลื่อนใบอื่น (เปลี่ยนจากเดิมที่เลื่อนช่องซ้าย เพราะผู้ใช้เลือกช่องเองแล้ว) บทบาทตำแหน่งผูกกับช่อง
+- แตะไพ่ในช่องเพื่อพลิกเปิดเองได้ทันทีทีละใบ ลำดับใดก็ได้ แม้ช่องอื่นยังว่าง; ไพ่ที่เปิดแล้วคืนไม่ได้; เมื่อครบสามช่องมีปุ่ม "เปิดไพ่ทั้งสามใบ"/"เปิดใบที่เหลือ" เปิดใบที่เหลือเรียงช่อง; เปิดครบสามใบแล้วไปขั้นปลดล็อก คงสำรับ/ผลเดิมเมื่อปลดล็อก ปุ่มปลดล็อกเป็น demo ไม่มี entitlement หรือ price
 - Reduced motion หยุดการหมุน/บิน/พลิก แต่ยังรอผู้ใช้กดหยุดสับและเลือกเอง หากโหลด GSAP ไม่สำเร็จใช้สำรับนิ่งและยังเดิน flow ต่อได้
-- ใช้ CSS/GSAP local asset เดิม ไม่สร้างภาพใหม่ ไม่ใช้เครดิตหรือส่งข้อมูลให้บริการภายนอก
+- ใช้ CSS/GSAP/three.js ที่ bundle ในเว็บเอง ไม่สร้างภาพใหม่ ไม่ใช้เครดิตหรือส่งข้อมูลให้บริการภายนอก
 
 ## ข้อตกลงข้อมูล
 
 Types และ pure functions อยู่ใน `lib/reading.ts`:
 
 - `ReadingRequest`: category, situation, question, spread='past-present-future'
-- `DrawSession`: phase, deck (78 IDs), selected (ordered IDs สูงสุด 3), revealed (0–3), unlocked
+- `DrawSession`: phase, deck (78 IDs), slots (3 ช่องตามตำแหน่ง แต่ละช่องเป็น ID หรือว่าง), opened (เปิดแล้วรายช่อง), unlocked; action `PICK` รับ slot ได้, `OPEN` เปิดรายช่อง
 - `ReadingResult`: request, entries (card ID/name/position/text/source), summary, reflection, status='demo', knowledgeVersion
 - `createReading()` ตรวจครบ 3 ใบไม่ซ้ำและสถานการณ์ตรงหมวด ไม่รับกรณีที่ไม่มีข้อมูลมาแทนคำอ่านจริง
 - `sessionReducer()` กัน stale transition, rapid duplicate, early reveal/unlock, และการเปลี่ยนสำรับระหว่างเลือก
@@ -62,3 +67,17 @@ python3 -m http.server 3010 --bind 127.0.0.1 --directory out
 ```
 
 UI suite ใช้ production export และ browser แยก ไม่มีการต่อบัญชีหรือเปลี่ยนโค้ด production ตรวจ 60 วินาทีแบบ elapsed time จริง; หลักฐาน `artifacts/reading/ui-check.json` และ screenshots
+
+## กระต่ายและไพ่เคลื่อนไหว — 2026-10-17
+
+`app/reading/Motion.tsx` มี AnimatedRabbit (size: portrait/compact, motion, reaction) ใช้ iframe `/scene/index.html?presentation=portrait` และภาพ/ท่าหายใจ/กะพริบตาจากหน้าแรก ไม่เรียก draw. Bridge ตรวจ origin และ source ทั้งสองฝั่ง; message `mmkt:portrait-motion` รับ playing เฉพาะ portrait mode. โหมดหน้าแรกยังใช้ controller เดิม. ฉากไม่พร้อมภายใน 8 วินาทีหรือส่ง error จะเปลี่ยนเป็นภาพนิ่งและถอด iframe. ลด turbulence ของพื้นหลังห้องเฉพาะ portrait เพื่อไม่วาด texture ทั้งห้องใหม่ทุกเฟรม; ภาพกระต่ายเดิมคงอยู่.
+
+`CardVisual.tsx` แยก placement ภายนอก → bob → turn → front/back/cream edges (2px). ใช้กับไพ่ต้อนรับ พัด/กริด ไพ่ในช่อง และไพ่ที่ลาก/บิน. ไม่สร้างลูปลอยให้สำรับ 78 ใบ: เฉพาะสามใบต้อนรับลอย 7px รอบ 4.8–5.6s และไพ่คว่ำในช่องลอย 2.5px. ไพ่ต้อนรับเอียงตาม mouse สูงสุด 5° เฉพาะ fine pointer; ไพ่เปิดพลิก 650ms แล้วหยุดลอย. พื้นที่กด/ช่องวางไม่ transform ตามภาพ.
+
+ปุ่มหยุด/เล่นรวมกับ prefers-reduced-motion เป็น reduced flag เดิม จึงใช้ fallback สำรับและทำ transition ต่อจนเสร็จแทนการแช่ state. IntersectionObserver และ visibilitychange พัก mascot/float เมื่อออกนอกจอหรือซ่อนแท็บ. WebGL หยุดเดินเวลาเมื่อซ่อนแท็บหรือ idle shuffle อยู่นอกจอ; gather/spread เดินต่อถ้าอยู่ในแท็บที่เปิด. Escape, resize และซ่อนแท็บยกเลิก drag อย่างปลอดภัย; motion toggle ระหว่างบิน/คืนไพ่ไม่เปลี่ยน ID.
+
+ไม่มีการแก้ DrawSession, RNG, ความหมายรายใบหรือข้อมูลคำอ่านในรอบนี้. ตรวจเพิ่มเติมด้วย `MMKT_TEST_URL=http://127.0.0.1:3012 ../.venv/bin/python scripts/check_reading_motion.py`; หลักฐานอยู่ `artifacts/reading-motion/`.
+
+ฉาก `public/scene/index.html` ตรวจ `window.gsap` ก่อนสร้าง timeline เพื่อให้ controller แจ้ง fallback โดยไม่เกิด ReferenceError เมื่อโหลด library ไม่สำเร็จ; `scripts/build_web_scene.py` รักษา guard นี้เมื่อสร้างฉากใหม่. AnimatedRabbit ส่ง hello อีกครั้งเมื่อ React ติด listener เพื่อรองรับ iframe ที่โหลดจาก cache ก่อน hydration.
+
+หากตรวจฉากหน้าแรกใน software headless แล้วเรนเดอร์ช้า ใช้ Chrome ที่ติดตั้งผ่าน `MMKT_BROWSER_CHANNEL=chrome` กับ `scripts/check_reveal.py` ได้; รายงานระบุ browser_channel และใช้เงื่อนไข/timeout เดิม. บันทึกคลิป viewport ล้วนด้วย `MMKT_BROWSER_CHANNEL=chrome ../.venv/bin/python scripts/record_reading_motion.py`.

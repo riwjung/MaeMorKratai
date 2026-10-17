@@ -36,3 +36,44 @@
 - ตรวจภาพUIด้วยตาหลังแก้ช่องไพ่ว่างและปรับขนาดโต๊ะ/ปุ่มมือถือแล้ว. หลักฐานล่าสุด artifacts/reading/ui-check.json,domain-check.txt และภาพ12ไฟล์.
 - ภาพพร้อม5ใบ อีก73ใช้กรอบพร้อมชื่อ. คำอ่านรักจากแชทเดิมยังรอเจ้าของทบทวน;บทสรุปเชื่อมเวลาเป็นdemo หมวดอื่นรอข้อมูล. ไม่มีAI API,การเก็บเงินจริงหรือdeploy.
 - ยังไม่ตรวจSafariบนอุปกรณ์จริงหรือHostinger;ไม่มีการวัดFPSบนโทรศัพท์จริง.
+
+## ปรับท่าสับ/กางไพ่ให้ลื่น — 2026-10-16
+
+- เปลี่ยนเฉพาะ motion ใน `app/reading/Table.tsx`, `reading.css`, `lib/reading-motion.ts` และเพิ่ม `public/cards/card-back.webp` (raster จาก card-back.svg เดิม 360×576) ไม่เปลี่ยน art style, state หรือข้อมูลไพ่.
+- แก้บั๊กเดิม: `.ritual button:disabled` ทำให้สำรับจางลงระหว่างรวมกอง; และ `position:fixed` ของไพ่ที่บินถูกยึดกับ section ที่มี transform จาก entrance animation จึงใช้ portal.
+- typecheck/production build ผ่าน; `check_reading.cjs` ผ่าน7กลุ่ม; `check_reading_ui.py` ผ่าน12กลุ่ม (รวม ticker.sleep หยุดแล้ว pose ไม่ reset); `check_reveal.py` ผ่าน11กลุ่ม.
+- ตรวจด้วยตาจากวิดีโอ Playwright 1440 และ 390px (headless ไม่มี GPU, 25fps) ยังไม่ได้วัด FPS บนโทรศัพท์จริงหรือ Safari.
+
+## สำรับ 3D (three.js) ช่วงสับ/รวม/กาง — 2026-10-16
+
+- ตามคำขอเจ้าของให้ใกล้ Ref2 และแก้ไพ่ทะลุกัน: เพิ่ม `app/reading/DeckScene.tsx`, `app/reading/fan.ts`; แก้ `page.tsx`, `Table.tsx`, `reading.css`; dependency `three@0.186.1`, dev `@types/three@0.186.0` (exact). ส่วนเลือกไพ่/คีย์บอร์ด/กริดยังเป็น DOM เดิม.
+- three แยก 2 chunk ราว 188KB gzip (368+380KB raw) โหลดเมื่อถึงขั้นคำถาม/สับเท่านั้น ไม่โหลดกับหน้าแรกหรือหน้า /reading/ ตอนเปิด (ตรวจ network ใน Chromium).
+- `check_reading_ui.py` ปรับเฉพาะตัวอ่าน pose: อ่าน `data-pose` จากสำรับ WebGL หรือ transform ของสำรับ DOM; เงื่อนไขเดิมคงไว้ (pose เปลี่ยนใน 1.1 วินาที, สับเกิน 60 วินาที, ticker.sleep แล้วกดหยุด pose ไม่ reset).
+- ผล: typecheck/build ผ่าน; `check_reading.cjs` 7/7; `check_reading_ui.py` 12/12; `check_reveal.py` 11/11. ตรวจเพิ่ม: WebGL ทำงานจริง (canvas 1 อันระหว่างสับ, 0 หลังกาง), เล่นซ้ำในหน้าเดิมไม่ค้าง canvas, Chromium `--disable-webgl --disable-3d-apis` ตกไปสำรับ DOM 24 ใบและเลือกไพ่ได้ ไม่มี pageerror.
+- จุดส่งต่อ 3D→DOM: ตำแหน่งตรงกันราว 1px; หลัง fade ความต่างเฟรมต่อเฟรมสูงสุด ~1.9 (ก่อนแก้ 14.2 จาก opacity ของปุ่ม disabled).
+- ข้อจำกัด: วิดีโอ/ตรวจทั้งหมดเป็น headless Chromium (SwiftShader, 25fps) ยังไม่วัด FPS บนโทรศัพท์จริง, Safari/iOS หรือ Hostinger. บนจอ 390×844 พัดอยู่ใต้แถบเลือกที่ sticky จึงเห็นการคลี่ไพ่เพียงแถบบน (layout เดิม).
+
+## ท่าสับแบบ Moonlight (ไพ่น้อยลง เว้นระยะ หันข้าง) — 2026-10-16
+
+- เจ้าของขอให้ลดจำนวนไพ่ เว้นระยะ และใช้ท่าแบบ app.moonlight.world. ห้องตัวอย่างต้องสมัครบัญชีจึงไม่ได้เข้า; วิเคราะห์จากไฟล์ JS สาธารณะที่หน้าโหลดมา (component สับไพ่ใน bundle หลัก) แล้วเขียนใหม่เอง ไม่คัดลอกโค้ด.
+- แก้ `DeckScene.tsx` ทั้งท่าสับ/รวม/กาง และ stage สับสูงขึ้น (desktop 440px, มือถือ 370px) ใน `reading.css`.
+- ผล: typecheck/build ผ่าน; `check_reading.cjs` 7/7; `check_reading_ui.py` 12/12; `check_reveal.py` 11/11; WebGL ทำงานจริง, canvas คืนหน่วยความจำหลังกาง, เล่นซ้ำในหน้าเดิมได้, ปิด WebGL แล้วตกไปสำรับ DOM ไม่มี pageerror.
+- ตรวจด้วยตาเทียบเฟรม Ref2 (มุมหันข้างเห็นวงไพ่, มุมหน้าเป็นขั้นบันได) ที่ 1440×1000 และ 390×844; ยังไม่วัด FPS บนโทรศัพท์จริง/Safari.
+
+## ลากไพ่ลงช่องและแตะเปิดเอง — 2026-10-17
+
+- ตามคำขอเจ้าของ: ลากไพ่จากพัดไปวางในช่องที่เลือก และแตะไพ่ในช่องเพื่อเปิดเอง. แก้ `lib/reading.ts` (slots/opened, `PICK` แบบระบุช่อง, `OPEN`), `Table.tsx`, `page.tsx`, `reading.css`; ปรับชุดทดสอบตามพฤติกรรมใหม่ (คืนไพ่แล้วช่องว่างไว้ ไม่เลื่อน).
+- แก้บั๊กเดิม 2 จุดที่เจอระหว่างทำ: `:hover` ค้างบนจอสัมผัสทำให้ไพ่ใบที่แตะล่าสุดยกค้างและบังใบข้าง ๆ (จำกัด hover ไว้ที่ `@media(hover:hover)`); ไพ่ที่บินเข้าช่อง (`.ritual-flight`) ใช้ position:fixed ใต้ section ที่มี transform จึงเพี้ยนตำแหน่ง (ย้ายไป portal ที่ body). เพิ่มการเลื่อนหน้าตอนกางไพ่ให้เห็นทั้งช่องและพัดเหนือแถบเลือกบนมือถือ (เดิมที่ 390×844 พัดโผล่ราว 68 จาก 205px).
+- ผล: typecheck/build ผ่าน; `check_reading.cjs` 8/8 (เพิ่มกลุ่มเปิดเองลำดับใดก็ได้); `check_reading_ui.py` 12/12 รวมลากด้วยเมาส์ลงช่องที่ระบุ, ปล่อยนอกช่องแล้วไพ่กลับ, คืนไพ่แล้วช่องว่างคงที่, ลากด้วย touch จริงผ่าน CDP ที่ 360/390/430px และแตะเปิดครบสามช่อง; `check_reveal.py` 11/11; ตรวจ WebGL/fallback ผ่าน.
+- ตรวจด้วยตาจากวิดีโอ 1440×1000 และ 390×844 (touch ผ่าน CDP); ยังไม่ทดสอบนิ้วจริงบนโทรศัพท์/Safari iOS.
+
+## กระต่ายเคลื่อนไหวและไพ่ลอย CSS 3D — 2026-10-17
+
+- เพิ่ม AnimatedRabbit/portrait bridge และ CardVisual; ไม่แก้ state model, RNG หรือคำอ่าน. หน้าแรกใช้เส้นทางเดิม; regression `artifacts/reveal-motion-regression/reveal-check.json` ผ่าน 11 กลุ่ม.
+- `check_reading_motion.py` ผ่าน 10 กลุ่ม: หายใจ/กะพริบตาจริง, การลอย, origin/source guards, portrait ไม่รับ draw, หยุด/เล่น, visibility lifecycle, hitbox ช่องนิ่ง, ขอบหน้า–หลัง, เปิดสลับลำดับ, หยุดกลาง gather/reveal, ID ตรงคำอ่าน, มือถือ 360/390/430 และ failed scene/reduced motion. ไม่พบ pageerror.
+- `check_reading_interruptions.py` ผ่าน 6 กลุ่ม: WebGL unavailable ใช้ DOM animated fallback, หยุดกลาง spread, Escape/resize/hidden/pointercancel ยกเลิกลากได้, หยุดระหว่างบินแล้วเล่นจนปลดล็อกด้วย ID เดิม.
+- ภาพและคลิปใน `artifacts/reading-motion/`: screenshots เดสก์ท็อป/มือถือ และ desktop-preview.mp4, mobile-preview.mp4 จากการเล่นจริงใน Chromium. คลิปไม่มีเสียง ไม่ใช่วิดีโอที่เจนใหม่.
+- ตรวจภาพหู/หมวกอยู่ในกรอบ, ข้อความและปุ่มไม่บังกัน, ไพ่เปิดแล้วหยุดลอย. ช่วง gather/spread ใช้ elapsed time โดยหักเวลาซ่อนแท็บเพื่อไม่ยืดเวลาบน renderer ช้า. พื้นหลัง portrait ไม่คำนวณ turbulence ทั้งห้องใหม่ทุกเฟรม.
+- การทดสอบเป็น desktop Chromium และมือถือจำลอง ยังไม่วัด FPS หรือตรวจ Safari/iOS บนอุปกรณ์จริง. ไม่มี deploy หรือบริการ/เครดิตเพิ่ม.
+
+สภาพแวดล้อมหน้าแรก: ตรวจรอบสุดท้ายด้วย `MMKT_BROWSER_CHANNEL=chrome ... scripts/check_reveal.py` ผ่าน 11/11 โดยไม่เปลี่ยน timeout 14 วินาทีของ suite. ตัว Chromium headless shell แบบ software rendering บนเครื่องนี้เล่นฉากเดิมช้าจนเกิน timeout ระหว่าง normal-motion draw; ตรวจพบว่า timeline ยังเดินและเปิดได้ จึงใช้ Chrome ที่ติดตั้งเป็นตัวตรวจเพิ่มเติม ไม่เปลี่ยนความเร็ว/ท่าของหน้าแรก. ชุด /reading/ ใช้ Chromium headless shell ผ่าน 12/12. คลิป preview ใช้ Chrome จาก browser profile ทดสอบแยก.

@@ -28,12 +28,28 @@ test('unbiased index rejects the out-of-range tail',()=>{
  try {assert.equal(r.randomBelow(78),77);assert.equal(calls,2);}finally{Object.defineProperty(globalThis,'crypto',descriptor);}
 });
 function selecting(){let s=r.sessionReducer(r.initialSession,{type:'QUESTION'});s=r.sessionReducer(s,{type:'START',deck:r.cards.map(c=>c.id)});s=r.sessionReducer(s,{type:'STOP'});s=r.sessionReducer(s,{type:'GATHERED'});return r.sessionReducer(s,{type:'SPREAD'});}
-test('state guards prevent rapid duplicates, a fourth pick and premature reveal',()=>{
- let s=selecting();const first=s.deck[0];s=r.sessionReducer(s,{type:'PICK',id:first});assert.equal(r.sessionReducer(s,{type:'PICK',id:first}),s);assert.equal(r.sessionReducer(s,{type:'PICK',id:'invalid'}),s);assert.equal(r.sessionReducer(s,{type:'REVEAL'}),s);
- s=r.sessionReducer(s,{type:'PICK',id:s.deck[1]});s=r.sessionReducer(s,{type:'PICK',id:s.deck[2]});assert.equal(r.sessionReducer(s,{type:'PICK',id:s.deck[3]}),s);
- const order=s.deck; s=r.sessionReducer(s,{type:'REMOVE',id:first});assert.equal(s.deck,order);assert.deepEqual(s.selected,[order[1],order[2]]);s=r.sessionReducer(s,{type:'PICK',id:first});assert.deepEqual(s.selected,[order[1],order[2],first]);
- s=r.sessionReducer(s,{type:'REVEAL'});assert.equal(r.sessionReducer(s,{type:'REMOVE',id:first}),s);assert.equal(r.sessionReducer(s,{type:'UNLOCK'}),s);
- for(let i=0;i<3;i++)s=r.sessionReducer(s,{type:'NEXT_REVEAL'});assert.equal(s.phase,'locked');assert.equal(s.revealed,3);assert.equal(r.sessionReducer(s,{type:'NEXT_REVEAL'}),s);const ids=s.selected;s=r.sessionReducer(s,{type:'UNLOCK'});assert.equal(s.phase,'reading');assert.equal(s.selected,ids);
+test('state guards: cards keep their slot, no duplicates, no fourth card, no premature reveal',()=>{
+ let s=selecting();const [a,b,c,d]=s.deck;
+ s=r.sessionReducer(s,{type:'PICK',id:a});assert.deepEqual(s.slots,[a,null,null]);
+ assert.equal(r.sessionReducer(s,{type:'PICK',id:a}),s);assert.equal(r.sessionReducer(s,{type:'PICK',id:'invalid'}),s);assert.equal(r.sessionReducer(s,{type:'REVEAL'}),s);
+ s=r.sessionReducer(s,{type:'PICK',id:b,slot:2});assert.deepEqual(s.slots,[a,null,b]);
+ assert.equal(r.sessionReducer(s,{type:'PICK',id:c,slot:2}),s);assert.equal(r.sessionReducer(s,{type:'PICK',id:c,slot:3}),s);
+ s=r.sessionReducer(s,{type:'PICK',id:c});assert.deepEqual(s.slots,[a,c,b]);assert.equal(r.sessionReducer(s,{type:'PICK',id:d}),s);
+ const order=s.deck;s=r.sessionReducer(s,{type:'REMOVE',id:a});assert.equal(s.deck,order);assert.deepEqual(s.slots,[null,c,b]);
+ s=r.sessionReducer(s,{type:'PICK',id:a,slot:0});assert.deepEqual(s.slots,[a,c,b]);
+ s=r.sessionReducer(s,{type:'OPEN',slot:1});assert.deepEqual(s.opened,[false,true,false]);assert.equal(s.phase,'selecting');
+ assert.equal(r.sessionReducer(s,{type:'REMOVE',id:c}),s);assert.equal(r.sessionReducer(s,{type:'OPEN',slot:1}),s);
+ s=r.sessionReducer(s,{type:'REVEAL'});assert.equal(s.phase,'revealing');for(const action of [{type:'REMOVE',id:a},{type:'UNLOCK'},{type:'OPEN',slot:0},{type:'PICK',id:d}])assert.equal(r.sessionReducer(s,action),s);
+ s=r.sessionReducer(s,{type:'NEXT_REVEAL'});assert.deepEqual(s.opened,[true,true,false]);s=r.sessionReducer(s,{type:'NEXT_REVEAL'});assert.equal(s.phase,'locked');assert.deepEqual(s.opened,[true,true,true]);
+ assert.equal(r.sessionReducer(s,{type:'NEXT_REVEAL'}),s);const slots=s.slots;s=r.sessionReducer(s,{type:'UNLOCK'});assert.equal(s.phase,'reading');assert.equal(s.slots,slots);
+});
+test('cards opened by hand in any order complete the round',()=>{
+ let s=selecting();const [a,b,c]=s.deck;
+ s=r.sessionReducer(s,{type:'PICK',id:a,slot:2});assert.equal(r.sessionReducer(s,{type:'OPEN',slot:0}),s);
+ s=r.sessionReducer(s,{type:'OPEN',slot:2});assert.deepEqual(s.opened,[false,false,true]);assert.equal(s.phase,'selecting');
+ s=r.sessionReducer(s,{type:'PICK',id:b});assert.deepEqual(s.slots,[b,null,a]);s=r.sessionReducer(s,{type:'OPEN',slot:0});
+ s=r.sessionReducer(s,{type:'PICK',id:c});s=r.sessionReducer(s,{type:'OPEN',slot:1});assert.equal(s.phase,'locked');
+ assert.deepEqual(r.placedCards(s),[b,c,a]);
 });
 test('invalid start and stale animation events cannot replace a round',()=>{
  const s=selecting();assert.equal(r.sessionReducer(s,{type:'START',deck:r.shuffleDeck()}),s);assert.equal(r.sessionReducer(s,{type:'GATHERED'}),s);assert.equal(r.sessionReducer({...r.initialSession,phase:'question'},{type:'START',deck:Array(78).fill('the-fool')}).phase,'question');assert.deepEqual(r.sessionReducer(s,{type:'EDIT'}),{...r.initialSession,phase:'question'});

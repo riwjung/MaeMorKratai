@@ -21,7 +21,7 @@
 3. npm run build — สร้างout/แบบstatic export
 4. python3 -m http.server 3010 --bind 127.0.0.1 --directory out
 
-บนเครื่องนี้node_modulesเชื่อมกับruntimeเดิมเพื่อไม่ติดตั้งซ้ำ ZIPต้นฉบับไม่รวมsymlink; เครื่องใหม่ใช้npm ci.
+tarot-webมีnode_modulesของตัวเองแล้ว (เพิ่ม three สำหรับสำรับ WebGL หน้า /reading/) ไม่ได้เชื่อมกับ runtime Social Center (`../web/node_modules`) อีก; เครื่องใหม่ใช้npm ci.
 
 - app/page.tsx: state,สถานะความรัก,random draw,ผลไพ่
 - public/scene/controller.js: handshake/idle/draw/reveal กับiframe
@@ -45,3 +45,7 @@ QA scripts contain this Mac’s runtime paths. They are evidence/reproduction he
 ## หน้าเปิดไพ่ 3 ใบ — 2026-10-16
 
 หน้าใหม่ `/reading/` เชื่อมจากลูกศรในหน้าแรก เลือกหมวด/สถานการณ์ → สับจนกดหยุด → เลือก 3 จาก 78 → เปิดอดีต/ปัจจุบัน/อนาคต → ปลดล็อกคำอ่านสาธิต ภาพจริง5ใบและกรอบสำรองอีก73 ไม่ใช้APIหรือเก็บเงินจริง รายละเอียดข้อจำกัด โครงสร้างข้อมูล และวิธีตรวจอยู่ใน [READING.md](READING.md).
+
+## /reading/ — กระต่ายเคลื่อนไหวและไพ่ลอย 3D (2026-10-17)
+
+เพิ่ม portrait mode ของฉากหน้าแรก, CSS 3D front/back/edges, การลอย/พลิกไพ่ และปุ่มหยุด/เล่นทั้งหน้า. อ่านโครงสร้าง/ข้อจำกัดใน [READING.md](READING.md) และผลตรวจใน [VERIFY.md](VERIFY.md). ภาพกับคลิปอยู่ `artifacts/reading-motion/` (ไฟล์ตรวจในเครื่อง ไม่อยู่ใน Git). ไม่เพิ่มบริการภายนอกหรือเผยแพร่เว็บ.

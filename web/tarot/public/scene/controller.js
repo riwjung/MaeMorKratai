@@ -11,6 +11,16 @@
   const front = document.querySelector('#card-front');
   const back = document.querySelector('#card-back');
   const send = (type, extra = {}) => parent.postMessage({ type, ...extra }, location.origin);
+  const portrait = new URLSearchParams(location.search).get('presentation') === 'portrait';
+  let portraitPlaying = false;
+  if (portrait) {
+    document.documentElement.style.cssText = 'width:100%;height:100%;overflow:hidden';
+    document.body.style.cssText = 'width:100%;height:100%;overflow:hidden';
+    document.querySelector('#halloween').style.transform = 'translate(-40px,-320px)';
+    // Keep the original textured character; avoid re-rasterizing full-room turbulence
+    // on every ghost/candle frame in a small portrait. Home presentation is unchanged.
+    document.querySelector('#room [filter="url(#room-paper)"]')?.removeAttribute('filter');
+  }
   let idle = null;
   let idleRest = [];
   let busy = false;
@@ -53,7 +63,7 @@
 
   function breathe() {
     stopIdle();
-    if (preference.matches || requestedReducedMotion || busy) return;
+    if (preference.matches || requestedReducedMotion || busy || (portrait && (!portraitPlaying || document.hidden))) return;
     // Restore these exact values on interruption; repeated preference changes
     // must not gradually move the ghost or rabbit away from its original pose.
     for (const [selector, properties] of [
@@ -160,8 +170,14 @@
       case 'mmkt:hello':
         if (initialized) send('mmkt:ready');
         break;
+      case 'mmkt:portrait-motion':
+        if (portrait && typeof data.playing === 'boolean') {
+          portraitPlaying = data.playing;
+          if (portraitPlaying) breathe(); else stopIdle();
+        }
+        break;
       case 'mmkt:draw':
-        if (initialized) void draw(data);
+        if (initialized && !portrait) void draw(data);
         break;
       case 'mmkt:card-visibility':
         if (!busy && active && typeof data.visible === 'boolean') {
@@ -204,6 +220,10 @@
     if (busy && !loading) finishReveal();
   });
 
+  if (portrait) document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopIdle(); else breathe();
+  });
+  if (portrait) window.addEventListener('pagehide', () => {stopIdle(); master.pause();});
   resetScene();
   breathe();
   initialized = true;

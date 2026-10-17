@@ -32,7 +32,7 @@ REOPEN = "เปิดไพ่ใบเดิมจากมือแม่ห�
 DETAILS = "อ่านความหมายทั้งหมดด้านล่าง"
 OUT.mkdir(parents=True, exist_ok=True)
 report = {
-    "passed": False, "url": URL, "checks": [], "assets": [],
+    "passed": False, "url": URL, "browser_channel": os.environ.get("MMKT_BROWSER_CHANNEL", "chromium-headless-shell"), "checks": [], "assets": [],
     "browser_errors": [], "bad_responses": [], "failed_requests": [],
     "external_requests": [], "screenshots": [],
     "entropy_override": "Only isolated QA pages, never app source or build",
@@ -316,7 +316,7 @@ def main():
     started = time.monotonic()
     try:
         with sync_playwright() as pw:
-            browser = pw.chromium.launch(headless=True)
+            browser = pw.chromium.launch(headless=True, channel=os.environ.get("MMKT_BROWSER_CHANNEL") or None)
             try:
                 desktop(browser)
                 all_cards_mobile(browser)
