@@ -226,7 +226,8 @@ export function DeckScene({phase, onFail, onGathered, onSpread}: {phase: DeckPha
       let visible = !document.hidden, onscreen = true, activeTime = 0, previousTime = -1;
       const visibility = () => {visible = !document.hidden; previousTime = -1;};
       document.addEventListener('visibilitychange', visibility);
-      const observer = new IntersectionObserver(([entry]) => {onscreen = entry.isIntersecting; previousTime = -1;});
+      // One callback can carry several entries when visibility flips quickly; only the latest is current.
+      const observer = new IntersectionObserver((entries) => {onscreen = entries[entries.length - 1].isIntersecting; previousTime = -1;});
       const host = anchor()?.parentElement;
       if (host) observer.observe(host);
       teardown.push(() => {observer.disconnect(); document.removeEventListener('visibilitychange', visibility);});

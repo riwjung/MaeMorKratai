@@ -115,7 +115,7 @@ with sync_playwright() as p:
   page.get_by_role('button',name='นำไพ่ตำแหน่งปัจจุบันกลับสำรับ',exact=True).click();assert slots(page)==[ids[0],'',ids[1]]
   page.get_by_role('button',name='กลับมุมมองพัด',exact=False).click();drag_to_slot(page,ids[2],1);ids=[ids[0],ids[2],ids[1]];assert slots(page)==ids
   shot(page,'desktop-selected');reveal(page);shot(page,'desktop-unlock')
-  assert page.locator('.ritual-card-front img').evaluate_all('(els)=>els.map(e=>e.getAttribute("src"))')==['/cards/'+i+'.jpeg' for i in ids]
+  assert page.locator('.ritual-card-front img').evaluate_all('(els)=>els.map(e=>e.getAttribute("src"))')==['/cards/web/'+i+'.webp' for i in ids]
   unlock(page);shot(page,'desktop-reading');record('drag to chosen slot, drop outside returns, remove keeps slots, reveal and unlock retain exact identities')
   before_summary=page.get_by_test_id('reading-summary').inner_text()
   expect(page.locator('[data-reading-id]')).to_have_count(3);assert all(i in page.locator('[data-reading-id]').evaluate_all('(els)=>els.map(e=>e.dataset.readingId)') for i in ids)

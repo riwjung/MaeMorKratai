@@ -11,8 +11,32 @@
   const front = document.querySelector('#card-front');
   const back = document.querySelector('#card-back');
   const send = (type, extra = {}) => parent.postMessage({ type, ...extra }, location.origin);
-  const portrait = new URLSearchParams(location.search).get('presentation') === 'portrait';
+  const params = new URLSearchParams(location.search);
+  const portrait = params.get('presentation') === 'portrait';
   let portraitPlaying = false;
+  // Safari (every iOS browser) and touch devices re-render this filtered SVG on every animation frame, which
+  // drops the whole page below 2 fps. There the scene stays still and draws reveal without the long sequence.
+  // ?motion=live forces motion, ?motion=still forces stillness.
+  const ua = navigator.userAgent;
+  const webkitEngine = /iP(hone|ad|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || (/Safari\//.test(ua) && !/Chrome|Chromium|CriOS|Edg|OPR|Firefox|FxiOS/.test(ua));
+  const still = params.get('motion') === 'still' || (params.get('motion') !== 'live' && (webkitEngine || matchMedia('(pointer: coarse)').matches));
+  document.documentElement.dataset.motion = still ? 'still' : 'live';
+  // ?fit=1: the page sizes this iframe to its display size and the 1080x1920 composition scales itself to fit,
+  // so it is painted at display resolution. Scaling a full-size iframe from outside made iPhone Safari (3x screens)
+  // build the room's filter buffers at 1080x1920 x 3, past its limit, and drop the room. Anchors stay in
+  // composition units.
+  let fit = 1;
+  if (params.has('fit') && !portrait) {
+    const stage = document.querySelector('#halloween');
+    const applyFit = () => {
+      fit = innerWidth / 1080;
+      for (const el of [document.documentElement, document.body]) el.style.cssText += `;width:${innerWidth}px;height:${innerHeight}px`;
+      // zoom, not transform: Safari sizes filter buffers from layout size, and a transform left them at full size.
+      stage.style.zoom = String(fit);
+    };
+    applyFit();
+    addEventListener('resize', applyFit);
+  }
   if (portrait) {
     document.documentElement.style.cssText = 'width:100%;height:100%;overflow:hidden';
     document.body.style.cssText = 'width:100%;height:100%;overflow:hidden';
@@ -48,9 +72,9 @@
   back.replaceChildren(backArt);
 
   function anchor() {
-    // Coordinates are in this iframe's viewport, before any parent CSS scale.
+    // Composition units (1080 wide), whether the parent scales the iframe or the composition fits itself.
     const rect = showCard.getBoundingClientRect();
-    return { x: rect.x, y: rect.y, width: rect.width, height: rect.height };
+    return { x: rect.x / fit, y: rect.y / fit, width: rect.width / fit, height: rect.height / fit };
   }
 
   function stopIdle() {
@@ -63,7 +87,7 @@
 
   function breathe() {
     stopIdle();
-    if (preference.matches || requestedReducedMotion || busy || (portrait && (!portraitPlaying || document.hidden))) return;
+    if (still || preference.matches || requestedReducedMotion || busy || (portrait && (!portraitPlaying || document.hidden))) return;
     // Restore these exact values on interruption; repeated preference changes
     // must not gradually move the ghost or rabbit away from its original pose.
     for (const [selector, properties] of [
@@ -148,7 +172,7 @@
       art.setAttribute('preserveAspectRatio', 'xMidYMid meet');
       front.replaceChildren(art);
       loading = false;
-      if (preference.matches || requestedReducedMotion) finishReveal();
+      if (still || preference.matches || requestedReducedMotion) finishReveal();
       else master.restart();
     } catch {
       const cardId = active;

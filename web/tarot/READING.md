@@ -81,3 +81,11 @@ UI suite ใช้ production export และ browser แยก ไม่มี
 ฉาก `public/scene/index.html` ตรวจ `window.gsap` ก่อนสร้าง timeline เพื่อให้ controller แจ้ง fallback โดยไม่เกิด ReferenceError เมื่อโหลด library ไม่สำเร็จ; `scripts/build_web_scene.py` รักษา guard นี้เมื่อสร้างฉากใหม่. AnimatedRabbit ส่ง hello อีกครั้งเมื่อ React ติด listener เพื่อรองรับ iframe ที่โหลดจาก cache ก่อน hydration.
 
 หากตรวจฉากหน้าแรกใน software headless แล้วเรนเดอร์ช้า ใช้ Chrome ที่ติดตั้งผ่าน `MMKT_BROWSER_CHANNEL=chrome` กับ `scripts/check_reveal.py` ได้; รายงานระบุ browser_channel และใช้เงื่อนไข/timeout เดิม. บันทึกคลิป viewport ล้วนด้วย `MMKT_BROWSER_CHANNEL=chrome ../.venv/bin/python scripts/record_reading_motion.py`.
+
+## ประสิทธิภาพบนมือถือและ Safari (2026-10-17)
+
+- ฉาก SVG ที่มีฟิลเตอร์ (ห้องหน้าแรก, มาสคอต) บน Safari ทุกแบบ (รวมทุกเบราว์เซอร์บน iOS) และอุปกรณ์จอสัมผัส **อยู่นิ่ง**: `public/scene/controller.js` ไม่เริ่มแอนิเมชันระหว่างรอ และเปิดไพ่หน้าแรกแบบไม่เล่นฉากยาว (`?motion=live`/`?motion=still` บังคับได้); เดสก์ท็อป Chrome ยังเคลื่อนไหวเหมือนเดิม. ตัวตรวจเดียวกันอยู่ `lib/motion-lite.ts`.
+- มาสคอตหน้า `/reading/` บนอุปกรณ์ดังกล่าวแสดงภาพต้นฉบับ `character.jpg` แทน iframe ฉาก (ไม่ดาวน์โหลดฉากเลย); เดสก์ท็อปยังเป็นฉากเคลื่อนไหว.
+- หน้าแรกฝัง `/scene/index.html?fit=1`: iframe มีขนาดเท่าที่แสดงและฉากย่อตัวเองด้วย CSS `zoom` (ไม่ใช่ transform) เพราะ Safari บนจอ 3x ทิ้งชั้นห้องที่มีฟิลเตอร์เมื่อวาดเต็ม 1080×1920; พิกัดไพ่ที่ส่งกลับยังเป็นหน่วย 1080 เหมือนเดิม.
+- หน้าไพ่ในหน้า 3 ใบใช้ WebP กว้าง 600px (`public/cards/web/<id>.webp`, ใบละ ~21–28KB จาก ~1.9MB) สร้างด้วย `python3 scripts/make_web_cards.py`; ถ้าโหลดไม่ได้ใช้ JPEG ต้นฉบับ.
+- การพลิกไพ่ (`CardVisual`, `CardReveal`) ซ่อนด้านที่ไม่ควรเห็นเองตามมุมพลิก เพราะ Safari ไม่เคารพ `backface-visibility` ในการ์ดเหล่านี้.

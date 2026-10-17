@@ -2,14 +2,17 @@
 import {useEffect, useLayoutEffect, useRef, useState, type CSSProperties} from 'react';
 import {createPortal} from 'react-dom';
 import {cards, placedCards, positions, type Card, type DrawSession} from '../../lib/reading';
+import {webArt} from '../../lib/motion-lite';
 import {loadReadingMotion, type Motion, type Timeline} from '../../lib/reading-motion';
 import {fanArc, FAN_STEP} from './fan';
 
 import {Back, CardVisual} from './CardVisual';
 import {useMotionActivity} from './Motion';
 export function Face({card}: {card: Card}) {
-  const [failed, setFailed] = useState(false);
-  return card.art && !failed ? <img src={card.art} alt={'ไพ่ '+card.name} onError={()=>setFailed(true)} draggable={false}/> : <div className="ritual-placeholder"><span aria-hidden="true">☾</span><strong>{card.name}</strong><span className="ritual-placeholder-star" aria-hidden="true">✧</span><small>ภาพอยู่ระหว่างจัดทำ</small></div>;
+  // 0 = web-size WebP, 1 = original JPEG, 2 = neither loaded.
+  const [attempt, setAttempt] = useState(0);
+  const src = card.art && (attempt === 0 ? webArt(card.art) : card.art);
+  return src && attempt < 2 ? <img src={src} alt={'ไพ่ '+card.name} onError={()=>setAttempt(a=>a+1)} draggable={false}/> : <div className="ritual-placeholder"><span aria-hidden="true">☾</span><strong>{card.name}</strong><span className="ritual-placeholder-star" aria-hidden="true">✧</span><small>ภาพอยู่ระหว่างจัดทำ</small></div>;
 }
 const SHUFFLE_CARDS = 24;
 const SHUFFLE_PERIOD = 2.4;
@@ -199,7 +202,7 @@ export function Table({session, reduced, external, onPick, onRemove, onOpen, onR
   useEffect(()=>()=>{cancelAnimationFrame(wave.current); endDrag.current?.(); returnAnimation.current?.cancel();},[]);
   useEffect(()=>{
     // Only the placed fronts are warmed; face identities remain hidden in the UI.
-    session.slots.forEach(id=>{const card=cards.find(c=>c.id===id);if(card?.art){const image=new Image();image.src=card.art;}});
+    session.slots.forEach(id=>{const card=cards.find(c=>c.id===id);if(card?.art){const image=new Image();image.src=webArt(card.art);}});
   },[session.slots]);
   useEffect(()=>{
     const cancel = () => {

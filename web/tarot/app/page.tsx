@@ -12,7 +12,8 @@ function Scene({onReady,onReveal,onError,frameRef,cardAnchor,onReopen}:{onReady:
  const box=useRef<HTMLDivElement>(null);
  useEffect(()=>{
   const element=box.current;
-  const scale=()=>{if(element&&frameRef.current)frameRef.current.style.transform='scale('+(element.clientWidth/1080)+')';};
+  // The iframe takes the display size and the scene fits itself inside (?fit=1), so it paints at display resolution.
+  const scale=()=>{if(element&&frameRef.current){const w=element.clientWidth;frameRef.current.style.width=w+'px';frameRef.current.style.height=(w*1920/1080)+'px';}};
   const observer=new ResizeObserver(scale);if(element)observer.observe(element);scale();
   const listen=(e:MessageEvent)=>{
    if(e.source!==frameRef.current?.contentWindow||e.origin!==location.origin)return;
@@ -23,7 +24,7 @@ function Scene({onReady,onReveal,onError,frameRef,cardAnchor,onReopen}:{onReady:
   frameRef.current?.contentWindow?.postMessage({type:'mmkt:hello'},location.origin);
   return()=>{observer.disconnect();window.removeEventListener('message',listen);};
  },[frameRef,onReady,onReveal,onError]);
- return <div ref={box} className="room-window"><iframe ref={frameRef} src="/scene/index.html" title="แม่หมอกระต่ายในห้องปรุงยา สับและเปิดไพ่ให้คุณ" scrolling="no"/>{cardAnchor&&<button className="hand-card-toggle" aria-label="แตะไพ่ในมือแม่หมอเพื่อเปิดดูอีกครั้ง" onClick={onReopen} style={{left:(cardAnchor.x/1080*100)+'%',top:(cardAnchor.y/1500*100)+'%',width:(cardAnchor.width/1080*100)+'%',height:(cardAnchor.height/1500*100)+'%'}}/>}</div>;
+ return <div ref={box} className="room-window"><iframe ref={frameRef} src="/scene/index.html?fit=1" title="แม่หมอกระต่ายในห้องปรุงยา สับและเปิดไพ่ให้คุณ" scrolling="no"/>{cardAnchor&&<button className="hand-card-toggle" aria-label="แตะไพ่ในมือแม่หมอเพื่อเปิดดูอีกครั้ง" onClick={onReopen} style={{left:(cardAnchor.x/1080*100)+'%',top:(cardAnchor.y/1500*100)+'%',width:(cardAnchor.width/1080*100)+'%',height:(cardAnchor.height/1500*100)+'%'}}/>}</div>;
 }
 export default function Home(){
  const frameRef=useRef<HTMLIFrameElement>(null);

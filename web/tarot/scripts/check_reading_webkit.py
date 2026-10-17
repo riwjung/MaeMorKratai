@@ -39,6 +39,28 @@ with sync_playwright() as p:
   expect(page.locator('[data-reading-id]')).to_have_count(3)
   assert not page.evaluate('document.documentElement.scrollWidth > innerWidth'),'horizontal overflow'
   page.screenshot(path=str(OUT/'iphone-reading.png'),full_page=True);ok('open by tap, unlock demo and reading, no overflow')
+  context.close()
+  # Frame rate with normal motion settings. The filtered SVG scene used to animate here and held the whole page
+  # near 1 fps; on Safari and touch devices it now stays still, so the page and the WebGL shuffle keep up.
+  fps="()=>new Promise(r=>{let n=0;const t0=performance.now();const f=()=>{n++;if(performance.now()-t0<2000)requestAnimationFrame(f);else r(n/2)};requestAnimationFrame(f)})"
+  context=browser.new_context(**p.devices['iPhone 13']);page=context.new_page()
+  page.on('pageerror',lambda e:report['errors'].append(str(e)))
+  page.goto(URL+'/');page.wait_for_timeout(4000)
+  scene=page.frames[1]
+  # The scene fits itself with CSS zoom; a transform left 3x screens building filter buffers past Safari's limit.
+  assert scene.evaluate('document.documentElement.dataset.motion')=='still' and float(scene.evaluate("document.querySelector('#halloween').style.zoom")) < 1
+  home=page.evaluate(fps);assert home>=30,f'home page {home} fps'
+  # The home reveal used to stay on the mirrored back on Safari; the drawn card's face must be the visible side.
+  expect(page.locator('.draw-button')).to_be_enabled(timeout=15000);page.locator('.draw-button').tap()
+  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=15000)
+  faces=page.locator('.reveal-flipper').evaluate("(f)=>[getComputedStyle(f.querySelector('.reveal-front')).visibility,getComputedStyle(f.querySelector('.reveal-back')).visibility]")
+  assert faces==['visible','hidden'],faces
+  page.screenshot(path=str(OUT/'iphone-home-reveal.png'));ok('home scene fitted with zoom; reveal shows the card face')
+  page.goto(URL+'/reading/');phase(page,'topic');page.get_by_role('button',name='ไปต่อ',exact=False).tap();phase(page,'question')
+  page.get_by_role('button',name='พร้อมแล้ว',exact=False).tap();phase(page,'shuffling');page.wait_for_timeout(2500)
+  assert page.evaluate("!!document.querySelector('canvas.ritual-deck-canvas')"),'WebGL deck not live'
+  shuffle=page.evaluate(fps);assert shuffle>=30,f'3D shuffle {shuffle} fps'
+  report['fps']={'home':home,'shuffle':shuffle};ok(f'still scenes keep the page fluid: home {home} fps, 3D shuffle {shuffle} fps')
   assert not report['errors'],report['errors']
   report['passed']=True
  finally:

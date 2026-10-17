@@ -53,3 +53,5 @@ QA scripts contain this Mac’s runtime paths. They are evidence/reproduction he
 ## Vercel
 
 `vercel.json` ตั้ง framework เป็น Other แล้วเสิร์ฟ `out/` จาก `npm run build` ตรง ๆ เหมือน static server ในเครื่อง. ถ้าใช้ preset Next.js, Vercel ให้ไฟล์ `.html` ใน `public/` เป็น clean URL ทำให้ `/scene/index.html` และ `/card-scenes/<id>.html` ที่ฝังเป็น iframe ตอบ 404 (ฉากห้องกระต่าย มาสคอต และฉากไพ่ไม่ขึ้น). ตั้งโปรเจกต์ Vercel ให้ Root Directory เป็น `web/tarot`; push `main` แล้ว deploy ใหม่อัตโนมัติ.
+
+ภาพหน้าไพ่ใหม่: วางต้นฉบับที่ `public/cards/<id>.jpeg` และใส่ `art` ใน `lib/reading-cards.json` แล้วรัน `python3 scripts/make_web_cards.py` เพื่อสร้าง WebP ขนาดเว็บใน `public/cards/web/`.
