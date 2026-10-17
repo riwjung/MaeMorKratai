@@ -59,3 +59,11 @@ progressจริงแสดงMagician/HighPriestess=SAVEDมือ,Empress=ge
 ### ห้องไพ่สามใบ — 2026-10-16
 
 [[tarot-web-prototype]]เพิ่มhttp://127.0.0.1:3010/reading/ ลูกศรจากหน้าเดิม;หมวด/สถานการณ์→สับวนจนหยุด→พัด/กริด78ใบ→เลือก3คว่ำ→เปิดอดีต/ปัจจุบัน/อนาคต→ปลดล็อกdemoฟรี. Runtimeเดิมtarot-web,สำรองweb/tarot;READING.mdมีtypes/SecondBrainแนวทาง. Build/typecheck/domain7/UI12/regressionเดิม11ผ่าน ตาม[[tarot-three-card-source-2026-10-16]].ภาพจริง5ใบ อีก73กรอบสำรอง;คำอ่าน/summaryยังรอเจ้าของทบทวน.ไม่มีAI API/เครดิต/รับเงินจริง/deploy;ยังไม่ตรวจSafariจริง. ZIPล่าสุดอัปเดตและเก็บชุดก่อนเป็น*-before-three-card-20261016.zip.
+
+### Gemini runner 1.3.0 — ชื่อไพ่ภาษาอังกฤษ
+
+อัปเดต runner และ prompts-78 ตาม [[gemini-card-title-source-2026-10-16]]: สเปก title-v1 ทุกใบ, โหมดแก้ชื่อบนภาพเดิม, แนบ original art + approved typography ref + target card, manual approval, คิวและดาวน์โหลดแยกจากเดิม. รีโหลดส่วนขยายและรีเฟรชแชทก่อนใช้; เลือกไฟล์และอนุมัติ ref ใหม่หลังรีเฟรช. ยังไม่มีผล Gemini จริงหรือ ref ที่เจ้าของอนุมัติในงานนี้ ไม่ได้ใช้เครดิต/กดเจน. ตรวจผลทดสอบล่าสุดใน tools/gemini-web-runner/tests/artifacts.
+
+## Gemini runner 1.4.0 — 2026-10-17
+
+ดู [[gemini-pro-card-repair-source-2026-10-17]]: Pro model picker เป็นค่าเริ่มต้น/ตรวจซ้ำก่อนส่ง; โหมดซ่อมภาพเดิมเลือกกรอบหรือคิ้ว โดยรักษาภาพและชื่อ คิว repair-v1 แยกจากเดิม; attempt history และไฟล์เก่าคงอยู่ ผล cards-repaired/v1 ต้อง owner review ไม่มี auto visual QA. Emperor เริ่มซ่อมกรอบ; Chariot เริ่มเติมคิ้ว. พรอมต์สองใบพร้อมใช้ใน tools/gemini-web-runner/repair-prompts. Google แยก Pro chat กับ Nano Banana Pro (Redo with Pro); ตัวช่วยยังไม่กด Redo เพิ่มเอง. อัปเดตคู่มือ/ZIP/สำรอง runtime แล้ว อ่านผลทดสอบ tests/artifacts; ไม่มีการเจนภาพจริงหรือเปลี่ยน JPG ใน Downloads ในงานนี้

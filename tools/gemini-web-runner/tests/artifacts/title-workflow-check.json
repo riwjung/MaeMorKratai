@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checks": [
+    "missing reference stops before preparing; candidate caps batch at one; title-specific output",
+    "approved first result accompanies original art reference on every subsequent card; SHA256 provenance",
+    "edit original existing Fool with three references; preserve-art prompt; original five are not skipped",
+    "batch filename matching is atomic; unknown/duplicate names never silently misassign art",
+    "legacy progress preserved; titled versions have independent queue",
+    "reload retains progress but never pretends local reference files remain approved",
+    "same-card legacy image cannot satisfy a titled recovery job",
+    "incomplete multi-reference upload stops before sending instead of silently omitting art reference"
+  ],
+  "browser_errors": [],
+  "live_gemini_tested": false,
+  "images_generated": 0
+}

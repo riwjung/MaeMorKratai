@@ -4,7 +4,8 @@
     "empty-contenteditable editor + lazy file input via plus/upload menu + icon-only send",
     "open shadow-root editor + paste reference image without file input",
     "manual picker + explicit unsent reset + prepare-only preserve unrelated draft",
-    "UNSENT with missing editor shows actionable error; no unhandled rejection"
+    "UNSENT with missing editor shows actionable error; no unhandled rejection",
+    "multiple title references uploaded through shadow-root paste without file input"
   ],
   "browser_errors": [],
   "live_gemini_tested": false,

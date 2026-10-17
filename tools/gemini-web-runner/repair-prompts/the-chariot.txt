@@ -1,0 +1,12 @@
+REPAIR EXISTING APPROVED ART — LOCAL CORRECTIONS ONLY
+ATTACHMENT ROLES:
+the-chariot.jpg = TARGET ARTWORK TO REPAIR. Use this exact existing card as the edit base, not as inspiration for a new scene.
+IMG_5392.JPG = original mascot/art style reference; do not replace the target composition with its pose.
+No extra typography reference is required: preserve the target artwork’s existing title and lettering.
+
+Repair the one-sided eyebrow on the main rabbit: preserve the existing eyebrow and add its missing matching counterpart above the other visible eye, matching stroke weight, color, length and expression. Do not change the eyes, nose, mouth, cheeks, ears or pose. If a balanced pair already exists, preserve it.
+
+Preserve the original aspect ratio, dimensions, composition, illustration style, colors, lighting, characters, pose, props and all details outside the specified repairs. Do not regenerate an alternative scene. Do not add or remove suit symbols. Preserve the existing English title exactly, with its current letterforms, size, spacing and location; do not redraw or duplicate the title. No additional text, logos or watermarks.
+CARD SCENE: THE CHARIOT
+CARD TITLE: THE CHARIOT
+Return one repaired image. Inspect the requested corrections before returning it; preserve everything else.

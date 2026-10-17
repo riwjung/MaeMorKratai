@@ -2,5 +2,7 @@
   "reference_image": "wiki/Images/IMG_5392.JPG",
   "sha256": "bdaa7d02c5fda8f9e062758ff011c19e5387a2c209d05aaf4b03f227519384ff",
   "cards": 78,
-  "default_skip_existing": 5
+  "title_system": "title-v1",
+  "approved_title_reference": "owner imports and approves in UI; not bundled",
+  "imported_images": "memory only; reselect after refresh"
 }

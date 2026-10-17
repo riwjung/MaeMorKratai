@@ -14,6 +14,8 @@ async function handle(message,sender){
  }
  if(message.type==='mmkt:download'||message.type==='mmkt:download-data'){
   if(!/^[a-z0-9-]+$/.test(message.cardId))throw Error('ชื่อไพ่ไม่ถูกต้อง');
+  if(message.variant&&!['original','title-v1','repair-v1'].includes(message.variant))throw Error('รุ่นภาพไม่ถูกต้อง');
+  const folder=message.variant==='repair-v1'?'cards-repaired/v1/':message.variant==='title-v1'?'cards-titled/v1/':'cards/';
   let url,extension='png';
   if(message.type==='mmkt:download-data'){
    const match=/^data:(image\/(png|jpeg|webp|gif|avif));base64,([A-Za-z0-9+/]+={0,2})$/.exec(message.dataUrl||'');
@@ -27,7 +29,7 @@ async function handle(message,sender){
    if(u.protocol!=='https:'||!(u.hostname==='gemini.google.com'||u.hostname.endsWith('.googleusercontent.com')))throw Error('ต้องอ่านข้อมูลภาพจากหน้าGeminiก่อนดาวน์โหลด');
    url=u.href;
   }
-  const id=await chrome.downloads.download({url,filename:'MaeMorKratai/cards/'+message.cardId+'.'+extension,saveAs:false,conflictAction:'uniquify'});
+  const id=await chrome.downloads.download({url,filename:'MaeMorKratai/'+folder+message.cardId+'.'+extension,saveAs:false,conflictAction:'uniquify'});
   const {mmktDownloads:downloads={}}=await chrome.storage.local.get('mmktDownloads');downloads[id]={tabId,cardId:message.cardId};await chrome.storage.local.set({mmktDownloads:downloads});
   return {ok:true,downloadId:id};
  }

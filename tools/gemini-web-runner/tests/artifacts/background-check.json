@@ -8,7 +8,9 @@
     "completion and MIME verification",
     "data image bytes preserve JPEG extension",
     "reject HTML and mismatched image signatures",
-    "reveal actual downloaded file"
+    "reveal actual downloaded file",
+    "title outputs separated; reject unsafe variant",
+    "repair outputs separated and never overwrite originals"
   ],
   "network_calls": 0
 }

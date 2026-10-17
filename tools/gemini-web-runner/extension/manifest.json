@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MaeMorKratai Gemini Card Runner",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "description": "ส่งพรอมต์ไพ่พร้อมภาพต้นฉบับในแชท Gemini ที่เจ้าของเลือก โดยไม่ใช้ API",
   "permissions": [
     "storage",
@@ -20,6 +20,7 @@
       ],
       "js": [
         "deck-data.js",
+        "title-workflow.js",
         "content.js"
       ],
       "run_at": "document_idle"

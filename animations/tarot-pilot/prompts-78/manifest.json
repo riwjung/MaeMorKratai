@@ -1259,5 +1259,12 @@
         "line": 493
       }
     }
-  ]
+  ],
+  "title_system": {
+    "version": "title-v1",
+    "language": "English uppercase",
+    "capital_height_canvas": 0.024,
+    "baseline_canvas": 0.92,
+    "approved_reference_required_after_candidate": true
+  }
 }

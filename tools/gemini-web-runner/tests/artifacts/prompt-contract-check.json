@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "cards": 78,
+  "checks": [
+    "all prompts share identical title specification",
+    "exact original English card names",
+    "no conflicting no-title instruction in title modes",
+    "preserved legacy no-title prompt",
+    "all edit prompts preserve artwork"
+  ],
+  "generation_requests": 0
+}

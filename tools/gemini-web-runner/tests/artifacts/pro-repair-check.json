@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "default Pro switches Fast to Pro and verifies selected control before send",
+    "missing Pro stops before attachments; never clicks upgrade or falls back",
+    "click alone is not confirmation of Pro",
+    "unknown model DOM stops safely; owner may explicitly choose current model",
+    "rechecks Pro immediately before send after uploads",
+    "Emperor frame-only repair preserves art/title, requires original, and uses separate output",
+    "explicit repair of completed card archives previous attempt and preserves old files",
+    "Chariot repairs paired eyebrows only; no unnecessary redraw or frame edits",
+    "custom repair needs notes; changed source requires requeue before send",
+    "repair queue is independent; original completion records remain unchanged"
+  ],
+  "browser_errors": [],
+  "live_gemini_tested": false,
+  "real_images_generated": 0
+}
