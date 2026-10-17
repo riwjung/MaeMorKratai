@@ -56,4 +56,4 @@ QA scripts contain this Mac’s runtime paths. They are evidence/reproduction he
 
 ภาพหน้าไพ่ใหม่: วางต้นฉบับที่ `public/cards/<id>.jpeg` และใส่ `art` ใน `lib/reading-cards.json` แล้วรัน `python3 scripts/make_web_cards.py` เพื่อสร้าง WebP ขนาดเว็บใน `public/cards/web/`.
 
-วิดีโอสับไพ่หน้าแรกสำหรับมือถือ (`public/scene/draw-shuffle.mp4`) สร้างใหม่เมื่อแก้ฉาก: เปิด static server แล้วรัน `MMKT_TEST_URL=http://127.0.0.1:3010 ../.venv/bin/python scripts/build_draw_video.py` (ต้องมี ffmpeg; ใช้เวลาราว 5 นาที).
+วิดีโอหน้าแรกสำหรับมือถือ (`public/scene/idle-loop.mp4` กระต่ายขยับระหว่างรอ และ `public/scene/draw-shuffle.mp4` สับและชูไพ่) สร้างใหม่เมื่อแก้ฉาก: เปิด static server แล้วรัน `MMKT_TEST_URL=http://127.0.0.1:3010 ../.venv/bin/python scripts/build_scene_videos.py` (ต้องมี ffmpeg; ใช้เวลาราว 10 นาที; ใส่ `idle` หรือ `draw` เพื่อทำเฉพาะไฟล์นั้น).

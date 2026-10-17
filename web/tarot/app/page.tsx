@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {useCallback,useEffect,useRef,useState} from 'react';
-import CardReveal,{CardBack,type Anchor} from './CardReveal';
+import CardReveal,{type Anchor} from './CardReveal';
 import {prefersStillScene} from '../lib/motion-lite';
 import cardsData from '../lib/cards.json';
 type Card=typeof cardsData[number];
@@ -9,7 +9,7 @@ const contexts=['คนโสด','แอบชอบ','คุยกัน','ซ
 type Context=typeof contexts[number];
 const source='https://chatgpt.com/share/6ad07301-7314-83ec-bfe4-3793e13fa8b3';
 function randomIndex(n:number){const a=new Uint32Array(1);const ceiling=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a);}while(a[0]>=ceiling);return a[0]%n;}
-type DrawVideo={ref:React.RefObject<HTMLVideoElement|null>;on:boolean;onEnded:()=>void};
+type DrawVideo={ref:React.RefObject<HTMLVideoElement|null>;on:boolean;onEnded:()=>void;idle:React.RefObject<HTMLVideoElement|null>;idleOn:boolean};
 function Scene({onReady,onReveal,onError,frameRef,cardAnchor,onReopen,drawVideo}:{onReady:()=>void;onReveal:(id:string,anchor?:Anchor)=>void;onError:(s:string)=>void;frameRef:React.RefObject<HTMLIFrameElement|null>;cardAnchor:Anchor|null;onReopen:()=>void;drawVideo:DrawVideo|null}){
  const box=useRef<HTMLDivElement>(null);
  useEffect(()=>{
@@ -26,7 +26,7 @@ function Scene({onReady,onReveal,onError,frameRef,cardAnchor,onReopen,drawVideo}
   frameRef.current?.contentWindow?.postMessage({type:'mmkt:hello'},location.origin);
   return()=>{observer.disconnect();window.removeEventListener('message',listen);};
  },[frameRef,onReady,onReveal,onError]);
- return <div ref={box} className="room-window"><iframe ref={frameRef} src="/scene/index.html?fit=1" title="แม่หมอกระต่ายในห้องปรุงยา สับและเปิดไพ่ให้คุณ" scrolling="no"/>{drawVideo&&<video ref={drawVideo.ref} className={'draw-video'+(drawVideo.on?' is-playing':'')} src="/scene/draw-shuffle.mp4" muted playsInline preload="auto" aria-hidden="true" onEnded={drawVideo.onEnded} onError={drawVideo.onEnded}/>}{cardAnchor&&<button className="hand-card-toggle" aria-label="แตะไพ่ในมือแม่หมอเพื่อเปิดดูอีกครั้ง" onClick={onReopen} style={{left:(cardAnchor.x/1080*100)+'%',top:(cardAnchor.y/1500*100)+'%',width:(cardAnchor.width/1080*100)+'%',height:(cardAnchor.height/1500*100)+'%'}}/>}</div>;
+ return <div ref={box} className="room-window"><iframe ref={frameRef} src="/scene/index.html?fit=1" title="แม่หมอกระต่ายในห้องปรุงยา สับและเปิดไพ่ให้คุณ" scrolling="no"/>{drawVideo&&<video ref={drawVideo.idle} className={'idle-video'+(drawVideo.idleOn?' is-playing':'')} src="/scene/idle-loop.mp4" muted loop playsInline autoPlay preload="auto" aria-hidden="true"/>}{drawVideo&&<video ref={drawVideo.ref} className={'draw-video'+(drawVideo.on?' is-playing':'')} src="/scene/draw-shuffle.mp4" muted playsInline preload="auto" aria-hidden="true" onEnded={drawVideo.onEnded} onError={drawVideo.onEnded}/>}{cardAnchor&&<button className="hand-card-toggle" aria-label="แตะไพ่ในมือแม่หมอเพื่อเปิดดูอีกครั้ง" onClick={onReopen} style={{left:(cardAnchor.x/1080*100)+'%',top:(cardAnchor.y/1500*100)+'%',width:(cardAnchor.width/1080*100)+'%',height:(cardAnchor.height/1500*100)+'%'}}/>}</div>;
 }
 export default function Home(){
  const frameRef=useRef<HTMLIFrameElement>(null);
@@ -40,11 +40,17 @@ export default function Home(){
  
  const timer=useRef<ReturnType<typeof setTimeout>|null>(null);
  // Phones and Safari keep the filtered scene still (it runs at a few fps there when animated). For a draw they play
- // the baked shuffle-and-raise video (scripts/build_draw_video.py) while the scene prepares the card; the reveal
- // waits for the video to end and opens from the raised card. The last frame stays up until the dialog closes.
+ // the baked shuffle-and-raise video (scripts/build_scene_videos.py) while the scene prepares the card; the reveal
+ // waits for the video to end and opens from the raised card. The last frame stays up until the dialog closes. If the
+ // phone refuses to play it (iOS Low Power Mode), the video hides and the reveal opens over the still scene at once.
  const [stillScene,setStillScene]=useState(false),[videoOn,setVideoOn]=useState(false);
  const drawVideo=useRef<HTMLVideoElement>(null),videoPlaying=useRef(false),pendingReveal=useRef<[string,Anchor|undefined]|null>(null);
  useEffect(()=>setStillScene(prefersStillScene()),[]);
+ // Before a card is drawn the still scene is covered by a baked loop of her idle motion (breathing, ghosts, candles,
+ // blinks); it pauses while hidden.
+ const idleVideo=useRef<HTMLVideoElement>(null);
+ const idleOn=stillScene&&!reduced&&phase==='idle'&&!selected&&!videoOn;
+ useEffect(()=>{const v=idleVideo.current;if(!v)return;if(idleOn)v.play().catch(()=>{});else v.pause();},[idleOn]);
  useEffect(()=>{const m=matchMedia('(prefers-reduced-motion: reduce)');setReduced(m.matches);const change=()=>setReduced(m.matches);m.addEventListener('change',change);return()=>{m.removeEventListener('change',change);if(timer.current)clearTimeout(timer.current);};},[]);
  const reveal=useCallback((id:string,anchor?:Anchor)=>{if(videoPlaying.current){pendingReveal.current=[id,anchor];return;}if(active.current?.id!==id)return;if(timer.current)clearTimeout(timer.current);if(anchor)sourceAnchor.current=anchor;setSelected(active.current);setPhase('revealed');setShowReveal(true);frameRef.current?.contentWindow?.postMessage({type:'mmkt:card-visibility',visible:false},location.origin);},[]);
  const sceneReady=useCallback(()=>setReady(true),[]);
@@ -64,7 +70,7 @@ export default function Home(){
   setError('');setSelected(null);setPhase('dealing');
   const card=cardsData[randomIndex(cardsData.length)];active.current=card;
   const video=stillScene&&!reduced?drawVideo.current:null;
-  if(video){videoPlaying.current=true;pendingReveal.current=null;setVideoOn(true);video.currentTime=0;video.play().catch(finishVideo);}
+  if(video){videoPlaying.current=true;pendingReveal.current=null;setVideoOn(true);video.currentTime=0;video.play().catch(()=>{setVideoOn(false);finishVideo();});}
   frameRef.current?.contentWindow?.postMessage({type:'mmkt:draw',cardId:card.id,reducedMotion:reduced},location.origin);
   timer.current=setTimeout(()=>failure('แอนิเมชันยังไม่ตอบกลับ กรุณาลองใหม่อีกครั้ง'),18000);
  }
@@ -91,10 +97,10 @@ export default function Home(){
     {error&&<p role="alert" className="error">{error}</p>}</div>
     <div className="status" role="status" aria-live="polite">{phase==='dealing'?'ตั้งคำถามไว้ในใจ แม่หมอกำลังเลือกไพ่ให้คุณ':phase==='revealed'?'ไพ่ของคุณเปิดแล้ว อ่านความหมายได้ด้านล่าง':'หายใจลึก ๆ แล้วเริ่มเมื่อคุณพร้อม'}</div>
    </div>
-   <div className="stage"><div className="stage-top"><span>THE MOONLIT ROOM</span><span>✧</span></div><Scene cardAnchor={selected&&!showReveal&&!videoOn?sourceAnchor.current:null} onReopen={reopen} frameRef={frameRef} onReady={sceneReady} onReveal={reveal} onError={failure} drawVideo={stillScene&&!reduced?{ref:drawVideo,on:videoOn,onEnded:finishVideo}:null}/><div className="stage-bottom"><span>MAEMORKRATAI</span><small>ห้องไพ่ใต้แสงจันทร์</small>{selected&&<button className="stage-reopen" onClick={reopen} disabled={showReveal} aria-label="เปิดไพ่ใบเดิมจากมือแม่หมอ"><span aria-hidden="true">✦</span> ดูไพ่ของคุณอีกครั้ง</button>}</div><span className="orbit orbit-one" aria-hidden="true">✦</span><span className="orbit orbit-two" aria-hidden="true">✧</span></div>
+   <div className="stage"><div className="stage-top"><span>THE MOONLIT ROOM</span><span>✧</span></div><Scene cardAnchor={selected&&!showReveal&&!videoOn?sourceAnchor.current:null} onReopen={reopen} frameRef={frameRef} onReady={sceneReady} onReveal={reveal} onError={failure} drawVideo={stillScene&&!reduced?{ref:drawVideo,on:videoOn,onEnded:finishVideo,idle:idleVideo,idleOn}:null}/><div className="stage-bottom"><span>MAEMORKRATAI</span><small>ห้องไพ่ใต้แสงจันทร์</small>{selected&&<button className="stage-reopen" onClick={reopen} disabled={showReveal} aria-label="เปิดไพ่ใบเดิมจากมือแม่หมอ"><span aria-hidden="true">✦</span> ดูไพ่ของคุณอีกครั้ง</button>}</div><span className="orbit orbit-one" aria-hidden="true">✦</span><span className="orbit orbit-two" aria-hidden="true">✧</span></div>
   </section>
   {selected&&<section id="reading-details" className="reading-result" aria-labelledby="result-title" data-card-id={selected.id}>
-   <div className="result-art"><button ref={resultButton} className="result-card-toggle" onClick={reopen} aria-label={'เปิดดูไพ่ '+selected.name+' อีกครั้ง'} aria-expanded={showReveal}><CardBack/><span className="toggle-card-label">แตะเพื่อเปิดไพ่ใบเดิม ✦</span></button><p className="saved-card-note">ไพ่ของคุณยังอยู่ตรงนี้</p></div>
+   <div className="result-art"><button ref={resultButton} className="result-card-toggle" onClick={reopen} aria-label={'เปิดดูไพ่ '+selected.name+' อีกครั้ง'} aria-expanded={showReveal}><img className="result-card-face" src={'/cards/'+selected.id+'.jpeg'} alt="" draggable={false}/></button><p className="saved-card-note">ไพ่ของคุณยังอยู่ตรงนี้<br/>แตะเพื่อดูใบใหญ่ ✦</p></div>
    <div className="result-copy"><p className="eyebrow">YOUR CARD · {context}</p><h2 id="result-title">{selected.name}</h2><p className="keyword">{selected.keyword}</p><div className="fine-line"/><p className="meaning">{selected.meanings[context]}</p><div className="reading-full"><h3>ความหมายในแต่ละสถานะ</h3><dl>{contexts.map(s=><div key={s} className={s===context?'current-context':''}><dt>{s}{s===context&&<span> · ที่คุณเลือก</span>}</dt><dd>{selected.meanings[s]}</dd></div>)}</dl></div><p className="gentle">ลองใช้ไพ่ใบนี้เป็นจุดเริ่มต้นทบทวนความรู้สึกของคุณ คำตอบยังขึ้นอยู่กับการเลือกและการกระทำในชีวิตจริง</p><a className="text-link" href={source} target="_blank" rel="noreferrer">อ่านแหล่งความหมายไพ่ ↗</a></div>
   </section>}
   <section className="collection" id="collection"><div className="section-heading"><div><p className="eyebrow">THE FIRST FIVE</p><h2>ห้าใบแรกจากโลกของแม่หมอกระต่าย</h2></div><p>ตัวละครที่คุ้นเคย ในเรื่องราวที่ต่างกัน<br/>แตะไพ่เพื่อชมภาพและอ่านความหมาย</p></div><div className="card-grid">{cardsData.map((card,i)=><button className="gallery-card" key={card.id} onClick={()=>{setDetail(card);setDetailPlaying(!reduced);}} aria-label={'ดูไพ่ '+card.name}><span className="card-number">0{i+1}</span><img src={'/cards/'+card.id+'.jpeg'} alt="" loading="lazy"/><span className="card-caption">{card.name}<small>{card.keyword}</small></span></button>)}</div></section>

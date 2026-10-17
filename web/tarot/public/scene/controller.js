@@ -100,6 +100,7 @@
       }
     }
     idle = gsap.timeline({ repeat: -1 });
+    window.__mmktIdle = idle; // scripts/build_scene_videos.py bakes one loop of this for phones
     // Hold the raised card still so its anchor remains stable during the
     // transfer to the parent overlay. Blinks and room details stay alive.
     if (!active) idle.to('#rabbit', { y: '-=6', duration: 2, repeat: 1, yoyo: true, ease: 'sine.inOut' }, 0);
@@ -211,7 +212,8 @@
         break;
       case 'mmkt:stow':
         if (!busy && active && data.cardId === active) {
-          setCardFace(false);
+          // Once drawn, the card stays face up in her hand (owner's request).
+          setCardFace(true);
           breathe();
           send('mmkt:stowed', { cardId: active, anchor: anchor() });
         }

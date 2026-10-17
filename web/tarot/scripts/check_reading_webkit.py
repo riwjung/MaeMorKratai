@@ -49,21 +49,42 @@ with sync_playwright() as p:
   scene=page.frames[1]
   # The scene fits itself with CSS zoom; a transform left 3x screens building filter buffers past Safari's limit.
   assert scene.evaluate('document.documentElement.dataset.motion')=='still' and float(scene.evaluate("document.querySelector('#halloween').style.zoom")) < 1
+  # Her idle motion plays as a baked loop over the still scene.
+  page.wait_for_function("(()=>{const v=document.querySelector('.room-window .idle-video');return v&&v.classList.contains('is-playing')&&!v.paused&&v.currentTime>0.5})()",timeout=8000)
   home=page.evaluate(fps);assert home>=30,f'home page {home} fps'
   # The home reveal used to stay on the mirrored back on Safari; the drawn card's face must be the visible side.
   expect(page.locator('.draw-button')).to_be_enabled(timeout=15000);page.locator('.draw-button').tap()
   # The still scene plays the baked shuffle-and-raise video for the draw; the reveal waits for it.
   page.wait_for_function("(()=>{const v=document.querySelector('.room-window .draw-video');return v&&v.classList.contains('is-playing')&&!v.paused&&v.currentTime>1})()",timeout=8000)
   assert not page.locator('.reveal-layer').count(),'reveal opened before the shuffle video ended'
+  assert not page.evaluate("document.querySelector('.room-window .idle-video').classList.contains('is-playing')"),'idle loop still shown during the draw'
   expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=20000)
   faces=page.locator('.reveal-flipper').evaluate("(f)=>[getComputedStyle(f.querySelector('.reveal-front')).visibility,getComputedStyle(f.querySelector('.reveal-back')).visibility]")
   assert faces==['visible','hidden'],faces
-  page.screenshot(path=str(OUT/'iphone-home-reveal.png'));ok('home scene fitted with zoom; shuffle video plays, then the reveal shows the card face')
+  page.screenshot(path=str(OUT/'iphone-home-reveal.png'))
+  # After "read the meaning below" the card stays face up in her hand (owner's request).
+  page.locator('.reveal-details').tap();expect(page.locator('.reveal-layer')).to_have_count(0,timeout=8000)
+  hand=page.frame_locator('.room-window iframe')
+  expect(hand.locator('#card-front')).to_have_css('opacity','1');expect(hand.locator('#card-back')).to_have_css('opacity','0')
+  # The reading below shows the card's face too, loaded, with no card back left on the page.
+  page.wait_for_function("(()=>{const i=document.querySelector('.result-art img.result-card-face');return !!i&&i.complete&&i.naturalWidth>0})()",timeout=8000)
+  assert not page.locator('.result-art .shared-card-back').count(),'card back still shown in the reading'
+  page.screenshot(path=str(OUT/'iphone-home-details.png'))
+  ok('idle loop plays; shuffle video plays, the reveal shows the face, and the card stays face up after closing, in her hand and in the reading')
   page.goto(URL+'/reading/');phase(page,'topic');page.get_by_role('button',name='ไปต่อ',exact=False).tap();phase(page,'question')
   page.get_by_role('button',name='พร้อมแล้ว',exact=False).tap();phase(page,'shuffling');page.wait_for_timeout(2500)
   assert page.evaluate("!!document.querySelector('canvas.ritual-deck-canvas')"),'WebGL deck not live'
   shuffle=page.evaluate(fps);assert shuffle>=30,f'3D shuffle {shuffle} fps'
   report['fps']={'home':home,'shuffle':shuffle};ok(f'still scenes keep the page fluid: home {home} fps, 3D shuffle {shuffle} fps')
+  context.close()
+  # iOS Low Power Mode refuses to play videos; the draw must still reveal the card, over the still scene.
+  context=browser.new_context(**p.devices['iPhone 13']);page=context.new_page()
+  page.on('pageerror',lambda e:report['errors'].append(str(e)))
+  page.add_init_script("HTMLMediaElement.prototype.play=function(){return Promise.reject(new DOMException('Low Power Mode','NotAllowedError'))}")
+  page.goto(URL+'/');expect(page.locator('.draw-button')).to_be_enabled(timeout=15000);page.locator('.draw-button').tap()
+  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=15000)
+  assert not page.evaluate("document.querySelector('.room-window .draw-video').classList.contains('is-playing')"),'refused video still covers the scene'
+  ok('video playback refused (Low Power Mode): the reveal opens over the still scene')
   assert not report['errors'],report['errors']
   report['passed']=True
  finally:

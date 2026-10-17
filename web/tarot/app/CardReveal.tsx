@@ -37,8 +37,8 @@ export default function CardReveal({card,meaning,context,reduced,getOrigin,onClo
   const width=element.offsetWidth;
   const dx=target.x+target.width/2-(parent.x+element.offsetLeft+width/2),dy=target.y+target.height/2-(parent.y+element.offsetTop+element.offsetHeight/2);
   timeline.current=motion.current.timeline({onComplete:finish});
+  // The card goes back to her hand face up; it no longer turns to its back.
   timeline.current.to([copy.current,halo.current,root.current?.querySelector('.reveal-stars')],{opacity:0,duration:.18},0)
-   .to(flip.current,{rotationY:180,duration:.42,ease:'sine.inOut',onUpdate:syncFaces},0)
    .to(shell.current,{x:dx,y:dy,scale:Math.max(.06,target.width/width),rotation:0,duration:.65,ease:'power3.inOut'},.08)
    .to(veil.current,{opacity:0,duration:.4},.22);
  };

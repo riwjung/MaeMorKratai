@@ -130,8 +130,12 @@ def assert_stowed(page: Page, card: dict):
     expect(page.locator(".reveal-layer")).to_have_count(0, timeout=4000)
     frame = page.frame_locator(".room-window iframe")
     expect(frame.locator("#show-card")).to_have_css("visibility", "visible")
-    expect(frame.locator("#card-back")).to_have_css("opacity", "1")
-    expect(frame.locator("#card-front")).to_have_css("opacity", "0")
+    # Once drawn, the card stays face up in her hand (owner's request, 2026-10-17).
+    expect(frame.locator("#card-back")).to_have_css("opacity", "0")
+    expect(frame.locator("#card-front")).to_have_css("opacity", "1")
+    # ...and the card in the reading below shows its face, not its back.
+    expect(page.locator(".result-art img.result-card-face")).to_have_attribute("src", "/cards/" + card["id"] + ".jpeg")
+    assert not page.locator(".result-art .shared-card-back").count()
     expect(page.locator("#reading-details")).to_have_attribute("data-card-id", card["id"])
     assert not page.locator("main").evaluate("e => e.inert")
     assert page.evaluate("getComputedStyle(document.body).overflow") != "hidden"
@@ -205,13 +209,14 @@ def desktop(browser):
     assert elapsed >= 5, "Normal-motion draw skipped the shuffle sequence"
     assert_focus_trap(page)
     screenshot(page, "desktop-reveal")
-    before = page.locator(".reveal-flipper").evaluate("e => getComputedStyle(e).transform")
+    before = page.locator(".reveal-card-shell").evaluate("e => getComputedStyle(e).transform")
     page.get_by_role("button", name=CLOSE, exact=True).click()
     expect(page.locator(".reveal-layer")).to_have_attribute("data-state", "closing")
     # Wait for an actual rendered animation frame; fixed 160ms is flaky under CPU-heavy Chromium.
-    page.wait_for_function("before => {const e=document.querySelector('.reveal-flipper');return e && getComputedStyle(e).transform!==before}", arg=before,timeout=1800)
-    after = page.locator(".reveal-flipper").evaluate("e => getComputedStyle(e).transform")
-    assert before != after, "Close did not rotate the card back"
+    page.wait_for_function("before => {const e=document.querySelector('.reveal-card-shell');return e && getComputedStyle(e).transform!==before}", arg=before,timeout=1800)
+    # The card flies back to her hand face up; it no longer turns to its back (owner's request, 2026-10-17).
+    faces = page.locator(".reveal-flipper").evaluate("f => [getComputedStyle(f.querySelector('.reveal-front')).visibility, getComputedStyle(f.querySelector('.reveal-back')).visibility]")
+    assert faces == ["visible", "hidden"], f"Close turned the card: {faces}"
     screenshot(page, "desktop-returning")
     assert_stowed(page, card)
     assert_reopen(page, card, "มีแฟน")

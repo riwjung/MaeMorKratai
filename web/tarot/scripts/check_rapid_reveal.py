@@ -13,7 +13,8 @@ with sync_playwright() as pw:
  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','opening',timeout=15000)
  page.keyboard.press('Escape')
  expect(page.locator('.reveal-layer')).to_have_count(0,timeout=4000)
- expect(page.frame_locator('.room-window iframe').locator('#card-back')).to_have_css('opacity','1')
+ # Closing no longer turns the card to its back: it stays face up in her hand (owner's request).
+ expect(page.frame_locator('.room-window iframe').locator('#card-front')).to_have_css('opacity','1')
  card=page.locator('#reading-details').get_attribute('data-card-id')
  page.locator('.stage-reopen').click()
  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open',timeout=4000)
@@ -23,7 +24,7 @@ with sync_playwright() as pw:
  page.emulate_media(reduced_motion='reduce')
  expect(page.locator('.reveal-layer')).to_have_count(0)
  page.wait_for_function("document.querySelector('#reading-details').getBoundingClientRect().top < 120")
- expect(page.frame_locator('.room-window iframe').locator('#card-back')).to_have_css('opacity','1')
+ expect(page.frame_locator('.room-window iframe').locator('#card-front')).to_have_css('opacity','1')
  page.locator('.result-card-toggle').click()
  expect(page.locator('.reveal-layer')).to_have_attribute('data-state','open')
  expect(page.locator('.reveal-layer')).to_have_attribute('data-card-id',card)
