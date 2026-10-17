@@ -56,3 +56,9 @@
 [data-motion-active=false] .ritual-slot-open span{animation-play-state:paused!important}
 .ritual-ghost[data-reduced=true]>div{transition:none;transform:none!important}
 .ritual-ghost[data-reduced=true] .ritual-card-turn{transform:none}
+/* WebKit/Safari does not always honour backface-visibility in this nested 3D card, which showed the mirrored
+   front through the back. Hide the face that should not show as well, switching at the 90° point of the turn
+   (35% of the 650ms curve), so the flip looks the same everywhere. */
+.ritual-card-visual .ritual-card-back,.ritual-card-visual .ritual-card-front{transition:visibility 0s linear 230ms}
+.ritual-card-visual[data-open=false] .ritual-card-front,.ritual-card-visual[data-open=true] .ritual-card-back{visibility:hidden}
+

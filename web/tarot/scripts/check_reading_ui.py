@@ -35,17 +35,30 @@ def deck_pose(page):
  page.wait_for_function("document.querySelector('.ritual-shuffle')?.dataset.pose || document.querySelectorAll('.ritual-shuffle-card').length>8",timeout=12000)
  return page.evaluate("(()=>{const d=document.querySelector('.ritual-shuffle');return d.dataset.pose||getComputedStyle(d.querySelectorAll('.ritual-shuffle-card')[8]).transform})()")
 def grab_point(page,card_id):
- # The middle of the strip of a fanned card that its neighbours leave uncovered.
- page.locator(f'[data-deck-id="{card_id}"]').scroll_into_view_if_needed()
- return page.evaluate('''(id)=>{const el=document.querySelector(`[data-deck-id="${id}"]`);const r=el.getBoundingClientRect();
-  for(const f of [.5,.35,.65]){const y=r.top+r.height*f,hits=[];for(let x=r.left+2;x<r.right-2;x+=2)if(document.elementFromPoint(x,y)?.closest('[data-deck-id]')===el)hits.push(x);
-   if(hits.length)return [hits[Math.floor(hits.length/2)],y];}return null}''',card_id)
+ # The middle of the strip of a fanned card that its neighbours leave uncovered. A lifted neighbour can briefly
+ # cover it, so look again a few times before giving up.
+ for _ in range(3):
+  page.locator(f'[data-deck-id="{card_id}"]').scroll_into_view_if_needed()
+  point=page.evaluate('''(id)=>{const el=document.querySelector(`[data-deck-id="${id}"]`);const r=el.getBoundingClientRect();
+   for(const f of [.5,.35,.65]){const y=r.top+r.height*f,hits=[];for(let x=r.left+2;x<r.right-2;x+=2)if(document.elementFromPoint(x,y)?.closest('[data-deck-id]')===el)hits.push(x);
+    if(hits.length)return [hits[Math.floor(hits.length/2)],y];}return null}''',card_id)
+  if point:return point
+  page.wait_for_timeout(300)
+ return None
 def slots(page):return page.locator('[data-slot]').evaluate_all('(els)=>els.map(e=>e.dataset.cardId)')
 def drag_to_slot(page,card_id,slot):
- point=grab_point(page,card_id);assert point,'card not reachable'
- # Hovering lifts nearby cards in a wave; aim again once it has settled.
- page.mouse.move(*point);page.wait_for_timeout(350);point=grab_point(page,card_id);assert point,'card not reachable'
- page.mouse.move(*point);page.wait_for_timeout(350);point=grab_point(page,card_id);page.mouse.move(*point);page.mouse.down();page.mouse.move(point[0],point[1]-24,steps=3)
+ # Hovering lifts the card under the mouse and a wave around it, which can cover a narrow strip. Like a person,
+ # aim, check what is actually under the pointer, and if it is a neighbour, move away and aim again.
+ hit=point=None
+ for _ in range(4):
+  point=grab_point(page,card_id)
+  if point:
+   page.mouse.move(*point);page.wait_for_timeout(350)
+   hit=page.evaluate('([x,y])=>document.elementFromPoint(x,y)?.closest("[data-deck-id]")?.dataset.deckId',point)
+   if hit==card_id:break
+  page.mouse.move(5,5);page.wait_for_timeout(350)
+ assert hit==card_id,'card not reachable'
+ page.mouse.down();page.mouse.move(point[0],point[1]-24,steps=3)
  if slot is None:page.mouse.move(point[0]+40,point[1]-60,steps=6)
  else:
   t=page.locator(f'[data-slot="{slot}"] .ritual-slot-card').bounding_box();page.mouse.move(t['x']+t['width']/2,t['y']+t['height']/2,steps=14)

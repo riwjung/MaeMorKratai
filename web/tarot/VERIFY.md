@@ -77,3 +77,10 @@
 - การทดสอบเป็น desktop Chromium และมือถือจำลอง ยังไม่วัด FPS หรือตรวจ Safari/iOS บนอุปกรณ์จริง. ไม่มี deploy หรือบริการ/เครดิตเพิ่ม.
 
 สภาพแวดล้อมหน้าแรก: ตรวจรอบสุดท้ายด้วย `MMKT_BROWSER_CHANNEL=chrome ... scripts/check_reveal.py` ผ่าน 11/11 โดยไม่เปลี่ยน timeout 14 วินาทีของ suite. ตัว Chromium headless shell แบบ software rendering บนเครื่องนี้เล่นฉากเดิมช้าจนเกิน timeout ระหว่าง normal-motion draw; ตรวจพบว่า timeline ยังเดินและเปิดได้ จึงใช้ Chrome ที่ติดตั้งเป็นตัวตรวจเพิ่มเติม ไม่เปลี่ยนความเร็ว/ท่าของหน้าแรก. ชุด /reading/ ใช้ Chromium headless shell ผ่าน 12/12. คลิป preview ใช้ Chrome จาก browser profile ทดสอบแยก.
+
+## ตรวจบน WebKit (engine ของ Safari) แบบ iPhone — 2026-10-17
+
+- ใช้ Playwright WebKit 27.2 จำลอง iPhone 13 (`scripts/check_reading_webkit.py`, ผ่าน 4/4): หน้าแรก, สับ/หยุด/กาง, วางไพ่ 3 ใบ, แตะเปิด, ปลดล็อก demo และหน้าอ่าน ไม่มี pageerror/console error หรือ overflow แนวนอน.
+- พบและแก้ 2 จุดที่เห็นได้บน iPhone: หลังไพ่ใน `CardVisual` แสดงกลับด้าน (WebKit ไม่ซ่อน backface ในการ์ดสามมิติซ้อนชั้นนี้) จึงซ่อนด้านที่ไม่ควรเห็นด้วย `visibility` สลับที่ 230ms ซึ่งเป็นจุด 90° ของการพลิก 650ms; เมนูหัวหน้าแรกตัดบรรทัดที่ 390px จึงซ่อนลิงก์ในหน้าเดียวกันบนจอไม่เกิน 480px เหลือ "เปิดไพ่ 3 ใบ →".
+- WebKit แบบ headless ส่งเฟรมแอนิเมชันราว 1 เฟรมทุก 2 วินาที (Chromium headless ~5–7 fps) ทั้งที่ renderer เป็น Apple GPU จึงตรวจเส้นทาง WebGL บน WebKit ไม่ได้ (สับได้แต่ช่วงรวมกองค้างตามจำนวนเฟรม) ต้องดูบนโทรศัพท์จริง; สคริปต์จึงใช้ reduced motion.
+- ตัวช่วยลากใน `check_reading_ui.py` เล็งใหม่เมื่อไพ่ข้าง ๆ ที่ถูกยกตามเมาส์บังแถบไพ่ (เดิมสุ่มล้ม): ผ่าน 12/12 ติดกัน 4 รอบ; `check_reveal.py` 11/11, `check_reading.cjs` 8/8, `check_reading_interruptions.py` 6/6; `check_reading_motion.py` ยังขึ้นกับจังหวะเวลา (ผ่าน 10/10 บางรอบ).

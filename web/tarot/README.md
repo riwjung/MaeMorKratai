@@ -49,3 +49,7 @@ QA scripts contain this Mac’s runtime paths. They are evidence/reproduction he
 ## /reading/ — กระต่ายเคลื่อนไหวและไพ่ลอย 3D (2026-10-17)
 
 เพิ่ม portrait mode ของฉากหน้าแรก, CSS 3D front/back/edges, การลอย/พลิกไพ่ และปุ่มหยุด/เล่นทั้งหน้า. อ่านโครงสร้าง/ข้อจำกัดใน [READING.md](READING.md) และผลตรวจใน [VERIFY.md](VERIFY.md). ภาพกับคลิปอยู่ `artifacts/reading-motion/` (ไฟล์ตรวจในเครื่อง ไม่อยู่ใน Git). ไม่เพิ่มบริการภายนอกหรือเผยแพร่เว็บ.
+
+## Vercel
+
+`vercel.json` ตั้ง framework เป็น Other แล้วเสิร์ฟ `out/` จาก `npm run build` ตรง ๆ เหมือน static server ในเครื่อง. ถ้าใช้ preset Next.js, Vercel ให้ไฟล์ `.html` ใน `public/` เป็น clean URL ทำให้ `/scene/index.html` และ `/card-scenes/<id>.html` ที่ฝังเป็น iframe ตอบ 404 (ฉากห้องกระต่าย มาสคอต และฉากไพ่ไม่ขึ้น). ตั้งโปรเจกต์ Vercel ให้ Root Directory เป็น `web/tarot`; push `main` แล้ว deploy ใหม่อัตโนมัติ.
