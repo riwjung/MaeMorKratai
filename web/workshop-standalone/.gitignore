@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.env*
+!.env.example
+.vercel/
+artifacts/
+backups/
+*.tsbuildinfo
+__pycache__/
+*.pyc
+.vercel

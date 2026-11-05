@@ -1,0 +1,16 @@
+{
+  "url": "https://mae-mor-kratai.vercel.app",
+  "passed": true,
+  "checks": [
+    "78 draws show source daily theme, overview, work, money, love, message, colors and affirmation; image/name-only faces",
+    "Reopen same card without new draw; Escape closes",
+    "Home links to the 3-card room; direct /reading/ opens it; return to home works",
+    "Every v3 card asset served with expected bytes",
+    "chromium mobile: image, new image, name-only, no overflow, 3-card room",
+    "webkit mobile: image, new image, name-only, no overflow, 3-card room",
+    "Desktop animated draw completes",
+    "Blocked card image falls back to name in reveal and mascot hand"
+  ],
+  "errors": [],
+  "badResponses": []
+}

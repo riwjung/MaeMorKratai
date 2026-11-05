@@ -1,0 +1,9 @@
+{
+  "url": "https://mae-mor-kratai.vercel.app",
+  "passed": true,
+  "checks": [
+    "chromium: primary action before preferences under scene; natural image/frame bounds; no outer stroke/back face; reopen does not redraw; motion=reduce",
+    "webkit: primary action before preferences under scene; natural image/frame bounds; no outer stroke/back face; reopen does not redraw; motion=no-preference"
+  ],
+  "errors": []
+}

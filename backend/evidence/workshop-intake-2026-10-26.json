@@ -1,0 +1,165 @@
+{
+  "project": "pmyftgrjhujcdwtfotqn",
+  "startedAt": "2026-10-26T05:19:04.855Z",
+  "completedAt": "2026-10-26T05:19:06.879Z",
+  "scope": "sole active owner; current reading per case; structural checks only",
+  "sourceTables": [
+    "workshop_members",
+    "workshop_cases",
+    "workshop_readings",
+    "workshop_responses",
+    "workshop_recordings",
+    "workshop_withdrawals"
+  ],
+  "catalogSha256": "971e2b97415e4aa527ae0e44d4c3265a635505edaff07c0b376fb5510c9a3d62",
+  "stableCurrentReadingsDuringAudit": true,
+  "activeRoles": {
+    "owner": 1,
+    "reader": 1
+  },
+  "expectedCases": 60,
+  "currentCases": 60,
+  "pairedCases": {
+    "bothStagesHaveText": 57,
+    "bothStagesAudioOnly": 3
+  },
+  "catalogCoverage": {
+    "deckSize": 78,
+    "allCardIds": 66,
+    "developmentCardIds": 59,
+    "note": "Appearance in a case does not establish approved coverage across categories, positions or combinations"
+  },
+  "stages": {
+    "baseline": 0,
+    "followup": 0,
+    "review": 60
+  },
+  "historyRows": 120,
+  "byCategory": [
+    {
+      "category": "love",
+      "expected": 30,
+      "present": 30,
+      "submitted": 30
+    },
+    {
+      "category": "work",
+      "expected": 10,
+      "present": 10,
+      "submitted": 10
+    },
+    {
+      "category": "money",
+      "expected": 10,
+      "present": 10,
+      "submitted": 10
+    },
+    {
+      "category": "health",
+      "expected": 10,
+      "present": 10,
+      "submitted": 10
+    }
+  ],
+  "bySplit": [
+    {
+      "split": "development",
+      "expected": 40,
+      "submitted": 40,
+      "cardIdsCovered": 59
+    },
+    {
+      "split": "holdout",
+      "expected": 20,
+      "submitted": 20,
+      "cardIdsCovered": 47
+    }
+  ],
+  "baseline": {
+    "fieldPresence": {
+      "answer": 57,
+      "evidence": 2,
+      "uncertainty": 2,
+      "question": 2,
+      "phrases": 2,
+      "changes": 0,
+      "unchanged": 0
+    },
+    "textOnly": 57,
+    "audioOnly": 3,
+    "textAndAudio": 0,
+    "missingBoth": 0,
+    "invalidAudioLinks": 0,
+    "referencedReadyAudio": 3,
+    "repeatedNormalizedAnswerCount": 1,
+    "duplicateAnswerCaseGroups": [
+      {
+        "caseIds": [
+          "case-15",
+          "case-16"
+        ],
+        "splits": [
+          "development"
+        ]
+      }
+    ],
+    "answerCharacterLength": {
+      "min": 63,
+      "median": 182,
+      "max": 312
+    }
+  },
+  "followup": {
+    "fieldPresence": {
+      "answer": 57,
+      "evidence": 3,
+      "uncertainty": 3,
+      "question": 3,
+      "phrases": 3,
+      "changes": 57,
+      "unchanged": 57
+    },
+    "textOnly": 57,
+    "audioOnly": 3,
+    "textAndAudio": 0,
+    "missingBoth": 0,
+    "invalidAudioLinks": 0,
+    "referencedReadyAudio": 3,
+    "repeatedNormalizedAnswerCount": 0,
+    "duplicateAnswerCaseGroups": [],
+    "answerCharacterLength": {
+      "min": 33,
+      "median": 92,
+      "max": 219
+    }
+  },
+  "audio": {
+    "metadataRows": 6,
+    "ready": 6,
+    "pending": 0,
+    "readyBytes": 5581766,
+    "readyDurationSeconds": 479,
+    "currentlyReferencedReady": 6,
+    "currentlyReferencedDurationSeconds": 479,
+    "readyNotCurrentlyReferenced": 0
+  },
+  "latestReadingUpdate": "2026-10-25T12:34:09.654574+00:00",
+  "earliestReadingUpdate": "2026-10-20T14:25:28.99452+00:00",
+  "checks": {
+    "missingExpectedCases": [],
+    "duplicateCurrentCaseRows": 0,
+    "unknownCases": 0,
+    "catalogMetadataMismatches": 0,
+    "historyVersionMismatches": 0,
+    "latestRevisionMismatches": 0,
+    "missingConsentRevisions": 0,
+    "duplicateFamilyAcrossSplits": 0,
+    "pendingWithdrawals": 0
+  },
+  "limits": [
+    "No audio download/playback/transcription or semantic correctness review performed",
+    "Optional text fields may be covered in audio; absence is not an error",
+    "Review stage is not knowledge approval; no raw content or identities exported",
+    "Paginated reads are not a transactional backup; repeat boundary check only detects current reading changes"
+  ]
+}

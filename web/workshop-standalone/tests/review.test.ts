@@ -1,0 +1,7 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {parseReview} from '../lib/review-domain';
+const base=()=>({revision:0,requestId:'11111111-1111-4111-8111-111111111111',sourceHash:'abc',status:'draft',content:{baseline:'คำอ่าน',followup:'ขยาย',notes:'',style:{}}});
+test('approval requires explicit confirmation and both readings',()=>{assert.throws(()=>parseReview({...base(),status:'approved'}));assert.throws(()=>parseReview({...base(),status:'approved',confirm:true,content:{...base().content,followup:''}}));assert.equal(parseReview({...base(),status:'approved',confirm:true}).status,'approved')});
+test('style approval requires all proposals answered; rejects unknown fields',()=>{assert.throws(()=>parseReview({...base(),status:'approved',confirm:true},['style-01']));assert.throws(()=>parseReview({...base(),content:{...base().content,style:{other:'yes'}}},['style-01']));assert.equal(parseReview({...base(),status:'approved',confirm:true,content:{...base().content,style:{'style-01':'ตกลง'}}},['style-01']).status,'approved')});
+test('invalid revisions, text types and oversized payloads rejected',()=>{for(const revision of [-1,1.2,null])assert.throws(()=>parseReview({...base(),revision}));assert.throws(()=>parseReview({...base(),content:{...base().content,notes:'x'.repeat(16001)}}));assert.throws(()=>parseReview({...base(),content:{...base().content,baseline:123}}))});

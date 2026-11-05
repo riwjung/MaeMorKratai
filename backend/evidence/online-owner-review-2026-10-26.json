@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-26",
+  "deployment": "dpl_EB2PcemYicnThzUC7bgD1tA7FCNt",
+  "url": "https://maemorkratai-workshop.vercel.app/review",
+  "hosted": {
+    "passed": true,
+    "application": "http://127.0.0.1:3012",
+    "anonymousDenied": true,
+    "readerDenied": true,
+    "directStorageDenied": true,
+    "holdoutExcluded": true,
+    "draftReload": true,
+    "approvalAndHistory": true,
+    "idempotentRetry": true,
+    "concurrentConflict": true,
+    "csrfRejected": true,
+    "unsavedGuard": true,
+    "mobileNoOverflow": true,
+    "realDevelopmentCases": 40,
+    "realAudioAccessible": true,
+    "realReviewsWritten": 0,
+    "pageErrors": 0
+  },
+  "webkitProduction": {
+    "passed": true,
+    "browser": "WebKit",
+    "production": true,
+    "loginAndOwnerMenu": true,
+    "cases": 40,
+    "styleProposals": 6,
+    "audioMetadataLoads": true,
+    "mobileNoOverflow": true,
+    "pageErrors": 0,
+    "writes": 0
+  },
+  "backup": {
+    "reviewDocuments": 42,
+    "audioFiles": 6,
+    "hashesVerified": 48,
+    "originalSixTablesUnchanged": true,
+    "actualOwnerRevisions": 0
+  },
+  "tests": {
+    "unitTestsPassed": 5,
+    "typecheck": true,
+    "productionBuild": true
+  },
+  "limitations": [
+    "Owner content review pending",
+    "Approval is case-specific; no generalized rule extraction or AI answering enabled",
+    "Portable backup is not a transactional database/Auth restore"
+  ],
+  "chromiumProduction": {
+    "passed": true,
+    "application": "https://maemorkratai-workshop.vercel.app",
+    "anonymousDenied": true,
+    "readerDenied": true,
+    "directStorageDenied": true,
+    "holdoutExcluded": true,
+    "draftReload": true,
+    "approvalAndHistory": true,
+    "idempotentRetry": true,
+    "concurrentConflict": true,
+    "csrfRejected": true,
+    "unsavedGuard": true,
+    "mobileNoOverflow": true,
+    "realDevelopmentCases": 40,
+    "realAudioAccessible": true,
+    "realReviewsWritten": 0,
+    "pageErrors": 0
+  }
+}

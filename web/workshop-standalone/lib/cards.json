@@ -1,0 +1,392 @@
+[
+  {
+    "id": "the-fool",
+    "name": "The Fool",
+    "art": "/cards/the-fool.jpeg"
+  },
+  {
+    "id": "the-magician",
+    "name": "The Magician",
+    "art": "/cards/the-magician.jpg"
+  },
+  {
+    "id": "the-high-priestess",
+    "name": "The High Priestess",
+    "art": "/cards/the-high-priestess.jpg"
+  },
+  {
+    "id": "the-empress",
+    "name": "The Empress",
+    "art": "/cards/the-empress.jpg"
+  },
+  {
+    "id": "the-emperor",
+    "name": "The Emperor",
+    "art": "/cards/the-emperor.jpg"
+  },
+  {
+    "id": "the-hierophant",
+    "name": "The Hierophant",
+    "art": "/cards/the-hierophant.jpg"
+  },
+  {
+    "id": "the-lovers",
+    "name": "The Lovers",
+    "art": "/cards/the-lovers.jpeg"
+  },
+  {
+    "id": "the-chariot",
+    "name": "The Chariot",
+    "art": "/cards/the-chariot.jpg"
+  },
+  {
+    "id": "strength",
+    "name": "Strength",
+    "art": "/cards/strength.jpg"
+  },
+  {
+    "id": "the-hermit",
+    "name": "The Hermit",
+    "art": "/cards/the-hermit.jpg"
+  },
+  {
+    "id": "wheel-of-fortune",
+    "name": "Wheel of Fortune",
+    "art": "/cards/wheel-of-fortune.jpg"
+  },
+  {
+    "id": "justice",
+    "name": "Justice",
+    "art": "/cards/justice.jpg"
+  },
+  {
+    "id": "the-hanged-man",
+    "name": "The Hanged Man",
+    "art": "/cards/the-hanged-man.jpeg"
+  },
+  {
+    "id": "death",
+    "name": "Death",
+    "art": "/cards/death.jpg"
+  },
+  {
+    "id": "temperance",
+    "name": "Temperance",
+    "art": "/cards/temperance.jpg"
+  },
+  {
+    "id": "the-devil",
+    "name": "The Devil",
+    "art": null
+  },
+  {
+    "id": "the-tower",
+    "name": "The Tower",
+    "art": "/cards/the-tower.jpg"
+  },
+  {
+    "id": "the-star",
+    "name": "The Star",
+    "art": "/cards/the-star.jpg"
+  },
+  {
+    "id": "the-moon",
+    "name": "The Moon",
+    "art": "/cards/the-moon.jpg"
+  },
+  {
+    "id": "the-sun",
+    "name": "The Sun",
+    "art": "/cards/the-sun.jpg"
+  },
+  {
+    "id": "judgement",
+    "name": "Judgement",
+    "art": "/cards/judgement.jpg"
+  },
+  {
+    "id": "the-world",
+    "name": "The World",
+    "art": "/cards/the-world.jpg"
+  },
+  {
+    "id": "ace-of-wands",
+    "name": "Ace of Wands",
+    "art": "/cards/ace-of-wands.jpg"
+  },
+  {
+    "id": "two-of-wands",
+    "name": "Two of Wands",
+    "art": "/cards/two-of-wands.jpg"
+  },
+  {
+    "id": "three-of-wands",
+    "name": "Three of Wands",
+    "art": "/cards/three-of-wands.jpeg"
+  },
+  {
+    "id": "four-of-wands",
+    "name": "Four of Wands",
+    "art": "/cards/four-of-wands.jpg"
+  },
+  {
+    "id": "five-of-wands",
+    "name": "Five of Wands",
+    "art": "/cards/five-of-wands.jpg"
+  },
+  {
+    "id": "six-of-wands",
+    "name": "Six of Wands",
+    "art": "/cards/six-of-wands.jpg"
+  },
+  {
+    "id": "seven-of-wands",
+    "name": "Seven of Wands",
+    "art": "/cards/seven-of-wands.jpg"
+  },
+  {
+    "id": "eight-of-wands",
+    "name": "Eight of Wands",
+    "art": "/cards/eight-of-wands.jpg"
+  },
+  {
+    "id": "nine-of-wands",
+    "name": "Nine of Wands",
+    "art": "/cards/nine-of-wands.jpg"
+  },
+  {
+    "id": "ten-of-wands",
+    "name": "Ten of Wands",
+    "art": "/cards/ten-of-wands.jpg"
+  },
+  {
+    "id": "page-of-wands",
+    "name": "Page of Wands",
+    "art": "/cards/page-of-wands.jpg"
+  },
+  {
+    "id": "knight-of-wands",
+    "name": "Knight of Wands",
+    "art": "/cards/knight-of-wands.jpg"
+  },
+  {
+    "id": "queen-of-wands",
+    "name": "Queen of Wands",
+    "art": "/cards/queen-of-wands.jpg"
+  },
+  {
+    "id": "king-of-wands",
+    "name": "King of Wands",
+    "art": "/cards/king-of-wands.jpg"
+  },
+  {
+    "id": "ace-of-cups",
+    "name": "Ace of Cups",
+    "art": "/cards/ace-of-cups.jpg"
+  },
+  {
+    "id": "two-of-cups",
+    "name": "Two of Cups",
+    "art": "/cards/two-of-cups.jpg"
+  },
+  {
+    "id": "three-of-cups",
+    "name": "Three of Cups",
+    "art": "/cards/three-of-cups.jpg"
+  },
+  {
+    "id": "four-of-cups",
+    "name": "Four of Cups",
+    "art": "/cards/four-of-cups.jpg"
+  },
+  {
+    "id": "five-of-cups",
+    "name": "Five of Cups",
+    "art": "/cards/five-of-cups.jpg"
+  },
+  {
+    "id": "six-of-cups",
+    "name": "Six of Cups",
+    "art": "/cards/six-of-cups.jpg"
+  },
+  {
+    "id": "seven-of-cups",
+    "name": "Seven of Cups",
+    "art": "/cards/seven-of-cups.jpg"
+  },
+  {
+    "id": "eight-of-cups",
+    "name": "Eight of Cups",
+    "art": "/cards/eight-of-cups.jpg"
+  },
+  {
+    "id": "nine-of-cups",
+    "name": "Nine of Cups",
+    "art": "/cards/nine-of-cups.jpg"
+  },
+  {
+    "id": "ten-of-cups",
+    "name": "Ten of Cups",
+    "art": "/cards/ten-of-cups.jpg"
+  },
+  {
+    "id": "page-of-cups",
+    "name": "Page of Cups",
+    "art": "/cards/page-of-cups.jpg"
+  },
+  {
+    "id": "knight-of-cups",
+    "name": "Knight of Cups",
+    "art": "/cards/knight-of-cups.jpg"
+  },
+  {
+    "id": "queen-of-cups",
+    "name": "Queen of Cups",
+    "art": "/cards/queen-of-cups.jpg"
+  },
+  {
+    "id": "king-of-cups",
+    "name": "King of Cups",
+    "art": "/cards/king-of-cups.jpg"
+  },
+  {
+    "id": "ace-of-swords",
+    "name": "Ace of Swords",
+    "art": "/cards/ace-of-swords.jpg"
+  },
+  {
+    "id": "two-of-swords",
+    "name": "Two of Swords",
+    "art": "/cards/two-of-swords.jpg"
+  },
+  {
+    "id": "three-of-swords",
+    "name": "Three of Swords",
+    "art": "/cards/three-of-swords.jpg"
+  },
+  {
+    "id": "four-of-swords",
+    "name": "Four of Swords",
+    "art": "/cards/four-of-swords.jpg"
+  },
+  {
+    "id": "five-of-swords",
+    "name": "Five of Swords",
+    "art": "/cards/five-of-swords.jpg"
+  },
+  {
+    "id": "six-of-swords",
+    "name": "Six of Swords",
+    "art": "/cards/six-of-swords.jpg"
+  },
+  {
+    "id": "seven-of-swords",
+    "name": "Seven of Swords",
+    "art": "/cards/seven-of-swords.jpg"
+  },
+  {
+    "id": "eight-of-swords",
+    "name": "Eight of Swords",
+    "art": "/cards/eight-of-swords.jpg"
+  },
+  {
+    "id": "nine-of-swords",
+    "name": "Nine of Swords",
+    "art": "/cards/nine-of-swords.jpg"
+  },
+  {
+    "id": "ten-of-swords",
+    "name": "Ten of Swords",
+    "art": "/cards/ten-of-swords.jpg"
+  },
+  {
+    "id": "page-of-swords",
+    "name": "Page of Swords",
+    "art": "/cards/page-of-swords.jpg"
+  },
+  {
+    "id": "knight-of-swords",
+    "name": "Knight of Swords",
+    "art": "/cards/knight-of-swords.jpg"
+  },
+  {
+    "id": "queen-of-swords",
+    "name": "Queen of Swords",
+    "art": "/cards/queen-of-swords.jpeg"
+  },
+  {
+    "id": "king-of-swords",
+    "name": "King of Swords",
+    "art": "/cards/king-of-swords.jpg"
+  },
+  {
+    "id": "ace-of-pentacles",
+    "name": "Ace of Pentacles",
+    "art": "/cards/ace-of-pentacles.jpg"
+  },
+  {
+    "id": "two-of-pentacles",
+    "name": "Two of Pentacles",
+    "art": "/cards/two-of-pentacles.jpg"
+  },
+  {
+    "id": "three-of-pentacles",
+    "name": "Three of Pentacles",
+    "art": "/cards/three-of-pentacles.jpg"
+  },
+  {
+    "id": "four-of-pentacles",
+    "name": "Four of Pentacles",
+    "art": "/cards/four-of-pentacles.jpg"
+  },
+  {
+    "id": "five-of-pentacles",
+    "name": "Five of Pentacles",
+    "art": "/cards/five-of-pentacles.jpg"
+  },
+  {
+    "id": "six-of-pentacles",
+    "name": "Six of Pentacles",
+    "art": "/cards/six-of-pentacles.jpg"
+  },
+  {
+    "id": "seven-of-pentacles",
+    "name": "Seven of Pentacles",
+    "art": "/cards/seven-of-pentacles.jpg"
+  },
+  {
+    "id": "eight-of-pentacles",
+    "name": "Eight of Pentacles",
+    "art": "/cards/eight-of-pentacles.jpg"
+  },
+  {
+    "id": "nine-of-pentacles",
+    "name": "Nine of Pentacles",
+    "art": "/cards/nine-of-pentacles.jpg"
+  },
+  {
+    "id": "ten-of-pentacles",
+    "name": "Ten of Pentacles",
+    "art": "/cards/ten-of-pentacles.jpg"
+  },
+  {
+    "id": "page-of-pentacles",
+    "name": "Page of Pentacles",
+    "art": "/cards/page-of-pentacles.jpg"
+  },
+  {
+    "id": "knight-of-pentacles",
+    "name": "Knight of Pentacles",
+    "art": "/cards/knight-of-pentacles.jpg"
+  },
+  {
+    "id": "queen-of-pentacles",
+    "name": "Queen of Pentacles",
+    "art": "/cards/queen-of-pentacles.jpg"
+  },
+  {
+    "id": "king-of-pentacles",
+    "name": "King of Pentacles",
+    "art": null
+  }
+]

@@ -1,5 +1,7 @@
 # ส่งต่องานให้ Claude — แม่หมอกระต่าย
 
+> **Dev consult release — 2026-11-05:** สถานะ/architecture/roadmapปัจจุบันเริ่มที่ [docs/consult/START_HERE.md](docs/consult/START_HERE.md). ชุดGitนี้รวมเว็บลูกค้าฉบับdeployล่าสุด, workshop, source SocialCenter และคลิปreference. ข้อความเก่าด้านล่างเป็นประวัติ ไม่ใช่สถานะล่าสุดของทุกระบบ.
+
 อัปเดต: 2026-10-16 (Asia/Bangkok)
 
 ## เริ่มอ่านที่นี่

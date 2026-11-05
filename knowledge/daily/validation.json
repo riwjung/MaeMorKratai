@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "captured_date": "2026-10-20",
+  "chats": 11,
+  "visible_messages": 108,
+  "roles": {
+    "user": 54,
+    "assistant": 54
+  },
+  "daily_unique_cards": 78,
+  "source_fields_verified": 992,
+  "owner_provided_cards": 1,
+  "assistant_draft_cards": 77,
+  "cards_missing_complicated_love": [
+    "the-fool",
+    "the-magician",
+    "the-high-priestess",
+    "the-empress",
+    "the-emperor",
+    "the-hierophant",
+    "the-lovers",
+    "the-chariot",
+    "strength",
+    "the-hermit",
+    "wheel-of-fortune",
+    "justice",
+    "the-hanged-man",
+    "death",
+    "temperance",
+    "the-devil",
+    "the-tower",
+    "the-star",
+    "the-moon",
+    "the-sun",
+    "judgement",
+    "the-world"
+  ],
+  "approved_for_web": 0,
+  "web_code_modified_by_validator": false,
+  "meaning_accuracy_validated": false,
+  "scope": "IDs, isolation of daily/general sources, faithful extraction and provenance; not factual validation of tarot claims."
+}

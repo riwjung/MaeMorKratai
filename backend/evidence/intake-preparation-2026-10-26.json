@@ -1,0 +1,20 @@
+{
+  "format": "maemorkratai-intake-prep-v1",
+  "backupReconciled": true,
+  "audioFilesHashAndDecodeVerified": 6,
+  "transcriptsCompleted": 6,
+  "transcriptsHumanReviewed": 0,
+  "developmentCases": 40,
+  "holdoutCases": 20,
+  "familyOverlap": 0,
+  "stagesPrepared": 120,
+  "approvedKnowledgeCases": 0,
+  "approvedStyleCases": 0,
+  "model": "ggml-large-v3-turbo-q5_0.bin",
+  "processing": "local_only",
+  "audioValidationLimit": "decode/hash verified; audio not listened to by owner in this preparation run",
+  "holdoutIsolation": "separate directory; not used for style/rule extraction; keep both stages in same split",
+  "reviewStyleProposals": 6,
+  "explicitEvidenceCandidates": 3,
+  "reviewPacketIncludesHoldoutAnswers": false
+}

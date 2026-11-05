@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "portableBackupArchiveRoundTrip": true,
+  "audioHashesAfterRestore": 6,
+  "productionDatabaseRestoreTested": false,
+  "developmentReviewCases": 40,
+  "holdoutCasesExcludedFromReview": 20,
+  "familyOverlap": 0,
+  "offlineReviewLoadsAudio": true,
+  "draftExportWorks": true,
+  "externalRequests": 0,
+  "productionWrites": 0,
+  "approvedRecords": 0
+}

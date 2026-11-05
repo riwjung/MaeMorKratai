@@ -1,6 +1,8 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
+import CardFace from './CardFace';
+import {cardAspectRatio} from '../lib/card-art';
 
 export type Anchor={x:number;y:number;width:number;height:number};
 type Timeline={to:(target:unknown,vars:Record<string,unknown>,position?:number|string)=>Timeline;set:(target:unknown,vars:Record<string,unknown>,position?:number|string)=>Timeline;kill:()=>void};
@@ -14,7 +16,7 @@ function loadMotion(){
  });return loading;
 }
 export function CardBack(){return <img className="shared-card-back" src="/cards/card-back.svg" alt="" aria-hidden="true" draggable={false}/>}
-export default function CardReveal({card,meaning,context,reduced,getOrigin,onClose,onDetails}:{card:{id:string;name:string;keyword:string};meaning:string;context:string;reduced:boolean;getOrigin:()=>Anchor;onClose:()=>void;onDetails:()=>void}){
+export default function CardReveal({card,meaning,detail,context,reduced,getOrigin,onClose,onDetails}:{card:{id:string;name:string;keyword:string;art?:string|null};meaning:string;detail:string;context:string;reduced:boolean;getOrigin:()=>Anchor;onClose:()=>void;onDetails:()=>void}){
  const root=useRef<HTMLDivElement>(null),panel=useRef<HTMLElement>(null),shell=useRef<HTMLDivElement>(null),flip=useRef<HTMLDivElement>(null),veil=useRef<HTMLDivElement>(null),halo=useRef<HTMLDivElement>(null),copy=useRef<HTMLDivElement>(null);
  const closeButton=useRef<HTMLButtonElement>(null),timeline=useRef<Timeline|null>(null),motion=useRef<Motion|null>(null),closing=useRef(false);
  const closeCompletion=useRef<(()=>void)|null>(null);
@@ -86,9 +88,9 @@ export default function CardReveal({card,meaning,context,reduced,getOrigin,onClo
    <button ref={closeButton} className="reveal-close" aria-label="ปิดไพ่และเก็บกลับ" onClick={()=>closeAction.current()}>×</button>
    <div className="reveal-art-stage"><div ref={halo} className="reveal-halo" aria-hidden="true"/>
     <div className="reveal-stars" aria-hidden="true">{Array.from({length:16},(_,i)=>{const a=i*Math.PI/8;return <span className={'reveal-star star-color-'+i%3} key={i} style={{left:`${50+Math.cos(a)*(i%2?49:41)}%`,top:`${50+Math.sin(a)*(i%2?47:43)}%`,fontSize:12+(i%4)*5,transform:`rotate(${i*17}deg)`}}>{i%3===0?'·':i%2?'✧':'✦'}</span>;})}</div>
-    <div ref={shell} className="reveal-card-shell"><div ref={flip} className="reveal-flipper"><div className="reveal-face reveal-front"><img src={'/cards/'+card.id+'.jpeg'} alt={'ไพ่ '+card.name} draggable={false}/></div><div className="reveal-face reveal-back" style={{visibility:'hidden'}}><CardBack/></div></div></div>
+    <div ref={shell} className="reveal-card-shell" style={{aspectRatio:cardAspectRatio(card)}}><div ref={flip} className="reveal-flipper"><div className="reveal-face reveal-front"><CardFace card={card}/></div><div className="reveal-face reveal-back" style={{visibility:'hidden'}}><CardBack/></div></div></div>
    </div>
-   <div ref={copy} className="reveal-copy"><p className="reveal-kicker">ไพ่ที่เลือกให้คุณ · {context}</p><h2 id="reveal-title">{card.name}</h2><p id="reveal-meaning" className="reveal-meaning">{meaning}</p><button className="reveal-details" onClick={()=>closeAction.current(true)}>อ่านความหมายทั้งหมดด้านล่าง <span aria-hidden="true">↓</span></button><p className="reveal-hint">ปิดแล้วแตะไพ่ เพื่อเปิดดูใบเดิมได้อีกครั้ง</p></div>
+   <div ref={copy} className="reveal-copy"><p className="reveal-kicker">ไพ่ที่เลือกให้คุณ · {context}</p><h2 id="reveal-title">{card.name}</h2><p id="reveal-meaning" className="reveal-meaning">{meaning}</p><p className="reveal-detail">{detail}</p><button className="reveal-details" onClick={()=>closeAction.current(true)}>อ่านความหมายทั้งหมดด้านล่าง <span aria-hidden="true">↓</span></button><p className="reveal-hint">ปิดแล้วแตะไพ่ เพื่อเปิดดูใบเดิมได้อีกครั้ง</p></div>
   </section>
  </div>,document.body);
 }

@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "status": "pending_owner_review",
+  "updated": "2026-10-20",
+  "scope_decision_from_owner": "Homepage daily single-card meanings differ from three/four-card readings.",
+  "decisions": [
+    {
+      "id": "complex-major",
+      "issue": "22 Major cards lack complicated love status",
+      "cards": [
+        "the-fool",
+        "the-magician",
+        "the-high-priestess",
+        "the-empress",
+        "the-emperor",
+        "the-hierophant",
+        "the-lovers",
+        "the-chariot",
+        "strength",
+        "the-hermit",
+        "wheel-of-fortune",
+        "justice",
+        "the-hanged-man",
+        "death",
+        "temperance",
+        "the-devil",
+        "the-tower",
+        "the-star",
+        "the-moon",
+        "the-sun",
+        "judgement",
+        "the-world"
+      ],
+      "action": "Owner provides or reviews daily-specific wording; no general-love fallback."
+    },
+    {
+      "id": "fool-theme",
+      "issue": "The Fool full text and summary table use different themes",
+      "proposed": "Prefer owner-provided full-text theme วันแห่งการเริ่มต้นใหม่; preserve summary as variant."
+    },
+    {
+      "id": "ex-status",
+      "issue": "Existing UI เลิกกัน differs from daily source คนรักเก่า",
+      "action": "Confirm audience and label before mapping; keep distinct key ex_partner for now."
+    },
+    {
+      "id": "tone-review",
+      "issue": "Assistant followups use longer repeated reassurance than owner example",
+      "action": "Owner edits five pilot cards; keep original and revised text separately."
+    },
+    {
+      "id": "scope-guard",
+      "issue": "General sources include reversed, scores, timelines and specialized topics",
+      "action": "Keep general_reference separate; do not add them to daily by default."
+    },
+    {
+      "id": "daily-draw",
+      "issue": "Current homepage allows repeated new questions/draws",
+      "proposed": "One result per local Bangkok day with reopen, subject to product decision; no implementation in this intake."
+    }
+  ],
+  "first_review_cards": [
+    "the-fool",
+    "the-lovers",
+    "the-hanged-man",
+    "three-of-wands",
+    "queen-of-swords"
+  ],
+  "general_rules_from_user": [
+    {
+      "topic": "places",
+      "message_index": 27,
+      "rule": "Six of Swords: island / Indonesia / Japan",
+      "scope": "owner-provided symbolic interpretation; not a factual country prediction",
+      "review_status": "pending_application_review"
+    }
+  ]
+}

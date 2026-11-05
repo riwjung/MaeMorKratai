@@ -54,3 +54,22 @@ __pycache__/
 *.otf
 *.woff
 *.woff2
+
+# Private operation state for all apps/workers
+**/.local/
+**/.vercel/
+**/artifacts/
+**/backups/
+**/logs/
+**/knowledge-prep/
+**/knowledge-intake/
+.pytest_cache/
+*.wav
+*.mp3
+*.aac
+*.m4a
+*.blend
+*.blend1
+*.glb
+*.fbx
+*.exr

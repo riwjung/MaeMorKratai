@@ -4,7 +4,8 @@
   // This bridge belongs to the interactive website. The exported HyperFrames
   // composition keeps its original finite timeline in index.html.
   const master = window.__timelines?.['maemorkratai-halloween'];
-  const valid = new Set(['the-fool', 'three-of-wands', 'the-lovers', 'the-hanged-man', 'queen-of-swords']);
+  const deck = new Map((window.__mmktDeck || []).map(card => [card.id, card]));
+  const valid = new Set(deck.keys());
   const ns = 'http://www.w3.org/2000/svg';
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const showCard = document.querySelector('#show-card');
@@ -54,7 +55,7 @@
   let requestedReducedMotion = false;
   let initialized = false;
 
-  if (!master || !window.gsap || !showCard || !front || !back) {
+  if (!master || !window.gsap || !showCard || !front || !back || valid.size !== 78) {
     send('mmkt:error', { message: 'เตรียมฉากแม่หมอไม่สำเร็จ กรุณาโหลดหน้าใหม่' });
     return;
   }
@@ -161,17 +162,32 @@
     reported = false;
     requestedReducedMotion = data.reducedMotion === true;
     resetScene();
-    const url = new URL('../cards/' + active + '.jpeg', location.href).href;
+    const card = deck.get(active);
     try {
-      await loadArt(url);
-      const art = document.createElementNS(ns, 'image');
-      art.setAttribute('href', url);
-      art.setAttribute('x', '-66');
-      art.setAttribute('y', '-100');
-      art.setAttribute('width', '132');
-      art.setAttribute('height', '200');
-      art.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      front.replaceChildren(art);
+      let loaded = false;
+      if (card.art) {
+        try {
+          await loadArt(card.art);
+          const art = document.createElementNS(ns, 'image');
+          art.setAttribute('href', card.art);
+          art.setAttribute('x', '-66');
+          art.setAttribute('y', '-100');
+          art.setAttribute('width', '132');
+          art.setAttribute('height', '200');
+          art.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          front.replaceChildren(art);
+          loaded = true;
+        } catch { /* A failed image must still allow the named card to open. */ }
+      }
+      if (!loaded) {
+        const face = document.createElementNS(ns, 'rect');
+        for (const [key,value] of Object.entries({x:-66,y:-100,width:132,height:200,rx:10,fill:'#30203f',stroke:'#e9c7a7','stroke-width':2})) face.setAttribute(key,String(value));
+        const label = document.createElementNS(ns, 'text');
+        label.setAttribute('text-anchor','middle');label.setAttribute('fill','#f5dec5');label.setAttribute('font-size','15');label.setAttribute('font-family','Georgia, serif');
+        const words=card.name.split(' ');
+        words.forEach((word,index)=>{const line=document.createElementNS(ns,'tspan');line.setAttribute('x','0');line.setAttribute('y',String((index-(words.length-1)/2)*22));line.textContent=word;label.append(line);});
+        front.replaceChildren(face,label);
+      }
       loading = false;
       if (still || preference.matches || requestedReducedMotion) finishReveal();
       else master.restart();

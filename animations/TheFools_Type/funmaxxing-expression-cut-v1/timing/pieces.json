@@ -1,0 +1,212 @@
+[
+  {
+    "piece": 1,
+    "lines": [
+      1
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_01.wav",
+    "start": 0.0,
+    "dur": 2.285,
+    "gap_after": 0.7,
+    "text": "คุณเป็นคนประเภทเดอะฟูลในที่ทำงานรึเปล่าคะ"
+  },
+  {
+    "piece": 2,
+    "lines": [
+      2
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_02.wav",
+    "start": 2.985,
+    "dur": 2.255,
+    "gap_after": 0.45,
+    "text": "ถ้าใช่ ไม่แย่เลยนะ คนแบบนี้แพ้ยากที่สุดในออฟฟิศ"
+  },
+  {
+    "piece": 3,
+    "lines": [
+      3
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_03.wav",
+    "start": 5.69,
+    "dur": 2.766,
+    "gap_after": 0.35,
+    "text": "เพราะเขาทำงานแบบเป็นตัวเอง ไม่เรื่องมาก อยากทำก็ทำ"
+  },
+  {
+    "piece": 4,
+    "lines": [
+      4
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_04.wav",
+    "start": 8.806,
+    "dur": 3.491,
+    "gap_after": 0.45,
+    "text": "ไม่สนกระแสใครว่า แต่พอมีเทรนด์ใหม่ กลับไหลไปกับมันได้อย่างแนบเนียน"
+  },
+  {
+    "piece": 5,
+    "lines": [
+      5
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_05.wav",
+    "start": 12.747,
+    "dur": 2.739,
+    "gap_after": 0.55,
+    "text": "สนุกของเขาไม่ใช่อู้งานนะคะ แต่คือจดจ่อจนลืมดูนาฬิกา"
+  },
+  {
+    "piece": 6,
+    "lines": [
+      6,
+      7
+    ],
+    "file": "audio/voicestudio-m67-s7/trim_01.wav",
+    "start": 16.037,
+    "dur": 1.934,
+    "gap_after": 0.3,
+    "text": "ต่างจากผู้ใหญ่หลายคน ที่ชอบนั่งจิบกาแฟ"
+  },
+  {
+    "piece": 7,
+    "lines": [
+      8
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_08.wav",
+    "start": 18.271,
+    "dur": 1.275,
+    "gap_after": 0.35,
+    "text": "มองลงมาจากบนหอคอย"
+  },
+  {
+    "piece": 8,
+    "lines": [
+      9
+    ],
+    "file": "audio/voicestudio-seedref-v8b/trim_09.wav",
+    "start": 19.896,
+    "dur": 2.371,
+    "gap_after": 0.3,
+    "text": "มองคนข้างล่าง ปล้ำกับกองงานยักษ์อย่างบ้าคลั่ง"
+  },
+  {
+    "piece": 9,
+    "lines": [
+      10
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_10.wav",
+    "start": 22.567,
+    "dur": 1.801,
+    "gap_after": 0.6,
+    "text": "แล้วบ่นว่า ถ้าเป็นเราคงทำได้ดีกว่า"
+  },
+  {
+    "piece": 10,
+    "lines": [
+      11
+    ],
+    "file": "audio/voicestudio-seedref-v8b/trim_11.wav",
+    "start": 24.969,
+    "dur": 2.278,
+    "gap_after": 0.3,
+    "text": "แต่เดอะฟูลต่างออกไปค่ะ เขาเดินลงสนามเอง"
+  },
+  {
+    "piece": 11,
+    "lines": [
+      12
+    ],
+    "file": "audio/voicestudio-seedref-v8b/trim_12.wav",
+    "start": 27.547,
+    "dur": 2.922,
+    "gap_after": 0.4,
+    "text": "แล้วแทนที่จะเครียด เขากลับเปลี่ยนกองงานนั้นให้เป็นของเล่น"
+  },
+  {
+    "piece": 12,
+    "lines": [
+      13
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_13.wav",
+    "start": 30.868,
+    "dur": 1.57,
+    "gap_after": 0.25,
+    "text": "งานที่ดูน่ากลัว เลยกลายเป็นเรื่องสนุก"
+  },
+  {
+    "piece": 13,
+    "lines": [
+      14
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_14.wav",
+    "start": 32.688,
+    "dur": 1.489,
+    "gap_after": 0.45,
+    "text": "พังก็ขำ แผนเปลี่ยนก็ปรับ"
+  },
+  {
+    "piece": 14,
+    "lines": [
+      15
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_15.wav",
+    "start": 34.627,
+    "dur": 2.884,
+    "gap_after": 0.6,
+    "text": "เพราะคนนั่งดูได้แค่ความเห็น ส่วนคนลงสนามได้ฝีมือกลับไป"
+  },
+  {
+    "piece": 15,
+    "lines": [
+      16
+    ],
+    "file": "audio/voicestudio-seedref-v8b/trim_16.wav",
+    "start": 38.111,
+    "dur": 1.855,
+    "gap_after": 0.8,
+    "text": "และพลังวิเศษอันดับหนึ่งของเขาคือ"
+  },
+  {
+    "piece": 16,
+    "lines": [
+      17
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_17.wav",
+    "start": 40.766,
+    "dur": 1.901,
+    "gap_after": 0.4,
+    "text": "เขาไม่กลัวที่จะดูโง่ในสายตาคนอื่นค่ะ"
+  },
+  {
+    "piece": 17,
+    "lines": [
+      18
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_18.wav",
+    "start": 43.067,
+    "dur": 3.047,
+    "gap_after": 0.6,
+    "text": "คำถามที่ทุกคนไม่กล้าถาม เขาถามก่อน ทั้งทีมเลยเข้าใจไปด้วย"
+  },
+  {
+    "piece": 18,
+    "lines": [
+      19
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_19.wav",
+    "start": 46.714,
+    "dur": 3.666,
+    "gap_after": 0.6,
+    "text": "ถ้าคุณเป็นเดอะฟูลในออฟฟิศ แท็กเพื่อน แล้วกดติดตามแม่หมอกระต่ายนะคะ"
+  },
+  {
+    "piece": 19,
+    "lines": [
+      20
+    ],
+    "file": "audio/voicestudio-seedref-v8/trim_20.wav",
+    "start": 50.98,
+    "dur": 2.918,
+    "gap_after": 0.0,
+    "text": "ฝากกดไลก์ กดแชร์ และกดติดตามแม่หมอกระต่ายด้วยนะคะ"
+  }
+]

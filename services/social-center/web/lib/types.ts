@@ -1,0 +1,15 @@
+export type Platform = "instagram" | "facebook";
+export type Settings = Record<string, string | string[] | number> & { api_version: string; page_name: string; page_id: string; ig_username: string };
+export type Job = { status: string; started_at: string; ended_at?: string; message: string };
+export type Status = { configured: boolean; connected: boolean; connection?: { status: string; verified_at?: string; message: string }; settings: Settings; jobs: Job[]; sync_running: boolean; daily_sync: string; scheduler: { installed: boolean }; latest_report?: { path: string } };
+export type WindowValue = { value: number | null; days: number; complete: boolean; sources: string[] };
+export type Card = { metric: string; label: string; value?: number | null; measured_at?: string; source_id?: string; current?: WindowValue; previous?: WindowValue; change_pct?: number | null };
+export type Coverage = { status: string; endpoint: string; metric?: string; detail: string };
+export type Overview = { account: { username?: string; name: string } | null; cards: Card[]; post_count: number; window_start: string; window_end: string; follower_growth_30d: number | null; trend: Record<string, string | number | null>[]; follower_trend: Record<string, string | number | null>[]; coverage: Coverage[]; definitions: Record<string, string> };
+export type Metric = { value: number; native_metric: string; observed_at: string; source_id: string; unit: string };
+export type Post = { post_id: string; hook: string; text: string; permalink: string; media_type: string; media_url?: string; thumbnail_url?: string; published_at: string; age_days: number | null; topic_tags: string[]; ranking_value: number | null; metrics: Record<string, Metric | null>; ranged_metrics: Array<Metric & {metric: string; start_at: string; end_at: string}> };
+export type Findings = { content_topics: Record<string, number>; comment_themes: Record<string, number>; comments_analyzed: number; method: string; hypothesis: string };
+export type MetaPage = { id: string; name: string; ig_username?: string; ig_status?: string; tasks: string[] };
+export type Discovery = { pages: MetaPage[]; permissions: string[] };
+export type Preview = { headers: string[]; fields: string[]; mapping: Record<string, string>; rows: number };
+export type Report = { path: string; content: string };

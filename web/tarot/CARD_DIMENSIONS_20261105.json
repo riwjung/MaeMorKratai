@@ -1,0 +1,657 @@
+{
+  "date": "2026-11-05",
+  "baseline": {
+    "width": 637,
+    "height": 1024,
+    "renderedWidth": 600,
+    "renderedHeight": 965
+  },
+  "total": 78,
+  "withArt": 74,
+  "missing": [
+    {
+      "id": "six-of-wands",
+      "name": "Six of Wands"
+    },
+    {
+      "id": "nine-of-wands",
+      "name": "Nine of Wands"
+    },
+    {
+      "id": "page-of-pentacles",
+      "name": "Page of Pentacles"
+    },
+    {
+      "id": "king-of-pentacles",
+      "name": "King of Pentacles"
+    }
+  ],
+  "differentFromSourceBaseline": [
+    {
+      "id": "the-magician",
+      "name": "The Magician",
+      "sourceWidth": 687,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 894
+    },
+    {
+      "id": "five-of-wands",
+      "name": "Five of Wands",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "four-of-pentacles",
+      "name": "Four of Pentacles",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "seven-of-pentacles",
+      "name": "Seven of Pentacles",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    }
+  ],
+  "allImages": [
+    {
+      "id": "the-fool",
+      "name": "The Fool",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-magician",
+      "name": "The Magician",
+      "sourceWidth": 687,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 894
+    },
+    {
+      "id": "the-high-priestess",
+      "name": "The High Priestess",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-empress",
+      "name": "The Empress",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-emperor",
+      "name": "The Emperor",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-hierophant",
+      "name": "The Hierophant",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-lovers",
+      "name": "The Lovers",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-chariot",
+      "name": "The Chariot",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "strength",
+      "name": "Strength",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-hermit",
+      "name": "The Hermit",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "wheel-of-fortune",
+      "name": "Wheel of Fortune",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "justice",
+      "name": "Justice",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-hanged-man",
+      "name": "The Hanged Man",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "death",
+      "name": "Death",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "temperance",
+      "name": "Temperance",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-devil",
+      "name": "The Devil",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-tower",
+      "name": "The Tower",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-star",
+      "name": "The Star",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-moon",
+      "name": "The Moon",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-sun",
+      "name": "The Sun",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "judgement",
+      "name": "Judgement",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "the-world",
+      "name": "The World",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ace-of-wands",
+      "name": "Ace of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "two-of-wands",
+      "name": "Two of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "three-of-wands",
+      "name": "Three of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "four-of-wands",
+      "name": "Four of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "five-of-wands",
+      "name": "Five of Wands",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "seven-of-wands",
+      "name": "Seven of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "eight-of-wands",
+      "name": "Eight of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ten-of-wands",
+      "name": "Ten of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "page-of-wands",
+      "name": "Page of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "knight-of-wands",
+      "name": "Knight of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "queen-of-wands",
+      "name": "Queen of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "king-of-wands",
+      "name": "King of Wands",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ace-of-cups",
+      "name": "Ace of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "two-of-cups",
+      "name": "Two of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "three-of-cups",
+      "name": "Three of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "four-of-cups",
+      "name": "Four of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "five-of-cups",
+      "name": "Five of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "six-of-cups",
+      "name": "Six of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "seven-of-cups",
+      "name": "Seven of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "eight-of-cups",
+      "name": "Eight of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "nine-of-cups",
+      "name": "Nine of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ten-of-cups",
+      "name": "Ten of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "page-of-cups",
+      "name": "Page of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "knight-of-cups",
+      "name": "Knight of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "queen-of-cups",
+      "name": "Queen of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "king-of-cups",
+      "name": "King of Cups",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ace-of-swords",
+      "name": "Ace of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "two-of-swords",
+      "name": "Two of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "three-of-swords",
+      "name": "Three of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "four-of-swords",
+      "name": "Four of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "five-of-swords",
+      "name": "Five of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "six-of-swords",
+      "name": "Six of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "seven-of-swords",
+      "name": "Seven of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "eight-of-swords",
+      "name": "Eight of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "nine-of-swords",
+      "name": "Nine of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ten-of-swords",
+      "name": "Ten of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "page-of-swords",
+      "name": "Page of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "knight-of-swords",
+      "name": "Knight of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "queen-of-swords",
+      "name": "Queen of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "king-of-swords",
+      "name": "King of Swords",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ace-of-pentacles",
+      "name": "Ace of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "two-of-pentacles",
+      "name": "Two of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "three-of-pentacles",
+      "name": "Three of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "four-of-pentacles",
+      "name": "Four of Pentacles",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "five-of-pentacles",
+      "name": "Five of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "six-of-pentacles",
+      "name": "Six of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "seven-of-pentacles",
+      "name": "Seven of Pentacles",
+      "sourceWidth": 1632,
+      "sourceHeight": 2624,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "eight-of-pentacles",
+      "name": "Eight of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "nine-of-pentacles",
+      "name": "Nine of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "ten-of-pentacles",
+      "name": "Ten of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "knight-of-pentacles",
+      "name": "Knight of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    },
+    {
+      "id": "queen-of-pentacles",
+      "name": "Queen of Pentacles",
+      "sourceWidth": 637,
+      "sourceHeight": 1024,
+      "webWidth": 600,
+      "webHeight": 965
+    }
+  ]
+}

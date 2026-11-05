@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>คู่มือห้องทดลองแม่หมอกระต่าย</title>
+  <style>
+    :root { color-scheme: light; --ink:#302b3b; --purple:#634977; --light:#f3edf8; --line:#e3dce9; --muted:#686171; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#eee9f0; color:var(--ink); font:16px/1.65 Tahoma, Thonburi, sans-serif; }
+    .page { max-width:850px; margin:24px auto; padding:36px 44px 25px; background:#fffdfa; border-radius:14px; box-shadow:0 5px 25px #302b3b12; }
+    .eyebrow { color:var(--purple); font-size:12px; font-weight:bold; letter-spacing:.04em; }
+    h1 { font-size:29px; line-height:1.4; margin:6px 0 8px; }
+    h2 { font-size:24px; line-height:1.4; margin:5px 0 12px; }
+    h3 { font-size:17px; margin:16px 0 6px; }
+    p { margin:5px 0 10px; }
+    a { color:#55406f; text-underline-offset:3px; overflow-wrap:anywhere; }
+    .lead { color:var(--muted); margin-bottom:15px; }
+    .linkbox,.note { border-radius:9px; padding:11px 15px; margin:12px 0; }
+    .linkbox { background:var(--light); }
+    .linkbox a { display:block; font-size:15px; font-weight:bold; }
+    .note { background:#fff2dd; border-left:4px solid #d4a05b; }
+    .steps { list-style:none; counter-reset:steps; padding:0; margin:15px 0; }
+    .steps li { counter-increment:steps; position:relative; padding:0 0 12px 42px; margin-bottom:9px; border-bottom:1px solid var(--line); break-inside:avoid; }
+    .steps li:last-child { border:0; padding-bottom:0; }
+    .steps li::before { content:counter(steps); position:absolute; left:0; top:0; width:29px; height:29px; border-radius:50%; background:var(--purple); color:white; font-size:16px; text-align:center; line-height:29px; }
+    .steps strong { display:block; font-size:17px; margin-bottom:3px; }
+    .button { font-weight:bold; color:#55406f; }
+    .small { font-size:13px; color:var(--muted); }
+    .flow { text-align:center; background:var(--light); padding:10px; border-radius:8px; font-weight:bold; color:#55406f; }
+    table { width:100%; border-collapse:collapse; margin:8px 0 14px; font-size:14px; }
+    th,td { text-align:left; vertical-align:top; border-bottom:1px solid var(--line); padding:8px 9px; }
+    th { background:var(--light); }
+    td:first-child { width:31%; font-weight:bold; }
+    .faq { margin:10px 0; }
+    .faq dt { font-weight:bold; margin-top:10px; }
+    .faq dd { margin:2px 0 0; }
+    .footer { border-top:1px solid var(--line); margin-top:15px; padding-top:9px; display:flex; justify-content:space-between; gap:12px; font-size:11px; color:var(--muted); }
+    @media (max-width:600px) {
+      .page { margin:0; padding:25px 20px; border-radius:0; box-shadow:none; }
+      .page+.page { border-top:8px solid #eee9f0; }
+      h1 { font-size:25px; } h2 { font-size:22px; }
+      .steps li { padding-left:38px; }
+      table { font-size:13px; } th,td { padding:8px 5px; }
+    }
+    @page { size:A4; margin:13mm 14mm; }
+    @media print {
+      body { background:white; font-size:11.3pt; line-height:1.52; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .page { margin:0; padding:0; border-radius:0; box-shadow:none; max-width:none; break-after:page; }
+      .page:last-child { break-after:auto; }
+      h1 { font-size:23pt; } h2 { font-size:21pt; } h3 { font-size:13pt; margin:13px 0 5px; }
+      .steps { margin:13px 0; }
+      .steps li { padding-bottom:10px; margin-bottom:9px; }
+      .steps strong { font-size:12.3pt; }
+      .linkbox a { font-size:11.5pt; }
+      table { font-size:10.5pt; } .small { font-size:10pt; }
+      .page:last-child { font-size:11pt; line-height:1.4; }
+      .page:last-child th,.page:last-child td { padding:6px 9px; }
+      .page:last-child .faq dt { margin-top:8px; }
+      .page:last-child .faq dd { margin-top:0; }
+      .footer { font-size:8pt; }
+    }
+  </style>
+</head>
+<body>
+  <section class="page" aria-labelledby="start">
+    <div class="eyebrow">แม่หมอกระต่าย · คู่มือสำหรับผู้ทดลอง</div>
+    <h1 id="start">เริ่มจากทำให้จบ 1 เคส</h1>
+    <p class="lead">เว็บนี้เป็นสมุดเก็บวิธีอ่านไพ่ของแม่หมอ ให้เล่าเหมือนคุยกับลูกดวงจริง<br>โจทย์เป็นเรื่องสมมติ ใช้ไพ่ที่เว็บแสดง และพูดด้วยสำนวนของตัวเองได้เลย</p>
+    <div class="linkbox"><b>เปิดห้องทดลองที่ลิงก์นี้</b><a href="https://maemorkratai-workshop.vercel.app">https://maemorkratai-workshop.vercel.app</a><span class="small">เปิดด้วย Safari หรือ Chrome แล้วใช้อีเมลแม่หมอที่ได้รับสิทธิ์และรหัสผ่านเดิม</span></div>
+    <ol class="steps">
+      <li><strong>เข้าเว็บ แล้วเลือกเคส</strong>กรอกอีเมลและรหัสผ่าน กด <span class="button">“เข้าห้องทดลอง”</span> เลือกหมวดและเคสที่ยังไม่เริ่ม<br>มือถือ: แตะลูกศรข้าง <b>“เรื่องราว 4 หมวด”</b> เพื่อเปิดรายการเคส<br>ถ้าเห็น <b>“เปิดดูคำอ่านของ”</b> ให้เลือก <b>“สมุดของฉัน”</b> ก่อนตอบ</li>
+      <li><strong>อ่านโจทย์กับไพ่ 3 ใบแรก</strong>ดูคำถาม เรื่องราว ช่วงเวลา และตำแหน่งไพ่ อดีต–ปัจจุบัน–อนาคต<br>ไพ่ตั้งตรงทุกใบ ให้ตีความจากชุดที่เห็น ไม่ต้องสุ่มไพ่เอง</li>
+      <li><strong>พูดคำอ่าน หรือพิมพ์แทนก็ได้</strong>กด <span class="button">“เริ่มอัดเสียง”</span> → อนุญาตไมโครโฟน → พูด → <span class="button">“หยุดอัด”</span> แล้วฟังตรวจ<br>หรือพิมพ์ที่ <b>“คำอ่านฉบับข้อความ”</b> เลือกอย่างใดอย่างหนึ่งได้<br>ลองเล่าให้ครบ: จะบอกลูกดวงว่าอะไร • ไพ่ไหนทำให้อ่านแบบนี้ • ยังสรุปอะไรไม่ได้</li>
+      <li><strong>ตรวจคำอ่าน แล้วเปิดใบที่ 4</strong>ติ๊กยินยอมให้เก็บเสียงและคำตอบด้านล่าง แล้วกด<br><span class="button">“เก็บคำอ่าน แล้วเปิดใบที่ 4”</span> รอจนไพ่ใบขยายปรากฏ<br><b>คำอ่าน 3 ใบแรกจะถูกล็อก แก้ทับไม่ได้</b> ถ้ายังไม่พร้อม ให้กด “บันทึกร่าง” ก่อน</li>
+      <li><strong>อ่านเพิ่มหลังเห็นใบขยาย</strong>ใบที่ 4 ใช้ขยายไพ่ตำแหน่งอนาคต อัดเสียงรอบใหม่หรือพิมพ์คำอ่านเพิ่ม<br>บอกว่า <b>อะไรชัดขึ้นหรือเปลี่ยนไป และอะไรยังเหมือนเดิม</b><br>ถ้าความหมายไม่เปลี่ยน ให้บอกว่าไม่เปลี่ยน พร้อมเหตุผล ไม่ต้องฝืนให้ต่างจากเดิม</li>
+      <li><strong>ส่งเคสให้เรียบร้อย แล้วค่อยไปเคสถัดไป</strong>หยุดอัด ตรวจคำตอบ แล้วกด <span class="button">“บันทึกและส่งทบทวน”</span><br>รอข้อความสำเร็จ และสถานะ <b>“ส่งทบทวนแล้ว”</b> จึงถือว่าจบเคสนี้<br>จากนั้นกด <span class="button">“เคสถัดไป”</span> ได้ คำตอบที่ส่งแล้วแก้ในหน้านี้ไม่ได้</li>
+    </ol>
+    <div class="note"><b>จำ 2 เรื่องนี้:</b> หยุดอัดแล้วต้องกดบันทึกด้วย • เสียงยังไม่แปลงเป็นข้อความอัตโนมัติ<br>ถ้าอัดเสียงไว้แล้ว ช่องข้อความว่างได้ ไม่ต้องพิมพ์ซ้ำทั้งหมด</div>
+    <div class="footer"><span>คู่มือตามหน้าจอรุ่น 21 ตุลาคม 2026</span><span>1 / 2 · เริ่มใช้งาน</span></div>
+  </section>
+  <section class="page" aria-labelledby="help">
+    <div class="eyebrow">เก็บหน้านี้ไว้ดูเวลาติดขัด</div>
+    <h2 id="help">ปุ่มไหนทำอะไร และควรเล่าแค่ไหน</h2>
+    <table>
+      <thead><tr><th>ปุ่มบนหน้าเว็บ</th><th>กดแล้วเกิดอะไรขึ้น</th></tr></thead>
+      <tbody>
+        <tr><td>บันทึกร่าง</td><td>เก็บข้อความและเสียงที่อัดไว้ กลับมาทำต่อได้ในขั้นเดิม ยังไม่นับว่าเคสเสร็จ</td></tr>
+        <tr><td>เก็บคำอ่าน แล้วเปิดใบที่ 4</td><td>เก็บและล็อกคำอ่าน 3 ใบแรก แล้วเปิดไพ่ใบขยาย</td></tr>
+        <tr><td>บันทึกและส่งทบทวน</td><td>เก็บและล็อกคำอ่านหลังเห็นใบขยาย เคสขึ้น “ส่งทบทวนแล้ว” และนับความคืบหน้า</td></tr>
+      </tbody>
+    </table>
+    <h3>ไม่ต้องกรอกทุกช่องให้ยาว แค่ให้รู้ว่าแม่หมอคิดอย่างไร</h3>
+    <p>ใน <b>“จดเหตุผลและสำนวนเพิ่มเติม”</b> จดไพ่และตำแหน่งที่ใช้เป็นเหตุผล สิ่งที่ยังฟันธงไม่ได้ คำถามที่อยากถามลูกดวง และสำนวนที่อยากใช้ <b>ถ้าเล่าไว้ในเสียงแล้ว ข้ามช่องเสริมได้</b> ส่วน “ชัดขึ้นหรือเปลี่ยนไป” และ “ยังเหมือนเดิม” ก็เล่าในเสียงได้เช่นกัน</p>
+    <p class="small">ใช้เฉพาะเรื่องสมมติ ไม่เอ่ยชื่อหรือข้อมูลลูกค้าจริง หมวดสุขภาพเน้นการพักผ่อน ความเครียด และการดูแลตัวเอง ตามโจทย์บนเว็บ</p>
+    <dl class="faq">
+      <dt>อยากพักก่อน ต้องทำอย่างไร?</dt>
+      <dd>หยุดอัด → ติ๊กยินยอม → กด “บันทึกร่าง” → รอข้อความ <b>“บันทึกร่างลงฐานข้อมูลแล้ว”</b> จึงปิดหน้าเว็บ ครั้งหน้าเข้าบัญชีเดิม เลือกเคสเดิมเพื่อทำต่อได้ ไม่ต้องทำครบ 60 เคสในครั้งเดียว</dd>
+      <dt>อัดเสียงแล้ว ไม่มีข้อความขึ้น / ตัวเลขเสร็จยังไม่เพิ่ม?</dt>
+      <dd>เสียงกับข้อความเก็บแยกกัน เว็บยังไม่ถอดเสียง ตัวเลขเสร็จจะเพิ่มหลัง <b>“บันทึกและส่งทบทวน”</b> เท่านั้น ถ้าเลือกหมวดอยู่ ตัวเลขจะแสดงเฉพาะหมวดนั้น เลือก “ทุกหมวด” เพื่อดูยอดรวม 60 เคส</dd>
+      <dt>ปุ่มกดไม่ได้ หรือบอกให้ยืนยันก่อนบันทึก?</dt>
+      <dd>หยุดอัดและรอโหลดให้เสร็จก่อน ต้องมีคำอ่านเป็นเสียงหรือข้อความก่อนเปิดใบที่ 4 และก่อนส่งทบทวน ตรวจว่าติ๊กยินยอมด้านล่างแล้วด้วย</dd>
+      <dt>ไมโครโฟนไม่ทำงาน / กำลังอัดแล้วสลับแอป?</dt>
+      <dd>เปิดสิทธิ์ไมโครโฟนให้ Safari หรือ Chrome แล้วลองใหม่ หรือพิมพ์แทนได้ ระหว่างอัดให้เปิดหน้าจอนี้ไว้ <b>หยุดอัดก่อนสลับแอปหรือล็อกจอ</b> อัดได้สูงสุดครั้งละ 10 นาที</dd>
+      <dt>บันทึกไม่สำเร็จ หรืออยากอัดใหม่?</dt>
+      <dd>ถ้ามีเสียงที่เพิ่งอัด ให้กด <b>“เก็บเสียงไว้ในเครื่อง”</b> สำรองก่อน คัดลอกข้อความเก็บไว้ด้วย แล้วลองบันทึกอีกครั้งก่อนโหลดหน้าใหม่ ถ้าไฟล์ใหญ่เกิน 16 MB ให้อัดสั้นลง ปุ่ม “อัดใหม่” จะแทนเสียงที่ยังไม่ได้บันทึก</dd>
+      <dt>เป็น Owner แล้ว ทำไมตอบไม่ได้ / ไม่เห็นปุ่มอนุมัติ?</dt>
+      <dd>ถ้าเห็น “กำลังอ่านสมุดของผู้ทดลอง · ดูได้อย่างเดียว” ให้เปลี่ยน “เปิดดูคำอ่านของ” กลับเป็น <b>“สมุดของฉัน”</b> บัญชีแม่หมอใช้ตอบของตัวเองและเปิดดูของผู้อื่นได้ ตอนนี้ยังไม่มีปุ่มอนุมัติเป็นความรู้พร้อมใช้ และไม่ต้องกดส่งออกเพื่อส่งงาน</dd>
+      <dt>เปิดใบที่ 4 หรือส่งทบทวนไปแล้ว อยากแก้คำอ่าน?</dt>
+      <dd>ต้นฉบับที่ล็อกแล้วแก้ทับในหน้านี้ไม่ได้ จดเลขเคสกับสิ่งที่ต้องการแก้ แล้วแจ้งผู้ดูแล หากลืมรหัสผ่าน ให้ติดต่อผู้ดูแลเพื่อตั้งใหม่เช่นกัน</dd>
+    </dl>
+    <div class="note"><b>“ส่งทบทวนแล้ว” = เก็บคำอ่านไว้ให้ตรวจต่อ</b><br>ยังไม่ได้นำไปตอบลูกค้าอัตโนมัติ และการตอบครบ 60 เคสยังไม่ใช่การฝึก AI เสร็จ</div>
+    <div class="footer"><span>อ้างอิงปุ่มและพฤติกรรมจากเว็บห้องทดลอง · 21 ตุลาคม 2026</span><span>2 / 2 · ปุ่มและวิธีแก้ปัญหา</span></div>
+  </section>
+</body>
+</html>

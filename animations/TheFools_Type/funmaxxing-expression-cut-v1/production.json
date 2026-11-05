@@ -1,0 +1,41 @@
+{
+  "source_project": "/Users/sawettachatsuthum/AIVideoLocal/maemorkratai/content/the-fool-type/funmaxxing-claude-v1",
+  "voice": {
+    "file": "audio/sai-voicestudio-seedref-v8-final.wav",
+    "duration": 53.898,
+    "sha256": "109d3b4083693b8a3d25ca523897e950ac9b858c98afff510031845fad11452c",
+    "sources_json": "audio/sai-voicestudio-seedref-v8-final.sources.json",
+    "sources_paths_relative_to": "/Users/sawettachatsuthum/AIVideoLocal/maemorkratai/content/the-fool-type/funmaxxing-claude-v1"
+  },
+  "main_duration": 50.98,
+  "end_duration": 10,
+  "duration": 61.0,
+  "frames": 1830,
+  "fps": 30,
+  "note": "main quantized to frame 1529/30=50.9667; closing voice remains at original time 50.98; 300-frame end credit, one final pad frame",
+  "approved_expression_proof": "/Users/sawettachatsuthum/AIVideoLocal/maemorkratai/content/the-fool-type/funmaxxing-claude-v1/expression-proof-v1",
+  "overlay": {
+    "engine": "HyperFrames 0.8.140 / GSAP",
+    "file": "overlay/overlay.webm",
+    "alpha_codec": "VP9",
+    "render_log": "qa/hyperframes-webm.log",
+    "first_pixel_alpha_verified": 0
+  },
+  "narrator": {
+    "type": "2D A–F sprites",
+    "cues": 370,
+    "source": "Rhubarb phonetic on actual v8-final WAV"
+  },
+  "captions": 24,
+  "mix": {
+    "file": "audio/episode-mix.wav",
+    "integrated_lufs": -16.5,
+    "true_peak_dbtp": -4.4,
+    "loudness_log": "qa/loudness-final-mix.log"
+  },
+  "refinements": [
+    "Shot 11: reduced asking-arm lift to 42 degrees to reduce underarm stretching and keep paw in frame"
+  ],
+  "delivery": "/Users/sawettachatsuthum/Desktop/AI_Video/FinalResult/MaeMorKratai_TheFool_Office_Expression_v1.mp4",
+  "status": "review_ready"
+}

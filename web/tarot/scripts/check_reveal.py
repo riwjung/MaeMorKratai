@@ -118,7 +118,7 @@ def wait_reveal(page: Page, card: dict, context: str, timeout=14000):
     expect(page.locator("#reading-details .meaning")).to_have_text(card["meanings"][context])
     # All readings remain rendered beneath the modal, including non-selected contexts.
     expected = list(card["meanings"].values())
-    assert page.locator(".reading-full dd").all_text_contents() == expected
+    assert page.locator(".reading-full dd .headline").all_text_contents() == expected
     hand_image = page.frame_locator(".room-window iframe").locator("#card-front image")
     assert hand_image.get_attribute("href").endswith("/cards/" + card["id"] + ".jpeg")
     assert page.locator("main").evaluate("e => e.inert")
@@ -139,7 +139,7 @@ def assert_stowed(page: Page, card: dict):
     expect(page.locator("#reading-details")).to_have_attribute("data-card-id", card["id"])
     assert not page.locator("main").evaluate("e => e.inert")
     assert page.evaluate("getComputedStyle(document.body).overflow") != "hidden"
-    assert page.locator(".reading-full dd").all_text_contents() == list(card["meanings"].values())
+    assert page.locator(".reading-full dd .headline").all_text_contents() == list(card["meanings"].values())
 
 
 def close_card(page: Page, card: dict, method="button"):

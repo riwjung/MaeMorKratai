@@ -101,3 +101,8 @@
 ตาม [[gemini-pro-card-repair-source-2026-10-17]] ตรวจภาพตัวอย่าง Emperor/Chariot ในเครื่อง เพิ่ม Pro picker guard และโหมดซ่อมกรอบ/คิ้ว/คำอธิบาย รักษารูปและชื่อเดิม คิว/โฟลเดอร์ repair แยก, สั่งทำซ้ำหลัง downloaded ได้พร้อม history. เพิ่มข้อกำหนดกรอบ/คิ้วในพรอมต์ใหม่ทั้ง78ใบ; เตรียม repair prompts สองใบ. อัปเดต [[gemini-web-card-runner]], index, handoffs และคู่มือ. ไม่มีการเรียกเจนหรือแก้ภาพต้นฉบับจริง; ไม่แก้งานเว็บสามมิติที่กำลังทำแยกอยู่
 
 - ตรวจรับ: DOM/flow 35 กรณี, background 10 กรณี, สเปกพรอมต์78ใบ และ MV3 downloads จริงบนfixtureผ่าน; wiki lint117หน้าผ่าน. การเลือกProยังตรวจเฉพาะDOMจำลอง และยังไม่มีภาพซ่อมจริงจากGeminiในงานนี้
+
+## [2026-11-05] package / consult | เว็บดูดวงและ Content Studio
+
+- ตามคำสั่งเจ้าของ จัดเอกสารสำหรับเพื่อนdevใน docs/consult: สถานะ, architecture, DB/transaction, roadmapตามเกณฑ์ผ่าน, dashboard/workerสร้างซีรีส์ไพ่และการเปิดในเครื่อง. แยกสิ่งที่deployแล้วกับข้อเสนอ.
+- รวมซอร์สweb/tarotที่ตรงรุ่นสีปุ่มล่าสุด, web/workshop-standalone, services/social-center และpipelineคลิปreference. ไม่มีข้อมูลคำตอบ/เสียงจริงหรือholdoutในชุดใหม่; ใช้isolated checkoutเพื่อไม่รวมงานอื่นในvaultโดยไม่ตั้งใจ.

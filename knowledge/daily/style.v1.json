@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "version": "daily-style-v1-draft",
+  "status": "proposal_pending_owner_review",
+  "scope": "daily_single",
+  "primary_examples": [
+    {
+      "topic": "daily",
+      "message_index": 2,
+      "role": "user",
+      "purpose": "owner-provided The Fool wording"
+    },
+    {
+      "topic": "daily",
+      "message_index": 13,
+      "role": "user",
+      "purpose": "explicit warm-hearted tone"
+    },
+    {
+      "topic": "daily",
+      "message_index": 24,
+      "role": "user",
+      "purpose": "six-part output structure and love statuses"
+    }
+  ],
+  "voice": {
+    "reader_address": "คุณ",
+    "speaker": "แม่หมอกระต่าย",
+    "tone": [
+      "อบอุ่น",
+      "เป็นกันเอง",
+      "ชัดเจน",
+      "เตือนด้วยเหตุผล",
+      "ให้สิทธิ์ผู้อ่านเลือก"
+    ],
+    "avoid_copying_chat_artifacts": [
+      "ชื่อผู้สร้างแชท",
+      "ได้เลยค่ะ Sai",
+      "พี่แนะนำให้ทำระบบ",
+      "If you want, I can",
+      "แท็กรูปภาพหรือองค์ประกอบ UI จากแชท"
+    ]
+  },
+  "proposed_sentence_pattern": [
+    "สถานการณ์หรือแก่นของไพ่ในวันนี้",
+    "สิ่งเล็ก ๆ ที่ทำได้วันนี้",
+    "เงื่อนไขหรือข้อควรระวังเมื่อเกี่ยวข้อง"
+  ],
+  "proposed_display_order": [
+    "theme",
+    "overview",
+    "work",
+    "money",
+    "love_by_status.selected",
+    "rabbit_message",
+    "colors",
+    "affirmation"
+  ],
+  "proposed_length_sentences": {
+    "overview": "2–3",
+    "work": "1–2",
+    "money": "1–2",
+    "selected_love": "1–2",
+    "rabbit_message": "1",
+    "affirmation": "1"
+  },
+  "rules": [
+    "Daily content takes precedence for daily_single; do not substitute general love/spread text when a daily field is missing.",
+    "Keep concrete card-specific meaning; do not turn every card into generic reassurance.",
+    "Preserve challenging meanings while phrasing them gently.",
+    "Offer a practical action; do not promise an event or another person's thoughts as certain.",
+    "Keep scope today; long-term topics may become an action to begin today, never a claim the long-term result will happen today.",
+    "No automatic percent scores, disease labels, nationality/appearance predictions, exact timing, lottery odds, or four-region temple lists in the homepage template.",
+    "User prompts and corrections are source evidence; assistant continuations remain drafts until explicitly reviewed.",
+    "Store new advice separately as a proposed editorial addition, with provenance; never silently append it as owner-approved."
+  ],
+  "optional_proposed_fields": [
+    "one_small_action_today"
+  ],
+  "missing_content_policy": "Return an explicit missing field for editor review; do not generate or borrow a replacement automatically.",
+  "source_file": "knowledge/sources/wiki-chat-index.json"
+}

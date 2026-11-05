@@ -1,5 +1,7 @@
 # แม่หมอกระต่าย — สารบัญ
 
+- [Dev consult: เริ่มที่นี่](docs/consult/START_HERE.md) — สถานะจริง, architecture, database/payment, roadmap, dashboardและการสร้างคลิปจากเว็บ · 2026-11-05
+
 โดเมน: `domain/maemorkratai`
 
 - [[character-and-silent-animation-brief]] — ตัวละครแม่หมอกระต่ายและอนิเมชันแบบไม่พูด

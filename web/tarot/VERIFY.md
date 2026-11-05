@@ -1,5 +1,17 @@
 # ผลตรวจต้นแบบ SVG รุ่นแรก — 2026-10-15
 
+> **แก้กรอบไพ่ v3 ล่าสุด — 2026-10-26:** กรอบเปิดไพ่/ผลคำอ่าน/รายละเอียดและแกลเลอรีใช้สัดส่วนภาพแต่ละใบจากmanifest แทน1632:2624ตายตัว จึงไม่มีพื้นที่เกินบน–ล่างโดยไม่ครอปรูป. Build/TypeScriptผ่าน; localตรวจ14ภาพ+WebKitมือถือ3สัดส่วนรวม17checks และproductionตรวจHierophant/Strength/Justiceพร้อมresult/detailผ่าน. Deploy `dpl_GgXzh1n1LpfyVzM8YQgE2qsLE2yS` ที่URLเดิม. ภาพและความหมายไม่เปลี่ยน. ซอร์สใหม่ `lib/card-art.ts`; หลักฐานruntime `artifacts/card-fit-20261026/`.
+
+## ผลล่าสุด — หน้าแรก78ใบ/ภาพv3/4ใบ Coming soon (2026-10-26)
+
+- Production build/TypeScriptผ่านบนNext.js16.4.2; อัปเดตจาก16.4.0หลังnpm auditพบcritical advisory. หลังอัปเดตnpm auditไม่พบช่องโหว่.
+- `scripts/check_launch.py` ผ่านในเครื่องและบน https://mae-mor-kratai.vercel.app โดยไม่login: สุ่มบังคับเฉพาะtestcontextครบ78ใบ/คำอ่าน468ช่อง,เปิดใบเดิมซ้ำไม่สุ่มใหม่/Escape,ลิงก์ตรงComing soonและกลับหน้าแรก,hashรูปv3ครบ14ใบ,Chromium/WebKit390pxไม่ล้น,แอนิเมชันdesktop และรูปโหลดไม่ได้ยังแสดงชื่อในoverlayกับมือแม่หมอ.
+- ไฟล์ผลproduction [LAUNCH_CHECK.json](LAUNCH_CHECK.json) ผ่าน8กลุ่ม ไม่มีpageerror/HTTPerrorในรอบปกติ. รูปและผลlocalอยู่runtime `artifacts/launch-20261026/`. ตรวจภาพdesktop/mobile/Coming soon/name-onlyด้วยสายตาแล้ว. ไม่ใช่การลองบนมือถือจริง.
+- ตรวจคำอ่าน/metadataทุกใบเทียบbackupก่อนแก้ตรงกันทุกfieldยกเว้นart; โค้ดหน้าreadingเดิมอยู่ReadingExperience.tsxและbytesตรงต้นฉบับ. รูป14ใบจากsnapshotv3ที่เจ้าของให้ อีก64ใบแสดงชื่อ; Wheel of Fortuneเลือกjpgที่แก้ล่าสุดจาก2ไฟล์. รูปต้นฉบับไม่แก้.
+- DeployREADY `dpl_D68DB5duzx4LzaFrofS3MFxAcKBm` ไปprojectเว็บหลักเดิมโดยCLI. ขอบเขต/เปอร์เซ็นต์/งานค้างอ่าน [LAUNCH_STATUS.md](LAUNCH_STATUS.md). ยังรอแม่หมอลองอุปกรณ์จริงและตรวจเนื้อหาก่อนประชาสัมพันธ์; ไม่ฝึก/เรียกAI ไม่แก้Supabaseหรือเว็บทดลอง.
+
+ผลด้านล่างเป็นประวัติรุ่นเดิม ไม่ใช่สถานะสำรับหรือrouteสาธารณะปัจจุบัน.
+
 - Next.js production build, TypeScript และ static export ผ่าน
 - Chromium จริง: desktop1440px และ mobile390px ไม่มีล้นแนวนอน, browser error หรือ failed request
 - กดดูดวงเล่นสับไพ่/หยิบ/พลิกสำเร็จ; ภาพไพ่ในมือกับชื่อและคำอ่านตรงกัน ตรวจครบ5ใบ

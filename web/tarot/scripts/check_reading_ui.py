@@ -115,7 +115,7 @@ with sync_playwright() as p:
   page.get_by_role('button',name='นำไพ่ตำแหน่งปัจจุบันกลับสำรับ',exact=True).click();assert slots(page)==[ids[0],'',ids[1]]
   page.get_by_role('button',name='กลับมุมมองพัด',exact=False).click();drag_to_slot(page,ids[2],1);ids=[ids[0],ids[2],ids[1]];assert slots(page)==ids
   shot(page,'desktop-selected');reveal(page);shot(page,'desktop-unlock')
-  assert page.locator('.ritual-card-front img').evaluate_all('(els)=>els.map(e=>e.getAttribute("src"))')==['/cards/web/'+i+'.webp' for i in ids]
+  assert page.locator('.ritual-card-front img').evaluate_all('(els)=>els.map(e=>e.getAttribute("src"))')==[next(c['art'] for c in json.loads((ROOT/'lib/reading-cards.json').read_text()) if c['id']==i) for i in ids]
   unlock(page);shot(page,'desktop-reading');record('drag to chosen slot, drop outside returns, remove keeps slots, reveal and unlock retain exact identities')
   before_summary=page.get_by_test_id('reading-summary').inner_text()
   expect(page.locator('[data-reading-id]')).to_have_count(3);assert all(i in page.locator('[data-reading-id]').evaluate_all('(els)=>els.map(e=>e.dataset.readingId)') for i in ids)
@@ -136,7 +136,7 @@ with sync_playwright() as p:
    touch_drag_to_slot(m,'the-magician',0);grid(m);pick(m,'the-fool');pick(m,'the-high-priestess');shot(m,f'mobile-{width}-selected');no_overflow(m)
    for position in ['อนาคต','อดีต','ปัจจุบัน']:m.get_by_role('button',name='เปิดไพ่ตำแหน่ง'+position,exact=True).click()
    phase(m,'locked');expect(m.locator('.ritual-slot-card.is-open')).to_have_count(3)
-   expect(m.locator('.ritual-placeholder')).to_have_count(2);unlock(m);shot(m,f'mobile-{width}-reading');assert 'มองหางานใหม่' in m.get_by_test_id('reading-summary').inner_text();expect(m.locator('[data-reading-id]')).to_have_count(3)
+   expect(m.locator('.ritual-placeholder')).to_have_count(sum(not c['art'] for c in json.loads((ROOT/'lib/reading-cards.json').read_text()) if c['id'] in ('the-magician','the-fool','the-high-priestess')));unlock(m);shot(m,f'mobile-{width}-reading');assert 'มองหางานใหม่' in m.get_by_test_id('reading-summary').inner_text();expect(m.locator('[data-reading-id]')).to_have_count(3)
    assert all('รอคำอ่าน' in t for t in m.locator('.ritual-reading-entries article>p').all_inner_texts())
    no_overflow(m);record(f'{width}px touch drag to slot, open by tap, reduced motion, drag guard, placeholders and work demo');mobile.close()
   # Keyboard targeting and resize while a selection exists.

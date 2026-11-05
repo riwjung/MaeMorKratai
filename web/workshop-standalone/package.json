@@ -1,0 +1,33 @@
+{
+  "name": "maemorkratai-workshop",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3012",
+    "build": "next build",
+    "start": "next start --hostname 127.0.0.1 --port 3012",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "next": "16.4.2",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "lucide-react": "^1.31.0",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "@types/node": "^22.19.19",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "tsx": "^4.21.0",
+    "@electric-sql/pglite": "0.5.10"
+  }
+}

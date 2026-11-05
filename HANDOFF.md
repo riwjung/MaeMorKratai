@@ -1,5 +1,7 @@
 # สถานะส่งต่องาน — 2026-10-14
 
+> **Dev consult release — 2026-11-05:** สถานะ/architecture/roadmapปัจจุบันเริ่มที่ [docs/consult/START_HERE.md](docs/consult/START_HERE.md). ชุดGitนี้รวมเว็บลูกค้าฉบับdeployล่าสุด, workshop, source SocialCenter และคลิปreference. ข้อความเก่าด้านล่างเป็นประวัติ ไม่ใช่สถานะล่าสุดของทุกระบบ.
+
 Next.js พร้อมที่ http://127.0.0.1:3000; เปิด tools/open-center.command
 งานหนัก: `/Users/sawettachatsuthum/AIVideoLocal/maemorkratai`; FastAPI8787/SQLiteปัจจุบัน PostgreSQLยังไม่ย้าย
 

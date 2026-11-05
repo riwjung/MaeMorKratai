@@ -1,0 +1,1104 @@
+// ============================================================================
+// MaeMorKratai (แม่หมอกระต่าย) — ภาพรวมฐานข้อมูล v0.1 (2026-10-17)
+// วางทั้งไฟล์ใน https://dbdiagram.io เพื่อดูแผนภาพ
+// PostgreSQL 16 · เงินเก็บเป็นสตางค์ (1900 = 19 บาท) · เวลาเป็น timestamptz (UTC) แสดงผลเป็น Asia/Bangkok
+// ============================================================================
+
+Project maemorkratai {
+  database_type: 'PostgreSQL'
+  Note: '''
+  ระบบดูดวงแม่หมอกระต่าย: บัญชีผู้ใช้ (LINE / Google / username + password),
+  บริการหลายแบบจาก master table services (ไพ่รายวัน, ไพ่ 3 ใบ, เซียมซี, จองแม่หมอ, คอลผ่าน LINE OA),
+  ชำระเงิน (PromptPay QR, TrueMoney Wallet, LINE Pay, โอนเข้าบัญชี), journal และชุมชน,
+  event/ธีมที่เปลี่ยน UI, แดชบอร์ดแอดมิน และข้อมูลคู่แข่งบนโซเชียล
+  '''
+}
+
+// ---------------------------------------------------------------- Enums
+
+Enum user_status {
+  active
+  suspended
+  deleted
+}
+
+Enum oauth_provider {
+  line
+  google
+}
+
+Enum access_level {
+  anonymous [note: 'ไม่ต้อง login']
+  member [note: 'ต้อง login']
+  paid [note: 'ต้อง login และมีสิทธิ์ (จ่ายเงิน/เครดิต/โปร)']
+}
+
+Enum service_kind {
+  self_reading [note: 'ผู้ใช้เปิดเอง: ไพ่ เซียมซี']
+  live_session [note: 'คุยกับแม่หมอตัวจริง: จองคิว คอล LINE']
+  journal [note: 'บันทึกไพ่จากสำรับจริง']
+}
+
+Enum record_status {
+  draft
+  active
+  paused
+  retired
+}
+
+Enum review_status {
+  draft
+  in_review
+  approved
+  rejected
+}
+
+Enum reading_source {
+  app
+  manual
+}
+
+Enum reading_status {
+  drawing [note: 'กำลังสับ/เลือกไพ่']
+  drawn [note: 'เลือกครบแล้ว ยังไม่ปลดล็อก']
+  unlocked [note: 'ดูความหมายได้แล้ว']
+  abandoned
+}
+
+Enum visibility {
+  private
+  unlisted [note: 'เห็นเฉพาะคนที่มีลิงก์']
+  community [note: 'ขึ้นหน้า journal ชุมชน']
+}
+
+Enum order_status {
+  pending
+  paid
+  cancelled
+  expired
+  refunded
+  partially_refunded
+}
+
+Enum payment_method {
+  promptpay_qr
+  truemoney_wallet
+  line_pay
+  bank_transfer
+  card
+  credit [note: 'ใช้เครดิตที่ซื้อไว้']
+}
+
+Enum payment_status {
+  created
+  pending
+  succeeded
+  failed
+  expired
+  cancelled
+  refunded
+}
+
+Enum booking_status {
+  pending_payment
+  confirmed
+  completed
+  cancelled
+  no_show
+  refunded
+}
+
+Enum notification_channel {
+  line
+  email
+  in_app
+}
+
+Enum moderation_status {
+  visible
+  hidden
+  removed
+}
+
+Enum social_owner {
+  own
+  competitor
+  reference
+}
+
+// ---------------------------------------------------------------- 1. บัญชีและสิทธิ์
+
+Table users [headercolor: #6B3FA0] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  nickname varchar(40) [not null, note: 'ชื่อเล่นที่แสดงในแอปและชุมชน ซ้ำกันได้']
+  handle varchar(30) [unique, note: '@handle สำหรับลิงก์โปรไฟล์ ไม่บังคับ']
+  avatar_media_id uuid [ref: > media_assets.id]
+  bio varchar(160)
+  email varchar(255) [note: 'ไว้ติดต่อ/กู้รหัส ไม่บังคับ']
+  email_verified_at timestamptz
+  birth_date date [note: 'ไม่บังคับ เผื่อบริการโหราศาสตร์ในอนาคต']
+  locale varchar(10) [not null, default: 'th']
+  timezone varchar(40) [not null, default: 'Asia/Bangkok']
+  preferred_theme_id int [ref: > themes.id, note: 'null = ใช้ธีมตาม event']
+  status user_status [not null, default: 'active']
+  last_login_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz [note: 'ลบบัญชี = ล้างข้อมูลส่วนตัว แต่เก็บธุรกรรมตามกฎหมาย']
+}
+
+Table user_identities [headercolor: #6B3FA0] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  provider oauth_provider [not null]
+  provider_subject varchar(255) [not null, note: 'LINE userId หรือ Google sub']
+  email varchar(255)
+  display_name varchar(100) [note: 'ชื่อจาก LINE/Google ใช้ตั้งชื่อเล่นเริ่มต้นให้']
+  picture_url text
+  linked_at timestamptz [not null, default: `now()`]
+  last_used_at timestamptz
+
+  indexes {
+    (provider, provider_subject) [unique]
+    user_id
+  }
+  Note: 'หนึ่งบัญชีผูกได้หลายช่องทาง เช่น LINE + Google + รหัสผ่าน'
+}
+
+Table password_credentials [headercolor: #6B3FA0] {
+  user_id uuid [pk, ref: - users.id]
+  username varchar(30) [not null, unique, note: 'เก็บเป็นตัวพิมพ์เล็ก']
+  password_hash text [not null, note: 'argon2id เท่านั้น ห้ามเก็บรหัสจริง']
+  failed_attempts smallint [not null, default: 0]
+  locked_until timestamptz
+  changed_at timestamptz [not null, default: `now()`]
+}
+
+Table auth_sessions [headercolor: #6B3FA0] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  token_hash char(64) [not null, unique, note: 'SHA-256 ของ session token']
+  ip inet
+  user_agent text
+  created_at timestamptz [not null, default: `now()`]
+  expires_at timestamptz [not null]
+  revoked_at timestamptz
+}
+
+Table auth_tokens [headercolor: #6B3FA0] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  purpose varchar(20) [not null, note: 'password_reset | email_verify | link_account']
+  token_hash char(64) [not null, unique]
+  expires_at timestamptz [not null]
+  used_at timestamptz
+}
+
+Table roles [headercolor: #6B3FA0] {
+  id smallint [pk, increment]
+  code varchar(30) [not null, unique, note: 'admin | staff | reader | moderator | content_editor']
+  name_th varchar(60)
+}
+
+Table user_roles [headercolor: #6B3FA0] {
+  user_id uuid [ref: > users.id]
+  role_id smallint [ref: > roles.id]
+  granted_by uuid [ref: > users.id]
+  granted_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, role_id) [pk]
+  }
+}
+
+Table consents [headercolor: #6B3FA0] {
+  id bigint [pk, increment]
+  user_id uuid [ref: > users.id]
+  anonymous_id uuid [ref: > anonymous_visitors.id]
+  kind varchar(30) [not null, note: 'terms | privacy | marketing | analytics_cookie']
+  version varchar(20) [not null]
+  granted boolean [not null]
+  recorded_at timestamptz [not null, default: `now()`]
+  ip inet
+  Note: 'หลักฐานความยินยอมตาม PDPA เก็บทุกครั้งที่ผู้ใช้เปลี่ยน'
+}
+
+Table anonymous_visitors [headercolor: #6B3FA0] {
+  id uuid [pk, note: 'id ใน cookie ก่อน login']
+  first_seen_at timestamptz [not null, default: `now()`]
+  last_seen_at timestamptz
+  first_touch jsonb [note: 'utm/referrer ครั้งแรก']
+  merged_user_id uuid [ref: > users.id, note: 'ย้ายประวัติไปบัญชีเมื่อ login']
+  merged_at timestamptz
+}
+
+// ---------------------------------------------------------------- 2. บริการ ราคา event ธีม
+
+Table services [headercolor: #C0663A] {
+  id smallint [pk, increment]
+  code varchar(40) [not null, unique, note: 'tarot_daily | tarot_three | siamsi | booking_live | line_call | journal_manual']
+  name_th varchar(80) [not null]
+  name_en varchar(80)
+  description text
+  kind service_kind [not null]
+  draw_access access_level [not null, note: 'ใครเริ่มได้ เช่น ไพ่ 3 ใบ = anonymous']
+  result_access access_level [not null, note: 'ใครดูผลได้ เช่น ไพ่ 3 ใบ = paid']
+  free_daily_quota smallint [note: 'เช่น ไพ่รายวันฟรี 1 ครั้งต่อวัน; null = ไม่จำกัด']
+  spread_id smallint [ref: > spreads.id, note: 'ใช้กับบริการไพ่']
+  siamsi_set_id smallint [ref: > siamsi_sets.id, note: 'ใช้กับบริการเซียมซี']
+  config jsonb [note: 'ค่าตั้งเฉพาะบริการที่ยังไม่มีคอลัมน์']
+  status record_status [not null, default: 'draft']
+  sort_order smallint [not null, default: 0]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  Note: 'master table ของทุกฟีเจอร์: เพิ่มบริการใหม่ = เพิ่มแถว ไม่ต้องแก้โครงสร้าง'
+}
+
+Table service_prices [headercolor: #C0663A] {
+  id int [pk, increment]
+  service_id smallint [not null, ref: > services.id]
+  label varchar(60) [not null, note: 'ราคาปกติ | โปรเปิดตัว | ราคา event']
+  amount_satang int [not null, note: '1900 = 19 บาท']
+  currency char(3) [not null, default: 'THB']
+  event_id int [ref: > events.id, note: 'null = ใช้ทั่วไป']
+  starts_at timestamptz [not null]
+  ends_at timestamptz
+  created_by uuid [ref: > users.id]
+  created_at timestamptz [not null, default: `now()`]
+  Note: 'เก็บประวัติราคา ราคาที่ลูกค้าจ่ายจริงถูกคัดลอกไปที่ order_items'
+}
+
+Table events [headercolor: #C0663A] {
+  id int [pk, increment]
+  code varchar(40) [not null, unique, note: 'halloween-2026 | loy-krathong-2026']
+  name_th varchar(80) [not null]
+  starts_at timestamptz [not null]
+  ends_at timestamptz [not null]
+  theme_id int [ref: > themes.id]
+  priority smallint [not null, default: 0, note: 'event ซ้อนกันใช้ค่าสูงสุด']
+  status record_status [not null, default: 'draft']
+  config jsonb [note: 'ข้อความ banner เอฟเฟกต์ เพลง']
+}
+
+Table themes [headercolor: #C0663A] {
+  id int [pk, increment]
+  code varchar(40) [not null, unique, note: 'moonlit-default | halloween']
+  name_th varchar(80) [not null]
+  ui_tokens jsonb [not null, note: 'สี ฟอนต์ พื้นหลัง (CSS variables)']
+  deck_id int [ref: > decks.id, note: 'สำรับ/หลังไพ่ของธีม']
+  version int [not null, default: 1]
+  status record_status [not null, default: 'draft']
+  Note: 'เปลี่ยนชุดโมเดลมาสคอตและธีม UI ตาม event หรือที่ผู้ใช้เลือก'
+}
+
+Table theme_assets [headercolor: #C0663A] {
+  theme_id int [ref: > themes.id]
+  slot varchar(40) [note: 'mascot_model | mascot_idle | background | card_back | sfx_shuffle']
+  media_id uuid [not null, ref: > media_assets.id]
+
+  indexes {
+    (theme_id, slot) [pk]
+  }
+}
+
+Table media_assets [headercolor: #8A8A8A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  owner_user_id uuid [ref: > users.id, note: 'null = ไฟล์ของระบบ']
+  purpose varchar(30) [not null, note: 'avatar | card_art | theme | payment_slip | journal_photo | share_image']
+  storage_key text [not null, note: 'path ใน object storage']
+  mime_type varchar(80) [not null]
+  bytes int
+  width int
+  height int
+  sha256 char(64)
+  is_public boolean [not null, default: false]
+  moderation moderation_status [not null, default: 'visible']
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ---------------------------------------------------------------- 3. ความรู้ไพ่และเซียมซี (ของเจ้าของ)
+
+Table decks [headercolor: #3F7A6B] {
+  id int [pk, increment]
+  code varchar(40) [not null, unique]
+  name_th varchar(80) [not null]
+  back_media_id uuid [ref: > media_assets.id]
+  is_default boolean [not null, default: false]
+  status record_status [not null, default: 'draft']
+}
+
+Table cards [headercolor: #3F7A6B] {
+  id varchar(40) [pk, note: 'the-fool, queen-of-swords (ตรงกับ ID ในเว็บตอนนี้)']
+  arcana varchar(5) [not null, note: 'major | minor']
+  suit varchar(10) [note: 'wands | cups | swords | pentacles']
+  rank smallint
+  name_en varchar(60) [not null]
+  name_th varchar(60)
+  sort_order smallint [not null]
+}
+
+Table deck_cards [headercolor: #3F7A6B] {
+  deck_id int [ref: > decks.id]
+  card_id varchar(40) [ref: > cards.id]
+  front_media_id uuid [ref: > media_assets.id]
+  art_status review_status [not null, default: 'draft', note: 'ขึ้นเว็บเฉพาะภาพที่เจ้าของอนุมัติ']
+
+  indexes {
+    (deck_id, card_id) [pk]
+  }
+}
+
+Table spreads [headercolor: #3F7A6B] {
+  id smallint [pk, increment]
+  code varchar(40) [not null, unique, note: 'single | past_present_future']
+  name_th varchar(80) [not null]
+  card_count smallint [not null]
+}
+
+Table spread_positions [headercolor: #3F7A6B] {
+  spread_id smallint [ref: > spreads.id]
+  position_index smallint
+  code varchar(30) [not null, note: 'past | present | future']
+  label_th varchar(40) [not null]
+  hint_th varchar(80)
+
+  indexes {
+    (spread_id, position_index) [pk]
+  }
+}
+
+Table topics [headercolor: #3F7A6B] {
+  id smallint [pk, increment]
+  code varchar(20) [not null, unique, note: 'love | work | money | life']
+  label_th varchar(40) [not null]
+  status record_status [not null, default: 'active']
+}
+
+Table situations [headercolor: #3F7A6B] {
+  id smallint [pk, increment]
+  topic_id smallint [not null, ref: > topics.id]
+  code varchar(30) [not null, note: 'single | crush | talking | complicated | together | broken_up']
+  label_th varchar(40) [not null, note: 'คนโสด แอบชอบ คุยกัน ...']
+  sort_order smallint [not null, default: 0]
+
+  indexes {
+    (topic_id, code) [unique]
+  }
+}
+
+Table knowledge_versions [headercolor: #3F7A6B] {
+  id int [pk, increment]
+  code varchar(30) [not null, unique, note: '2026.10-draft']
+  status review_status [not null, default: 'draft']
+  published_at timestamptz
+  approved_by uuid [ref: > users.id]
+  notes text
+  Note: 'ชุดความรู้ของเจ้าของ แก้รุ่นใหม่ได้โดยไม่กระทบคำอ่านที่ลูกค้าซื้อไปแล้ว'
+}
+
+Table card_meanings [headercolor: #3F7A6B] {
+  id bigint [pk, increment]
+  knowledge_version_id int [not null, ref: > knowledge_versions.id]
+  card_id varchar(40) [not null, ref: > cards.id]
+  topic_id smallint [not null, ref: > topics.id]
+  situation_id smallint [ref: > situations.id, note: 'null = ใช้ได้ทุกสถานการณ์ในหมวด']
+  position_code varchar(30) [note: 'null = ทุกตำแหน่ง']
+  orientation varchar(10) [not null, default: 'upright']
+  meaning_text text [not null]
+  source_ref varchar(120) [note: 'ที่มาในแชท/บันทึกของเจ้าของ']
+  review review_status [not null, default: 'draft']
+  reviewed_by uuid [ref: > users.id]
+  reviewed_at timestamptz
+
+  indexes {
+    (knowledge_version_id, card_id, topic_id, situation_id, position_code, orientation) [unique]
+  }
+}
+
+Table reading_templates [headercolor: #3F7A6B] {
+  id bigint [pk, increment]
+  knowledge_version_id int [not null, ref: > knowledge_versions.id]
+  spread_id smallint [not null, ref: > spreads.id]
+  topic_id smallint [ref: > topics.id]
+  situation_id smallint [ref: > situations.id]
+  kind varchar(20) [not null, note: 'summary | reflection | bridge']
+  body text [not null, note: 'มีช่องแทนค่า เช่น {past} {present} {future}']
+  review review_status [not null, default: 'draft']
+  Note: 'วิธีอ่านไพ่ 3 ใบรวมกันจากเจ้าของ (ตอนนี้บทสรุปยังเป็น demo)'
+}
+
+Table siamsi_sets [headercolor: #3F7A6B] {
+  id smallint [pk, increment]
+  code varchar(40) [not null, unique]
+  name_th varchar(80) [not null]
+  stick_count smallint [not null]
+  source text [note: 'ที่มาและสิทธิ์ใช้คำทำนาย']
+  status record_status [not null, default: 'draft']
+}
+
+Table siamsi_sticks [headercolor: #3F7A6B] {
+  id int [pk, increment]
+  set_id smallint [not null, ref: > siamsi_sets.id]
+  number smallint [not null]
+  poem_th text [not null]
+  meanings jsonb [note: 'คำทำนายแยกเรื่อง: งาน เงิน ความรัก สุขภาพ']
+  review review_status [not null, default: 'draft']
+
+  indexes {
+    (set_id, number) [unique]
+  }
+}
+
+// ---------------------------------------------------------------- 4. การดูดวงของผู้ใช้
+
+Table readings [headercolor: #2F5D8A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [ref: > users.id, note: 'null = ยังไม่ login (ย้ายเข้าบัญชีเมื่อ login)']
+  anonymous_id uuid [ref: > anonymous_visitors.id]
+  service_id smallint [not null, ref: > services.id]
+  source reading_source [not null, default: 'app']
+  status reading_status [not null, default: 'drawing']
+  deck_id int [ref: > decks.id]
+  topic_id smallint [ref: > topics.id]
+  situation_id smallint [ref: > situations.id]
+  question text [note: 'คำถามที่พิมพ์ = ข้อมูลส่วนบุคคล ผู้ใช้ลบได้']
+  event_id int [ref: > events.id, note: 'event ที่เปิดอยู่ตอนดูดวง']
+  theme_id int [ref: > themes.id]
+  drawn_at timestamptz
+  unlocked_at timestamptz
+  local_date date [not null, note: 'วันที่ตามเวลาผู้ใช้ ใช้ทำปฏิทิน']
+  client jsonb [note: 'อุปกรณ์ รองรับ WebGL หรือไม่ เวอร์ชันแอป']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, local_date)
+    anonymous_id
+    (service_id, created_at)
+  }
+  Note: 'หนึ่งแถว = ดูดวงหนึ่งครั้งของทุกบริการ (ไพ่ เซียมซี บันทึกไพ่จริง)'
+}
+
+Table reading_cards [headercolor: #2F5D8A] {
+  reading_id uuid [ref: > readings.id]
+  position_index smallint [note: '0 อดีต | 1 ปัจจุบัน | 2 อนาคต']
+  card_id varchar(40) [not null, ref: > cards.id]
+  orientation varchar(10) [not null, default: 'upright']
+  placed_at timestamptz
+  opened_at timestamptz [note: 'เวลาที่ผู้ใช้แตะเปิด']
+
+  indexes {
+    (reading_id, position_index) [pk]
+    (reading_id, card_id) [unique]
+    card_id
+  }
+}
+
+Table reading_sticks [headercolor: #2F5D8A] {
+  reading_id uuid [pk, ref: - readings.id]
+  stick_id int [not null, ref: > siamsi_sticks.id]
+  shaken_at timestamptz [not null, default: `now()`]
+}
+
+Table reading_results [headercolor: #2F5D8A] {
+  reading_id uuid [pk, ref: - readings.id]
+  knowledge_version_id int [ref: > knowledge_versions.id]
+  entries jsonb [not null, note: 'สำเนาความหมายรายใบ ณ ตอนปลดล็อก']
+  summary text
+  reflection text
+  generated_by varchar(20) [not null, default: 'rules', note: 'rules | reader | ai']
+  created_at timestamptz [not null, default: `now()`]
+  Note: 'คำอ่านที่ลูกค้าจ่ายเงินดู ส่งจาก server หลังตรวจสิทธิ์เท่านั้น'
+}
+
+Table entitlements [headercolor: #2F5D8A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  service_id smallint [not null, ref: > services.id]
+  reading_id uuid [ref: > readings.id]
+  booking_id uuid [ref: > bookings.id]
+  order_item_id uuid [ref: > order_items.id, note: 'null = ได้ฟรี โปร หรือแอดมินให้']
+  source varchar(20) [not null, note: 'purchase | free_quota | credit | promo | admin_grant']
+  granted_at timestamptz [not null, default: `now()`]
+  expires_at timestamptz
+  revoked_at timestamptz
+
+  indexes {
+    (user_id, reading_id) [unique]
+  }
+  Note: 'สิทธิ์ดูผล: API คืนคำอ่านเมื่อมีแถวที่ยังไม่ถูกยกเลิกเท่านั้น'
+}
+
+Table user_daily_summaries [headercolor: #2F5D8A] {
+  user_id uuid [ref: > users.id]
+  local_date date
+  readings_count smallint [not null, default: 0]
+  unlocked_count smallint [not null, default: 0]
+  cards jsonb [note: 'ไพ่ที่เปิดวันนั้น [{card_id, reading_id, position}]']
+  is_bookmarked boolean [not null, default: false]
+  note varchar(280) [note: 'โน้ตสั้นของวัน']
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, local_date) [pk]
+  }
+  Note: 'หน้าปฏิทิน: วันนี้เปิดไพ่อะไรไปแล้วบ้าง อัปเดตทุกครั้งที่มี reading'
+}
+
+// ---------------------------------------------------------------- 5. Journal และชุมชน
+
+Table journal_entries [headercolor: #A0457A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  reading_id uuid [ref: > readings.id, note: 'ไพ่ที่บันทึก (บันทึกไพ่จริงใช้ reading แบบ manual)']
+  entry_date date [not null]
+  title varchar(120)
+  body text [note: 'ความรู้สึกหรือสิ่งที่ได้จากไพ่']
+  include_question boolean [not null, default: false, note: 'แชร์คำถามด้วยหรือไม่']
+  include_meaning boolean [not null, default: true]
+  visibility visibility [not null, default: 'private']
+  share_slug varchar(16) [unique, note: 'ลิงก์สั้นสำหรับแชร์']
+  share_image_id uuid [ref: > media_assets.id, note: 'ภาพตัวอย่างเวลาแชร์ใน LINE/โซเชียล']
+  published_at timestamptz
+  like_count int [not null, default: 0]
+  comment_count int [not null, default: 0]
+  moderation moderation_status [not null, default: 'visible']
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+  deleted_at timestamptz
+
+  indexes {
+    (user_id, entry_date)
+    (visibility, published_at)
+  }
+}
+
+Table journal_reactions [headercolor: #A0457A] {
+  entry_id uuid [ref: > journal_entries.id]
+  user_id uuid [ref: > users.id]
+  kind varchar(12) [default: 'heart']
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (entry_id, user_id, kind) [pk]
+  }
+}
+
+Table journal_comments [headercolor: #A0457A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  entry_id uuid [not null, ref: > journal_entries.id]
+  user_id uuid [not null, ref: > users.id]
+  parent_id uuid [ref: > journal_comments.id, note: 'ตอบกลับคอมเมนต์']
+  body varchar(1000) [not null]
+  moderation moderation_status [not null, default: 'visible']
+  created_at timestamptz [not null, default: `now()`]
+  edited_at timestamptz
+  deleted_at timestamptz
+}
+
+Table user_follows [headercolor: #A0457A] {
+  follower_id uuid [ref: > users.id]
+  followee_id uuid [ref: > users.id]
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (follower_id, followee_id) [pk]
+  }
+}
+
+Table user_blocks [headercolor: #A0457A] {
+  blocker_id uuid [ref: > users.id]
+  blocked_id uuid [ref: > users.id]
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (blocker_id, blocked_id) [pk]
+  }
+}
+
+Table content_reports [headercolor: #A0457A] {
+  id bigint [pk, increment]
+  reporter_id uuid [not null, ref: > users.id]
+  target_type varchar(20) [not null, note: 'journal_entry | comment | user']
+  target_id uuid [not null]
+  reason varchar(40) [not null]
+  detail text
+  status varchar(20) [not null, default: 'open', note: 'open | actioned | dismissed']
+  handled_by uuid [ref: > users.id]
+  handled_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ---------------------------------------------------------------- 6. คำสั่งซื้อและการชำระเงิน
+
+Table orders [headercolor: #B08A2E] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  order_no varchar(20) [not null, unique, note: 'MMK-261017-0001']
+  user_id uuid [not null, ref: > users.id, note: 'ต้อง login ก่อนจ่าย']
+  status order_status [not null, default: 'pending']
+  subtotal_satang int [not null]
+  discount_satang int [not null, default: 0]
+  total_satang int [not null]
+  currency char(3) [not null, default: 'THB']
+  promo_code_id int [ref: > promo_codes.id]
+  expires_at timestamptz [note: 'QR/ลิงก์จ่ายหมดอายุ']
+  paid_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, created_at)
+    (status, created_at)
+  }
+}
+
+Table order_items [headercolor: #B08A2E] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  order_id uuid [not null, ref: > orders.id]
+  service_id smallint [not null, ref: > services.id]
+  service_price_id int [ref: > service_prices.id]
+  reading_id uuid [ref: > readings.id, note: 'ปลดล็อกคำอ่านครั้งนี้ (19 บาท)']
+  booking_id uuid [ref: > bookings.id]
+  credit_pack_qty smallint [note: 'ถ้าเป็นการซื้อแพ็กเครดิต']
+  description varchar(200) [not null]
+  quantity smallint [not null, default: 1]
+  unit_price_satang int [not null]
+  total_satang int [not null]
+}
+
+Table payments [headercolor: #B08A2E] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  order_id uuid [not null, ref: > orders.id]
+  method payment_method [not null]
+  provider varchar(30) [not null, note: 'payment gateway | linepay | manual']
+  provider_charge_id varchar(120) [unique, note: 'เลขอ้างอิงจาก gateway']
+  status payment_status [not null, default: 'created']
+  amount_satang int [not null]
+  fee_satang int [note: 'ค่าธรรมเนียม gateway']
+  net_satang int
+  currency char(3) [not null, default: 'THB']
+  payer_ref varchar(60) [note: 'ข้อมูลผู้จ่ายแบบปิดบางส่วน ไม่เก็บเลขบัตร']
+  slip_media_id uuid [ref: > media_assets.id, note: 'สลิปกรณีโอนเข้าบัญชีเอง']
+  receiving_account_id smallint [ref: > receiving_accounts.id]
+  verified_by uuid [ref: > users.id, note: 'แอดมินที่ตรวจสลิป']
+  verified_at timestamptz
+  failure_code varchar(60)
+  created_at timestamptz [not null, default: `now()`]
+  succeeded_at timestamptz
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table payment_webhook_events [headercolor: #B08A2E] {
+  id bigint [pk, increment]
+  provider varchar(30) [not null]
+  provider_event_id varchar(120) [not null]
+  event_type varchar(60) [not null]
+  payment_id uuid [ref: > payments.id]
+  signature_valid boolean [not null]
+  payload jsonb [not null]
+  received_at timestamptz [not null, default: `now()`]
+  processed_at timestamptz
+
+  indexes {
+    (provider, provider_event_id) [unique, note: 'กันประมวลผล webhook ซ้ำ']
+  }
+}
+
+Table refunds [headercolor: #B08A2E] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  payment_id uuid [not null, ref: > payments.id]
+  amount_satang int [not null]
+  reason varchar(200)
+  status varchar(20) [not null, default: 'requested', note: 'requested | succeeded | failed']
+  provider_refund_id varchar(120)
+  requested_by uuid [ref: > users.id]
+  processed_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table receiving_accounts [headercolor: #B08A2E] {
+  id smallint [pk, increment]
+  kind varchar(20) [not null, note: 'bank | promptpay']
+  bank_code varchar(10)
+  account_name varchar(100) [not null]
+  account_no_masked varchar(30) [not null]
+  is_active boolean [not null, default: true]
+  Note: 'บัญชีรับเงินของร้าน แสดงในหน้าโอนเงิน'
+}
+
+Table promo_codes [headercolor: #B08A2E] {
+  id int [pk, increment]
+  code varchar(30) [not null, unique]
+  discount_type varchar(10) [not null, note: 'percent | amount | free']
+  discount_value int [not null]
+  service_id smallint [ref: > services.id]
+  event_id int [ref: > events.id]
+  starts_at timestamptz
+  ends_at timestamptz
+  max_uses int
+  max_uses_per_user smallint [default: 1]
+  used_count int [not null, default: 0]
+  is_active boolean [not null, default: true]
+}
+
+Table credit_ledger [headercolor: #B08A2E] {
+  id bigint [pk, increment]
+  user_id uuid [not null, ref: > users.id]
+  delta int [not null, note: '+ ซื้อหรือได้แจก, - ใช้ปลดล็อก']
+  balance_after int [not null]
+  reason varchar(30) [not null, note: 'purchase | unlock | promo | refund | admin']
+  order_id uuid [ref: > orders.id]
+  reading_id uuid [ref: > readings.id]
+  created_at timestamptz [not null, default: `now()`]
+  Note: 'ทางเลือก: แพ็กเครดิต (เช่น 99 บาท = 6 ครั้ง) ลดค่าธรรมเนียมต่อรายการเล็ก'
+}
+
+Table receipts [headercolor: #B08A2E] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  order_id uuid [not null, unique, ref: - orders.id]
+  receipt_no varchar(30) [not null, unique]
+  buyer_name varchar(120)
+  buyer_tax_id varchar(20) [note: 'กรณีขอใบกำกับภาษี']
+  pdf_media_id uuid [ref: > media_assets.id]
+  issued_at timestamptz [not null, default: `now()`]
+}
+
+// ---------------------------------------------------------------- 7. จองดูดวงกับแม่หมอตัวจริง
+
+Table readers [headercolor: #4E7F3A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [unique, ref: - users.id, note: 'บัญชีเข้าระบบของแม่หมอ']
+  display_name varchar(80) [not null]
+  bio text
+  avatar_media_id uuid [ref: > media_assets.id]
+  specialties jsonb
+  status record_status [not null, default: 'active']
+}
+
+Table reader_offerings [headercolor: #4E7F3A] {
+  id int [pk, increment]
+  reader_id uuid [not null, ref: > readers.id]
+  service_id smallint [not null, ref: > services.id, note: 'booking_live | line_call']
+  channel varchar(20) [not null, note: 'line_call | line_video | line_chat | onsite']
+  duration_min smallint [not null]
+  price_satang int [note: 'null = ใช้ราคาจาก service_prices']
+  is_active boolean [not null, default: true]
+}
+
+Table reader_availability [headercolor: #4E7F3A] {
+  id int [pk, increment]
+  reader_id uuid [not null, ref: > readers.id]
+  weekday smallint [not null, note: '0 = อาทิตย์']
+  start_time time [not null]
+  end_time time [not null]
+  valid_from date
+  valid_to date
+}
+
+Table reader_time_off [headercolor: #4E7F3A] {
+  id int [pk, increment]
+  reader_id uuid [not null, ref: > readers.id]
+  starts_at timestamptz [not null]
+  ends_at timestamptz [not null]
+  reason varchar(120)
+}
+
+Table bookings [headercolor: #4E7F3A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  booking_no varchar(20) [not null, unique]
+  user_id uuid [not null, ref: > users.id]
+  reader_id uuid [not null, ref: > readers.id]
+  offering_id int [not null, ref: > reader_offerings.id]
+  starts_at timestamptz [not null]
+  ends_at timestamptz [not null]
+  status booking_status [not null, default: 'pending_payment']
+  topic_id smallint [ref: > topics.id]
+  question text
+  meeting_url text
+  user_note text
+  reader_private_note text [note: 'ผู้ใช้ไม่เห็น']
+  reminded_at timestamptz
+  cancelled_at timestamptz
+  cancel_reason varchar(200)
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (reader_id, starts_at)
+    (user_id, starts_at)
+  }
+  Note: 'กันจองซ้อนด้วย EXCLUDE USING gist (reader_id WITH =, tstzrange(starts_at, ends_at) WITH &&) เมื่อสถานะ pending_payment หรือ confirmed'
+}
+
+// ---------------------------------------------------------------- 8. LINE OA และการแจ้งเตือน
+
+Table line_oa_links [headercolor: #2E9C6A] {
+  user_id uuid [pk, ref: - users.id]
+  line_user_id varchar(64) [not null, unique, note: 'ตรงกับ LINE Login เมื่อ channel อยู่ provider เดียวกัน']
+  is_friend boolean [not null, default: false]
+  followed_at timestamptz
+  unfollowed_at timestamptz
+  last_message_at timestamptz
+}
+
+Table notifications [headercolor: #2E9C6A] {
+  id uuid [pk, default: `gen_random_uuid()`]
+  user_id uuid [not null, ref: > users.id]
+  channel notification_channel [not null]
+  template varchar(60) [not null, note: 'payment_success | booking_reminder | new_comment | event_start']
+  payload jsonb
+  status varchar(12) [not null, default: 'queued', note: 'queued | sent | failed | read']
+  scheduled_at timestamptz
+  sent_at timestamptz
+  read_at timestamptz
+  error text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+// ---------------------------------------------------------------- 9. แอดมินและแดชบอร์ด
+
+Table admin_audit_logs [headercolor: #555555] {
+  id bigint [pk, increment]
+  actor_id uuid [not null, ref: > users.id]
+  action varchar(60) [not null, note: 'verify_slip | refund | hide_entry | publish_meanings']
+  target_type varchar(30) [not null]
+  target_id varchar(64) [not null]
+  before_data jsonb
+  after_data jsonb
+  ip inet
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table app_settings [headercolor: #555555] {
+  setting_key varchar(60) [pk]
+  setting_value jsonb [not null]
+  updated_by uuid [ref: > users.id]
+  updated_at timestamptz [not null, default: `now()`]
+}
+
+Table app_events [headercolor: #555555] {
+  id bigint [pk, increment]
+  occurred_at timestamptz [not null]
+  user_id uuid [ref: > users.id]
+  anonymous_id uuid [ref: > anonymous_visitors.id]
+  name varchar(60) [not null, note: 'page_view | shuffle_start | card_placed | unlock_click | checkout_start | payment_success | entry_shared']
+  service_id smallint [ref: > services.id]
+  reading_id uuid [ref: > readings.id]
+  properties jsonb
+  utm jsonb
+  device varchar(20)
+
+  indexes {
+    (name, occurred_at)
+  }
+  Note: 'funnel ฟรีไปจ่ายเงิน สำหรับแดชบอร์ด (แบ่ง partition รายเดือน)'
+}
+
+Table kpi_daily [headercolor: #555555] {
+  metric_date date
+  metric varchar(60) [note: 'revenue_satang | new_users | readings | paid_conversion | refunds']
+  dimension varchar(60) [default: '', note: 'เช่น service=tarot_three หรือ method=truemoney_wallet']
+  metric_value numeric(14,2) [not null]
+  computed_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (metric_date, metric, dimension) [pk]
+  }
+  Note: 'ตัวเลขสรุปรายวันสำหรับหน้า summary ของแอดมิน (คำนวณจาก job ทุกคืน)'
+}
+
+// ---------------------------------------------------------------- 10. โซเชียลและคู่แข่ง (ต่อยอด Social Center เดิม)
+
+Table competitors [headercolor: #7A4E2E] {
+  id int [pk, increment]
+  name varchar(100) [not null]
+  niche varchar(40) [note: 'tarot | horoscope | siamsi | spiritual_shop']
+  website text
+  priority smallint [not null, default: 0]
+  notes text
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table social_accounts [headercolor: #7A4E2E] {
+  id int [pk, increment]
+  platform varchar(20) [not null, note: 'tiktok | instagram | facebook | youtube | line_voom | x']
+  external_id varchar(100)
+  handle varchar(100) [not null]
+  display_name varchar(120)
+  owner social_owner [not null]
+  competitor_id int [ref: > competitors.id]
+  url text
+  is_tracked boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (platform, handle) [unique]
+  }
+}
+
+Table social_posts [headercolor: #7A4E2E] {
+  id bigint [pk, increment]
+  account_id int [not null, ref: > social_accounts.id]
+  external_post_id varchar(120) [not null]
+  url text
+  published_at timestamptz
+  format varchar(20) [note: 'video | image | carousel | live | text']
+  caption text
+  duration_sec int
+  hashtags jsonb
+  topics jsonb [note: 'หมวดที่จัดเอง เช่น ดวงความรัก ไพ่รายวัน']
+  first_seen_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (account_id, external_post_id) [unique]
+    (account_id, published_at)
+  }
+}
+
+Table social_metric_observations [headercolor: #7A4E2E] {
+  id bigint [pk, increment]
+  account_id int [not null, ref: > social_accounts.id]
+  post_id bigint [ref: > social_posts.id, note: 'null = ระดับบัญชี เช่น followers']
+  metric varchar(40) [not null, note: 'followers | views | likes | comments | shares | saves']
+  period varchar(12) [not null, default: 'lifetime', note: 'lifetime | day | week']
+  metric_value numeric(18,2)
+  observed_at timestamptz [not null]
+  sync_source_id bigint [ref: > social_sync_sources.id]
+
+  indexes {
+    (account_id, metric, observed_at)
+    (post_id, metric, observed_at)
+  }
+  Note: 'เก็บเป็น time series เพื่อดูเทรนด์ (ต่อยอดตาราง metrics ของ Social Center เดิม)'
+}
+
+Table social_comment_themes [headercolor: #7A4E2E] {
+  id bigint [pk, increment]
+  account_id int [not null, ref: > social_accounts.id]
+  period_start date [not null]
+  period_end date [not null]
+  theme varchar(80) [not null, note: 'เช่น ถามราคา ขอดูดวงความรัก']
+  sentiment varchar(10) [note: 'positive | neutral | negative']
+  mention_count int [not null]
+  Note: 'เก็บเฉพาะธีมคอมเมนต์รวม ไม่เก็บชื่อหรือข้อความรายบุคคล'
+}
+
+Table social_trends [headercolor: #7A4E2E] {
+  id bigint [pk, increment]
+  platform varchar(20) [not null]
+  kind varchar(12) [not null, note: 'hashtag | sound | topic']
+  trend_value varchar(200) [not null]
+  observed_on date [not null]
+  rank_position int
+  stats jsonb
+}
+
+Table social_sync_sources [headercolor: #7A4E2E] {
+  id bigint [pk, increment]
+  platform varchar(20) [not null]
+  method varchar(20) [not null, note: 'official_api | manual_csv | manual_entry']
+  endpoint varchar(120)
+  api_version varchar(20)
+  fetched_at timestamptz [not null]
+  sha256 char(64)
+  job_status varchar(20)
+  message text
+  Note: 'ที่มาของทุกตัวเลข เพื่อตรวจย้อนได้ว่ามาจาก API หรือกรอกเอง'
+}
+
+// ---------------------------------------------------------------- กลุ่มตารางในแผนภาพ
+
+TableGroup identity_access {
+  users
+  user_identities
+  password_credentials
+  auth_sessions
+  auth_tokens
+  roles
+  user_roles
+  consents
+  anonymous_visitors
+}
+
+TableGroup catalog_events_themes {
+  services
+  service_prices
+  events
+  themes
+  theme_assets
+  media_assets
+}
+
+TableGroup tarot_siamsi_knowledge {
+  decks
+  cards
+  deck_cards
+  spreads
+  spread_positions
+  topics
+  situations
+  knowledge_versions
+  card_meanings
+  reading_templates
+  siamsi_sets
+  siamsi_sticks
+}
+
+TableGroup user_readings {
+  readings
+  reading_cards
+  reading_sticks
+  reading_results
+  entitlements
+  user_daily_summaries
+}
+
+TableGroup journal_community {
+  journal_entries
+  journal_reactions
+  journal_comments
+  user_follows
+  user_blocks
+  content_reports
+}
+
+TableGroup commerce {
+  orders
+  order_items
+  payments
+  payment_webhook_events
+  refunds
+  receiving_accounts
+  promo_codes
+  credit_ledger
+  receipts
+}
+
+TableGroup live_booking {
+  readers
+  reader_offerings
+  reader_availability
+  reader_time_off
+  bookings
+}
+
+TableGroup line_notifications {
+  line_oa_links
+  notifications
+}
+
+TableGroup admin_dashboard {
+  admin_audit_logs
+  app_settings
+  app_events
+  kpi_daily
+}
+
+TableGroup social_intelligence {
+  competitors
+  social_accounts
+  social_posts
+  social_metric_observations
+  social_comment_themes
+  social_trends
+  social_sync_sources
+}
